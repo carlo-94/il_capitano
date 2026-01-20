@@ -842,17 +842,30 @@
     const data = await res.json();
 
     function parsePrice(v){
-      if (v === null || v === undefined) return NaN;
-      if (typeof v === "number") return v;
+  if (v === null || v === undefined) return NaN;
+  if (typeof v === "number") return v;
 
-      const s = String(v).trim();
-      if (!s) return NaN;
+  let s = String(v).trim();
+  if (!s) return NaN;
 
-      let clean = s.replace(/\s/g, "").replace("€", "");
-      clean = clean.replace(/\./g, "").replace(",", ".");
-      const m = clean.match(/-?\d+(\.\d+)?/);
-      return m ? Number(m[0]) : NaN;
-    }
+  // rimuovi spazi e simbolo €
+  s = s.replace(/\s/g, "").replace("€", "");
+
+  // Caso A: formato IT "1.234,56" oppure "10,00"
+  if (s.includes(",")){
+    s = s.replace(/\./g, "");   // toglie separatori migliaia
+    s = s.replace(",", ".");    // virgola -> punto decimale
+  } else {
+    // Caso B: formato EN "1234.56" oppure "10.00"
+    // qui NON togliamo i punti, perché sono decimali
+    // (se mai ci fossero migliaia con virgola: "1,234.56")
+    s = s.replace(/,/g, "");
+  }
+
+  const num = Number(s);
+  return Number.isFinite(num) ? num : NaN;
+}
+
 
     // --- parser del TUO export ---
     let currentCategory = "Senza categoria";
@@ -939,6 +952,7 @@
 
 </body>
 </html>
+
 
 
 
