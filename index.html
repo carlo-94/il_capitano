@@ -715,7 +715,6 @@
     return num.toLocaleString("it-IT", { style:"currency", currency:"EUR" });
   }
 
-  // Normalizza testo categoria in uno "slug" semplice per filtri
   function slugify(s){
     return String(s ?? "")
       .toLowerCase()
@@ -728,7 +727,6 @@
   }
 
   function pickBadge(category){
-    // badge corto = ultimo pezzo dopo "»" o ">"
     const parts = String(category ?? "").split(/»|>/).map(x=>x.trim()).filter(Boolean);
     const last = parts.length ? parts[parts.length-1] : "PRODOTTO";
     return last.toUpperCase().slice(0, 18);
@@ -744,18 +742,15 @@
   }
 
   function renderCategoryUI(categories){
-    // Select (tutte)
     catSelect.innerHTML =
       `<option value="tutti">Tutte</option>` +
       categories.map(c => `<option value="${esc(slugify(c))}">${esc(c)}</option>`).join("");
 
-    // Catbar (solo top 8 per non affollare)
     const top = categories.slice(0, 8);
     catbarWrap.innerHTML =
       `<a href="#" data-cat="tutti">Tutti</a>` +
       top.map(c => `<a href="#" data-cat="${esc(slugify(c))}">${esc(c)}</a>`).join("");
 
-    // Eventi catbar
     catbarWrap.querySelectorAll("a").forEach(a=>{
       a.addEventListener("click", (e)=>{
         e.preventDefault();
@@ -823,7 +818,6 @@
       return;
     }
 
-    // Render leggero (evita lag)
     const first = list.slice(0, 60);
     grid.innerHTML = first.map(card).join("");
 
@@ -860,14 +854,14 @@
       return m ? Number(m[0]) : NaN;
     }
 
-    // Parser per il tuo export: categoria in row[""] e/o row["Categoria"]
+    // --- parser del TUO export ---
     let currentCategory = "Senza categoria";
     const out = [];
 
     for (const row of data){
       const marker = String(row[""] ?? "").trim();
 
-      // Riga separatore categoria: 'Categoria : ...'
+      // righe "Categoria : ...." stanno dentro la chiave vuota ""
       if (marker.toLowerCase().startsWith("categoria")){
         const parts = marker.split(":");
         const found = (parts.length > 1 ? parts.slice(1).join(":") : "")
@@ -936,14 +930,16 @@
       <div class="emptyState">
         <div>
           <h3>Errore caricamento</h3>
-          <p>Controlla che <b>data/products.json</b> esista e sia pubblicato.</p>
+          <p>Apri la console (F12) per vedere il dettaglio.</p>
         </div>
       </div>`;
   });
 </script>
 
+
 </body>
 </html>
+
 
 
 
