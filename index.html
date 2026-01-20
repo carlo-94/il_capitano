@@ -832,7 +832,7 @@
     });
   }
 
-  async function boot(){
+ async function boot(){
   countPill.textContent = "Carico...";
   metaLeft.textContent = "Caricamento catalogo...";
 
@@ -840,84 +840,125 @@
   if(!res.ok) throw new Error("Impossibile caricare products.json");
   const data = await res.json();
 
-  // --- helpers per il formato "Easyfatt export JSON" ---
-  const get = (obj, key) => obj && Object.prototype.hasOwnProperty.call(obj, key) ? obj[key] : undefined;
+  // helper lettura chiavi "strane"
+  const get = (obj, key) =>
+    obj && Object.prototype.hasOwnProperty.call(obj, key) ? obj[key] : undefined;
 
   function parsePrice(v){
-    // gestisce:  "6.00 €", "0,60 €", 6, 6.0, "" ...
+    // gestisce "6.00 €", "0,60 €", numeri, vuoti
     if (v === null || v === undefined) return NaN;
     if (typeof v === "number") return v;
+
     const s = String(v).trim();
     if (!s) return NaN;
-    const clean = s
-      .replace(/\s/g, "")
-      .replace("€","")
-      .replace(/\./g, "")      // toglie separatori migliaia "1.234,56"
-      .replace(",", ".");      // decimali IT
+
+    // 1) rimuove simboli e spazi
+    let clean = s.replace(/\s/g, "").replace("€", "");
+
+    // 2) normalizza formato IT/EN
+    // caso "1.234,56" -> "1234.56"
+    clean = clean.replace(/\./g, "").replace(",", ".");
+
     const m = clean.match(/-?\d+(\.\d+)?/);
     return m ? Number(m[0]) : NaN;
   }
 
-  // Capisce se è JSON "pulito" (sku/name/price) o "export" (Cod./Descrizione/...)
-  const looksClean = Array.isArray(data) && data.length && (data[0].sku !== undefined || data[0].name !== undefined);
+  // Se per caso è già nel formato pulito (sku/name/price/category)
+  const looksClean = Array.isArray(data) && data.length &&
+    (data[0].sku !== undefined || data[0].name !== undefined || data[0].category !== undefined);
 
   if (looksClean){
-    // già nel formato pulito
     ALL = data.map(x => {
       const category = (x.category && String(x.category).trim()) ? String(x.category).trim() : "Senza categoria";
+      const priceNum = (typeof x.price === "number") ? x.price : parsePrice(x.price);
+
       return {
         sku: String(x.sku ?? "").trim(),
-        title: String(x.name ?? "").trim() || "(Senza nome)",
+        title: String(x.name ?? "").trim() ||1617 ||",
         brand: String(x.brand ?? "").trim(),
         category,
         catSlug: slugify(category),
         badge: pickBadge(category),
-        price: x.price,
-        priceLabel: euro(x.price),
+        price: priceNum,
+        priceLabel: euro(priceNum),
         cover: PLACEHOLDER
       };
     });
   } else {
-    // formato export (quello che stai usando ora)
+    // === FORMATO EXPORT (il tuo attuale) ===
     let currentCategory = "Senza categoria";
     const out = [];
 
     for (const row of data){
-      const m = String(get(row, "m") ?? "").trim();
-      const catA = String(get(row, "Categoria") ?? "").trim();
-      const catB = String(get(row, "Categoria :") ?? "").trim(); // nel caso esista
-      const sku = String(get(row, "Cod.") ?? "").trim();
+      // riga categoria
+      const m = String(get(row, "m") ?? "").trim().toLowerCase();
 
-      // riga categoria (da screenshot: m = "Categoria :")
-      if (m.toLowerCase().includes("categoria") && (catA || catB)){
-        currentCategory = (catA || catB);
+      // in alcuni export la categoria può essere in campi diversi
+      const catFromCategoria = String(get(row, "Categoria") ?? "").trim();
+      const catFromAlt = String(get(row, "Categoria :") ?? "").trim();
+      const catFromDescr = String(get(row, "Descrizione") ?? "").trim();
+
+      if (m.includes("categoria")){
+        const found = catFromCategoria || catFromAlt || catFromDescr;
+        if (found) currentCategory = found;
         continue;
       }
 
-      // riga prodotto: ha "Cod."
-      if (sku){
-        const title = String(get(row, "Descrizione") ?? "").trim() || "(Senza nome)";
-        const brand = String(get(row, "Produttore") ?? "").trim();
-        const priceRaw = get(row, "Listino 1 (ivato)");
-        const priceNum = parsePrice(priceRaw);
-        const category = (catA || currentCategory || "Senza categoria");
+      // riga prodotto (ha Cod.)
+      const sku = String(get(row, "Cod.") ?? "").trim();
+      if (!sku) continue;
 
-        out.push({
-          sku,
-          title,
-          brand,
-          category,
-          catSlug: slugify(category),
-          badge: pickBadge(category),
-          price: priceNum,
-          priceLabel: euro(priceNum),
-          cover: PLACEHOLDER
-        });
-      }
+      const title = String(get(row, "Descrizione") ?? "").trim() || "(Senza nome)";
+      const brand = String(get(row, "Produttore") ?? "").trim();
+
+      const priceRaw = get(row, "Listino 1 (ivato)");
+      const priceNum = parsePrice(priceRaw);
+
+      // se manca la categoria sulla riga, usa la corrente
+      const category = (catFromCategoria || currentCategory || "Senza categoria");
+
+      out.push({
+        sku,
+        title,
+        brand,
+        category,
+        catSlug: slugify(category),
+        badge: pickBadge(category),
+        price: priceNum,
+        priceLabel: euro(priceNum),
+        cover: PLACEHOLDER
+      });
     }
 
     ALL = out;
   }
+
+  // UI categorie
+  const categories = buildCategories(ALL);
+  renderCategoryUI(categories);
+
+  // eventi UI
+  catSelect.addEventListener("change", ()=>{
+    state.cat = catSelect.value;
+    render();
+  });
+
+  sort.addEventListener("change", ()=>{
+    state.sort = sort.value;
+    render();
+  });
+
+  let t;
+  search.addEventListener("input", ()=>{
+    clearTimeout(t);
+    t = setTimeout(()=>{
+      state.q = search.value;
+      render();
+    }, 120);
+  });
+
+  render();
+}
 
   // Categorie UI
   const categories = buildCategories(ALL);
@@ -961,4 +1002,5 @@
 </script>
 </body>
 </html>
+
 
