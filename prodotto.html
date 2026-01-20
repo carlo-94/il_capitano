@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prodotto • Il Capitano</title>
+  <meta name="description" content="Scheda prodotto • Il Capitano Pesca Nautica. Acquisto su eBay." />
+
+  <style>
+  
+   :root{
+    --ink:#141414;
+    --muted:#4c5a60;
+
+    --sea:#0b5f76;
+    --sea2:#0e7ea0;
+    --foam:#eef6f7;
+    --sand:#f2e7c9;
+
+    --paper:#fbfaf6;
+    --paper2:#f6f3ea;
+
+    --line:rgba(0,0,0,.14);
+    --line2:rgba(11,95,118,.22);
+    --shadow:0 14px 30px rgba(0,0,0,.10);
+
+    --r:16px;
+    --max:1200px;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color:var(--ink);
+    background:
+    radial-gradient(1200px 460px at 50% -220px, rgba(11,95,118,.10), transparent 60%),
+    linear-gradient(180deg, var(--paper2) 0%, #fff 75%);
+      min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  }
+  a{color:inherit; text-decoration:none}
+  .wrap{max-width:var(--max); margin:0 auto; padding:8px 18px;}
+  .sr{position:absolute; left:-9999px}
+  
+  
+    /* Sticky footer: footer sempre in basso se la pagina è corta */
+html, body { height: 100%; }
+
+
+.wrap{
+  flex: 1;
+}
+    
+    /* =========================
+       TOP BAR 
+    ========================= */
+    .top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:6px 0 14px;
+      position:relative;
+    }
+
+    /* leggera “carta” sopra */
+    .top::before{
+      content:"";
+      position:absolute;
+      inset:-10px -14px 0 -14px;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(0deg,
+          rgba(0,0,0,.015) 0px, rgba(0,0,0,.015) 1px,
+          rgba(255,255,255,0) 2px, rgba(255,255,255,0) 6px);
+      opacity:.55;
+      mix-blend-mode:multiply;
+    }
+
+    .brandMini{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+
+    /* mini-cartoncino per logo */
+    .brandCard{
+      position:relative;
+      width:62px;
+      height:62px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.84));
+      border:1px solid rgba(0,0,0,.14);
+      box-shadow: 0 10px 18px rgba(0,0,0,.08);
+      transform: rotate(-1deg);
+      flex:0 0 auto;
+    }
+    .brandCard::after{
+      content:"";
+      position:absolute;
+      width:40px;
+      height:14px;
+      top:-6px;
+      left:50%;
+      transform:translateX(-50%) rotate(-6deg);
+      border-radius:6px;
+      background: rgba(242,231,201,.72);
+      border:1px solid rgba(0,0,0,.10);
+      box-shadow:0 8px 14px rgba(0,0,0,.06);
+    }
+    .brandCard img{
+      width:42px;
+      height:auto;
+      display:block;
+    }
+
+    .brandText{
+      display:flex;
+      flex-direction:column;
+      gap:3px;
+      min-width:0;
+    }
+    .brandText strong{
+      font-size:14px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-weight:1000;
+      color:rgba(11,95,118,.92);
+    }
+    .brandText span{
+      font-size:12px;
+      font-weight:850;
+      color:rgba(20,20,20,.70);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 64vw;
+    }
+
+    .back{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.14);
+      background: rgba(238,246,247,.70);
+      font-weight:950;
+      box-shadow: 0 10px 18px rgba(0,0,0,.06);
+      transition: transform .14s ease, box-shadow .14s ease, background .14s ease;
+      flex:0 0 auto;
+    }
+    .back:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.10);
+      background: rgba(238,246,247,.92);
+    }
+
+    /* =========================
+       PANEL
+    ========================= */
+    .panel{
+      position:relative;
+      border:1px solid rgba(0,0,0,.14);
+      border-radius: calc(var(--r) + 10px);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.92), rgba(251,250,246,.90));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    /* texture carta dentro al panel */
+    .panel::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(900px 340px at 20% 0%, rgba(11,95,118,.06), transparent 62%),
+        radial-gradient(700px 300px at 90% 0%, rgba(242,231,201,.22), transparent 60%),
+        repeating-linear-gradient(0deg,
+          rgba(0,0,0,.012) 0px, rgba(0,0,0,.012) 1px,
+          rgba(255,255,255,0) 2px, rgba(255,255,255,0) 7px);
+      opacity:.6;
+      mix-blend-mode:multiply;
+    }
+
+    .layout{
+      position:relative;
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:0;
+    }
+
+    /* =========================
+       GALLERY 
+    ========================= */
+    .gallery{
+      padding:16px;
+      border-right:1px solid rgba(0,0,0,.14);
+      background:
+        radial-gradient(520px 240px at 20% 10%, rgba(14,126,160,.10), transparent 62%),
+        radial-gradient(520px 240px at 80% 60%, rgba(242,231,201,.16), transparent 60%),
+        rgba(255,255,255,.60);
+    }
+    .galleryGrid{
+      display:grid;
+      grid-template-columns: 96px 1fr;
+      gap:14px;
+      align-items:start;
+    }
+
+    .thumbs{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .thumb{
+      border:1px solid rgba(0,0,0,.14);
+      border-radius:14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(251,250,246,.90));
+      padding:8px;
+      cursor:pointer;
+      box-shadow: 0 10px 18px rgba(0,0,0,.06);
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+      position:relative;
+    }
+
+    /* micro “spago” sotto la thumb attiva */
+    .thumb.active{
+      border-color: rgba(11,95,118,.38);
+      box-shadow:0 0 0 4px rgba(11,95,118,.10), 0 14px 24px rgba(0,0,0,.10);
+    }
+    .thumb:hover{
+      transform: translateY(-1px);
+      box-shadow:0 14px 24px rgba(0,0,0,.10);
+    }
+
+    /* cornice interna uniforme per nascondere sfondi brutti di img*/
+    .thumb .frame{
+      width:100%;
+      height:64px;
+      border-radius:12px;
+      border:1px solid rgba(0,0,0,.10);
+      background: linear-gradient(180deg, #fbfaf6, #f2e7c9);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px;
+      overflow:hidden;
+    }
+    .thumb img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+      mix-blend-mode:multiply;     /* “sparisce” il bianco */
+      filter: contrast(1.08) saturate(1.02);
+    }
+
+    .mainImg{
+      border:1px solid rgba(0,0,0,.14);
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(251,250,246,.90));
+      padding:14px;
+      min-height:420px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow: 0 14px 26px rgba(0,0,0,.08);
+    }
+
+    /* frame interno anche per l’immagine grande */
+    .mainFrame{
+      width:100%;
+      height:100%;
+      border-radius:18px;
+      border:1px solid rgba(0,0,0,.10);
+      background: linear-gradient(180deg, #fbfaf6, #f2e7c9);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      overflow:hidden;
+    }
+    .mainFrame img{
+      width:100%;
+      height:100%;
+      max-height:520px;
+      object-fit:contain;
+      display:block;
+      mix-blend-mode:multiply;
+      filter: drop-shadow(0 18px 26px rgba(0,0,0,.10)) contrast(1.06);
+    }
+
+    /* =========================
+       DETTAGLIO (destra)
+    ========================= */
+    .detail{
+      padding:18px 18px 20px;
+      background: rgba(255,255,255,.55);
+    }
+
+    .kicker{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.14);
+      background: rgba(238,246,247,.70);
+      font-weight:1000;
+      color: rgba(11,95,118,.92);
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      font-size:11px;
+      position:relative;
+    }
+
+  
+    .kicker::after{
+      content:"";
+      position:absolute;
+      inset:-6px;
+      border-radius:999px;
+      border:1px dashed rgba(11,95,118,.22);
+      opacity:.7;
+      pointer-events:none;
+    }
+
+    h1{
+      margin:12px 0 0;
+      font-size:30px;
+      letter-spacing:-.03em;
+      line-height:1.08;
+      font-weight:1000;
+    }
+
+    .desc{
+      margin:10px 0 0;
+      color:rgba(20,20,20,.75);
+      line-height:1.6;
+      font-weight:800;
+      font-size:14px;
+    }
+
+    .price{
+      margin:14px 0 0;
+      font-weight:1100;
+      color: rgba(11,95,118,.98);
+      font-size:24px;
+      letter-spacing:.02em;
+    }
+
+    /* corda separatore */
+    .rope{
+      margin:14px 0 0;
+      height:14px;
+      width:100%;
+      position:relative;
+    }
+    .rope::before{
+      content:"";
+      position:absolute;
+      left:0; right:0; top:6px;
+      height:2px;
+      background:
+        repeating-linear-gradient(90deg,
+          rgba(70,52,30,.55) 0 6px,
+          rgba(70,52,30,.35) 6px 10px);
+      border-radius:999px;
+      opacity:.60;
+    }
+
+    .actions{
+      margin-top:14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:12px 14px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.14);
+      background: rgba(238,246,247,.78);
+      font-weight:1000;
+      white-space:nowrap;
+      transition: transform .14s ease, box-shadow .14s ease, background .14s ease;
+      box-shadow: 0 10px 18px rgba(0,0,0,.06);
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.10);
+      background: rgba(238,246,247,.95);
+    }
+    .btnPrimary{
+      border-color: rgba(11,95,118,.22);
+      background: rgba(242,231,201,.58);
+    }
+
+    .infoBox{
+      margin-top:16px;
+      border-top:1px solid rgba(0,0,0,.14);
+      padding-top:14px;
+      color:rgba(20,20,20,.72);
+      font-weight:850;
+      font-size:13px;
+      line-height:1.55;
+    }
+     footer{
+    border-top:1px solid rgba(0,0,0,.12);
+    padding:18px 0 26px;
+    color:rgba(20,20,20,.72);
+    font-weight:900;
+  }
+  footer .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+
+    /* responsive 
+    @media (max-width: 980px){
+      .layout{grid-template-columns: 1fr}
+      .gallery{border-right:none; border-bottom:1px solid rgba(0,0,0,.14)}
+      .galleryGrid{grid-template-columns: 1fr}
+      .thumbs{flex-direction:row; overflow:auto; padding-bottom:6px}
+      .thumb{min-width:96px}
+      .mainImg{min-height:320px}
+    }  */
+    
+    
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brandMini">
+        <div class="brandCard">
+          
+          <img src="assets/img/logo/logo-transparent.svg" alt="Il Capitano">
+        </div>
+        <div class="brandText">
+          <strong>Il Capitano • Pesca Nautica</strong>
+          <span>Dal 1938 • Accessori nautici & pesca sportiva e professionale</span>
+        </div>
+      </div>
+
+      <a class="back" href="index.html">← Torna ai prodotti</a>
+    </div>
+
+    <section class="panel" id="panel">
+      <div class="layout">
+
+        <!-- GALLERY -->
+        <div class="gallery">
+          <div class="galleryGrid">
+            <div class="thumbs" id="thumbs"></div>
+
+            <div class="mainImg">
+              <div class="mainFrame">
+                <img id="heroImg" alt="Immagine prodotto">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DETTAGLIO -->
+        <div class="detail">
+          <div class="kicker" id="badge">PRODOTTO</div>
+          <h1 id="title">Titolo prodotto</h1>
+          <p class="desc" id="desc">Descrizione prodotto...</p>
+          <div class="price" id="price">€ 0,00</div>
+
+          <div class="rope" aria-hidden="true"></div>
+
+          <div class="actions">
+            <a class="btn btnPrimary" id="buy" href="#" target="_blank" rel="noopener noreferrer">Compra su eBay →</a>
+            <a class="btn" id="wa" href="#" target="_blank" rel="noopener noreferrer">WhatsApp assistenza</a>
+          </div>
+
+          
+        </div>
+
+      </div>
+    </section>
+  </div>
+  
+  <footer id="contatti">
+    <div class="wrap">
+      <div><strong></strong> Via Roma 306, Salerno</div>
+      <div>© <span id="y"></span> Il Capitano – Pesca Nautica</div>
+    </div>
+  </footer>
+
+  <script>
+   
+  document.getElementById("y").textContent = new Date().getFullYear();
+  
+  
+    const PRODUCTS = [
+      {
+        id: "p1",
+        title: "Canna Spinning 2.10m",
+        desc: "Azione rapida, perfetta per mare e scogli. Ottima sensibilità e controllo in ferrata.",
+        price: "€ 59,90",
+        badge: "CANNE",
+        ebay: "https://www.ebay.it/",
+        images: [
+          "assets/img/prodotti/p1-1.jpg",
+          "assets/img/prodotti/p1-2.png",
+          "assets/img/prodotti/p1-3.jpg"
+        ]
+      },
+      {
+        id: "p2",
+        title: "Mulinello 2500",
+        desc: "Frizione precisa, bobina in alluminio. Fluido in recupero, perfetto per uso mare.",
+        price: "€ 44,90",
+        badge: "MULINELLI",
+        ebay: "https://www.ebay.it/",
+        images: [
+          "assets/img/prodotti/p2-1.jpg",
+          "assets/img/prodotti/p2-2.png",
+          "assets/img/prodotti/p2-3.jpg"
+        ]
+      },
+      {
+        id: "p3",
+        title: "Ami Black Nickel (mis. 6)",
+        desc: "Confezione da 20, robusti e affidabili. Ideali per pesche leggere e medie.",
+        price: "€ 4,90",
+        badge: "AMI",
+        ebay: "https://www.ebay.it/",
+        images: [
+          "assets/img/prodotti/p3-1.jpg",
+          "assets/img/prodotti/p3-2.png",
+          "assets/img/prodotti/p3-3.jpg"
+        ]
+      }
+    ];
+
+    const WHATSAPP_NUMBER = "390000000000"; // metti senza + e senza spazi (es: 393891820567)
+    const WHATSAPP_TEXT = "Ciao! Mi dai info su questo prodotto?";
+
+    function qs(name){
+      return new URLSearchParams(location.search).get(name);
+    }
+
+    function esc(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function setActiveThumb(idx){
+      document.querySelectorAll(".thumb").forEach((t,i)=>{
+        t.classList.toggle("active", i === idx);
+      });
+    }
+
+    function renderProduct(p){
+      document.title = `${p.title} • Il Capitano`;
+
+      document.getElementById("badge").textContent = p.badge;
+      document.getElementById("title").textContent = p.title;
+      document.getElementById("desc").textContent = p.desc;
+      document.getElementById("price").textContent = p.price;
+
+      document.getElementById("buy").href = p.ebay;
+
+      const wa = document.getElementById("wa");
+      const msg = encodeURIComponent(`${WHATSAPP_TEXT}\n\nProdotto: ${p.title}`);
+      wa.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+
+      const heroImg = document.getElementById("heroImg");
+      const thumbs = document.getElementById("thumbs");
+
+      const imgs = (p.images && p.images.length) ? p.images : [""];
+
+      heroImg.src = imgs[0] || "";
+      heroImg.alt = p.title;
+
+      thumbs.innerHTML = imgs.map((src,i)=>`
+        <div class="thumb ${i===0 ? "active":""}" data-i="${i}">
+          <div class="frame">
+            <img src="${esc(src)}" alt="${esc(p.title)} foto ${i+1}">
+          </div>
+        </div>
+      `).join("");
+
+      thumbs.querySelectorAll(".thumb").forEach(el=>{
+        el.addEventListener("click", ()=>{
+          const i = Number(el.getAttribute("data-i"));
+          heroImg.src = imgs[i];
+          setActiveThumb(i);
+        });
+      });
+    }
+
+    const id = qs("id");
+    const p = PRODUCTS.find(x => x.id === id) || PRODUCTS[0];
+    renderProduct(p);
+  </script>
+</body>
+</html>

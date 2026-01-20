@@ -1,0 +1,937 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Il Capitano • Pesca Nautica</title>
+<meta name="description" content="Dal 1938 accessori nautici e prodotti per la pesca sportiva e professionale. Vetrina prodotti con scheda stile Amazon e reindirizzo eBay." />
+
+<style>
+  :root{
+    --ink:#141414;
+    --muted:#4c5a60;
+
+    --sea:#0b5f76;
+    --sea2:#0e7ea0;
+    --foam:#eef6f7;
+    --sand:#f2e7c9;
+
+    --paper:#fbfaf6;
+    --paper2:#f6f3ea;
+
+    --line:rgba(0,0,0,.14);
+    --line2:rgba(11,95,118,.22);
+    --shadow:0 14px 30px rgba(0,0,0,.10);
+
+    --r:16px;
+    --max:1200px;
+  }
+
+  *{box-sizing:border-box}
+  html, body{height:100%}
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 460px at 50% -220px, rgba(11,95,118,.10), transparent 60%),
+    linear-gradient(180deg, var(--paper2) 0%, #fff 75%);
+  }
+
+  a{color:inherit; text-decoration:none}
+  .wrap{max-width:var(--max); margin:0 auto; padding:8px 18px;}
+  .sr{position:absolute; left:-9999px}
+
+  /* =========================================================
+     STICKY FOOTER   footer sempre in basso se la pagina è corta
+  ========================================================= */
+  .page{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  .page__content{
+    flex:1;
+    
+  }
+
+  /* =========================================================
+     HEADER  (texture carta + corda + timbro + targa)
+  ========================================================= */
+
+  .headerHero{
+    position:relative;
+    padding:26px 0 16px;
+    border-bottom:1px solid var(--line);
+    background:
+      linear-gradient(180deg, rgba(242,231,201,.48), rgba(255,255,255,.92));
+    overflow:hidden;
+  }
+
+  /* texture carta  */
+  .headerHero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background:
+      repeating-linear-gradient(0deg,
+        rgba(0,0,0,.018) 0px, rgba(0,0,0,.018) 1px,
+        rgba(255,255,255,0) 2px, rgba(255,255,255,0) 6px),
+      radial-gradient(900px 360px at 20% 10%, rgba(11,95,118,.08), transparent 60%),
+      radial-gradient(700px 300px at 90% 0%, rgba(242,231,201,.24), transparent 60%);
+    opacity:.55;
+    mix-blend-mode:multiply;
+  }
+
+  .headerRow{
+    position:relative;
+    display:grid;
+    grid-template-columns: 190px 1fr 270px;
+    gap:22px;
+    align-items:center;
+  }
+
+  /* LOGO su cartoncino */
+  .headerLogo{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    min-height:140px;
+  }
+  .headerLogo::before{
+    content:"";
+    position:absolute;
+    inset:14px 18px;
+    border-radius:14px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.80));
+    border:1px solid rgba(0,0,0,.14);
+    box-shadow: 0 12px 22px rgba(0,0,0,.08);
+    transform: rotate(-1.4deg);
+    height:176px;
+  }
+  .headerLogo::after{
+    content:"";
+    position:absolute;
+    width:62px;
+    height:18px;
+    top:6px;
+    left:50%;
+    transform:translateX(-50%) rotate(-6deg);
+    border-radius:6px;
+    background: rgba(242,231,201,.72);
+    border:1px solid rgba(0,0,0,.10);
+    box-shadow:0 8px 14px rgba(0,0,0,.07);
+    opacity:.9;
+  }
+  .headerLogo img{
+    position:relative;
+    width:151px;
+    height:auto;
+    display:block;
+    filter:none;
+  }
+
+  /* Titolo*/
+  .headerTitle{
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    padding:6px 0;
+  }
+  .brandName{
+    margin:0;
+    font-size:34px;
+    font-weight:1000;
+    letter-spacing:.02em;
+  }
+  .brandSub{
+    margin:0;
+    font-size:13px;
+    font-weight:950;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:rgba(11,95,118,.92);
+  }
+  .brandDesc{
+    margin:2px 0 0;
+    color:rgba(20,20,20,.72);
+    font-weight:850;
+    line-height:1.35;
+    font-size:14px;
+  }
+
+  /* corda sotto al titolo */
+  .rope{
+    position:relative;
+    margin-top:8px;
+    height:14px;
+    width:min(680px, 100%);
+  }
+  .rope::before{
+    content:"";
+    position:absolute;
+    left:0; right:0;
+    top:6px;
+    height:2px;
+    background:
+      repeating-linear-gradient(90deg,
+        rgba(70,52,30,.55) 0 6px,
+        rgba(70,52,30,.35) 6px 10px);
+    border-radius:999px;
+    opacity:.65;
+  }
+  .rope::after{
+    content:"";
+    position:absolute;
+    left:0;
+    top:2px;
+    width:22px;
+    height:10px;
+    border:2px solid rgba(70,52,30,.45);
+    border-left:none;
+    border-radius: 0 999px 999px 0;
+    opacity:.55;
+  }
+
+  .stamp{
+    margin-top:8px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    width:max-content;
+    padding:7px 10px;
+    border-radius:12px;
+    border:1px dashed rgba(11,95,118,.35);
+    background: rgba(238,246,247,.60);
+    color: rgba(11,95,118,.95);
+    font-weight:1000;
+    letter-spacing:.10em;
+    text-transform:uppercase;
+    font-size:11px;
+  }
+  .stampDot{
+    width:8px; height:8px;
+    border-radius:999px;
+    background: rgba(11,95,118,.85);
+    box-shadow:0 0 0 3px rgba(11,95,118,.14);
+  }
+
+  
+  .assist{
+    justify-self:end;
+    width:250px;
+    aspect-ratio:1/1;
+    border-radius:999px;
+    border:2px solid rgba(11,95,118,.22);
+    box-shadow: var(--shadow);
+    background:
+      radial-gradient(220px 220px at 30% 25%, rgba(242,231,201,.72), transparent 60%),
+      radial-gradient(240px 240px at 70% 70%, rgba(14,126,160,.16), transparent 62%),
+      linear-gradient(180deg, rgba(255,255,255,.92), rgba(238,246,247,.86));
+    padding:18px 18px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    gap:8px;
+    position:relative;
+  }
+  .assist::before{
+    content:"";
+    position:absolute;
+    inset:10px;
+    border-radius:999px;
+    border:1px dashed rgba(11,95,118,.22);
+  }
+  .assist strong{
+    display:block;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    font-size:15px;
+  }
+  .assist .sub{
+    color:rgba(20,20,20,.65);
+    font-weight:950;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    font-size:14px;
+  }
+  .assist .phone{
+    font-weight:1100;
+    letter-spacing:.10em;
+    font-size:18px;
+    color:rgba(11,95,118,.98);
+    white-space:nowrap;
+  }
+  .assist .mini{
+    margin-top:8px;
+    padding-top:10px;
+    width:100%;
+    border-top:1px solid rgba(11,95,118,.18);
+    font-size:12px;
+    font-weight:900;
+    line-height:1.3;
+    color:rgba(20,20,20,.72);
+  }
+
+  /* =========================================================
+     NAV + SEARCH
+  ========================================================= */
+  .mininav{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    background: rgba(255,255,255,.78);
+    backdrop-filter: blur(6px);
+  }
+  .mininav .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:10px 18px;
+  }
+  .links{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    font-weight:950;
+    font-size:14px;
+    color:rgba(20,20,20,.80);
+  }
+  .links a{
+    padding:6px 10px;
+    border-radius:999px;
+    border:1px solid transparent;
+    font-size: 24px;
+  }
+  .links a:hover{
+    border-color: rgba(0,0,0,.10);
+    background: rgba(242,231,201,.35);
+  }
+  .searchTop{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .pill{
+    padding:8px 12px;
+    border-radius:999px;
+    border:1px solid rgba(0,0,0,.12);
+    background: rgba(238,246,247,.70);
+    font-weight:950;
+    color: rgba(11,95,118,.92);
+    white-space:nowrap;
+  }
+  .searchTop input{
+    width:280px;
+    padding:9px 12px;
+    border-radius:999px;
+    border:1px solid rgba(0,0,0,.16);
+    outline:none;
+    background:#fff;
+    font-weight:800;
+  }
+  .searchTop input:focus{
+    border-color: rgba(14,126,160,.45);
+    box-shadow: 0 0 0 4px rgba(14,126,160,.12);
+  }
+
+  /* categorie */
+  .catbar{
+    background:#2b2b2b;
+    color:#fff;
+    border-bottom:1px solid rgba(0,0,0,.25);
+  }
+  .catbar .wrap{
+    padding:14px 18px;
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:center;
+  }
+  .catbar a{
+    color:rgba(255,255,255,.92);
+    font-weight:950;
+    padding:8px 10px;
+    border-radius:999px;
+    border:1px solid transparent;
+    font-size: 24px;
+  }
+  .catbar a:hover{
+    border-color: rgba(255,255,255,.18);
+    background: rgba(255,255,255,.06);
+  }
+
+  /* =========================================================
+     CATALOGO
+  ========================================================= */
+  .catalog{
+    padding:26px 0 44px;
+  }
+  .pageTitle{
+    text-align:center;
+    font-size:40px;
+    letter-spacing:-.03em;
+    margin:18px 0 10px;
+    font-weight:1000;
+  }
+
+  .metaRow{
+    margin: 0 auto 16px;
+    max-width: 1080px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    padding:0 6px;
+    color:rgba(20,20,20,.72);
+    font-weight:900;
+  }
+  .metaRow .right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+  }
+  select{
+    padding:9px 12px;
+    border-radius:12px;
+    border:1px solid rgba(0,0,0,.16);
+    outline:none;
+    background:#fff;
+    font-weight:900;
+    color:rgba(20,20,20,.86);
+  }
+  select:focus{
+    border-color: rgba(14,126,160,.45);
+    box-shadow: 0 0 0 4px rgba(14,126,160,.12);
+  }
+
+  /* cards */
+  .grid{
+    max-width: 1080px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap:16px;
+    padding: 0 6px;
+  }
+  .card{
+    border:1px solid rgba(0,0,0,.14);
+    border-radius: var(--r);
+    background:#fff;
+    box-shadow: 0 10px 26px rgba(0,0,0,.07);
+    overflow:hidden;
+    cursor:pointer;
+    transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
+  }
+  .card:hover{
+    transform: translateY(-2px);
+    border-color: rgba(11,95,118,.22);
+    box-shadow: 0 18px 40px rgba(0,0,0,.10);
+  }
+  .thumb{
+    height:180px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+      radial-gradient(520px 240px at 15% 15%, rgba(14,126,160,.18), transparent 62%),
+      radial-gradient(520px 240px at 80% 50%, rgba(242,231,201,.26), transparent 60%),
+      linear-gradient(180deg, rgba(238,246,247,.70), rgba(255,255,255,.95));
+    position:relative;
+  }
+  .badge{
+    position:absolute;
+    left:12px; top:12px;
+    padding:7px 10px;
+    border-radius:999px;
+    background: rgba(11,95,118,.92);
+    color:#fff;
+    font-weight:1000;
+    letter-spacing:.10em;
+    text-transform:uppercase;
+    font-size:11px;
+    border:1px solid rgba(255,255,255,.18);
+    z-index:100;
+  }
+
+  .photoFrame{
+    width:78%;
+    height:78%;
+    background: linear-gradient(180deg, #fbfaf6, #f2e7c9);
+    border:1px solid rgba(0,0,0,.10);
+    border-radius:14px;
+    box-shadow: 0 10px 22px rgba(0,0,0,.10);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:12px;
+  }
+  .photoFrame img{
+    max-width:100%;
+    max-height:100%;
+    object-fit:contain;
+    display:block;
+    mix-blend-mode: multiply;
+    filter: contrast(1.08) saturate(1.02);
+  }
+  @supports not (mix-blend-mode: multiply){
+    .photoFrame img{ filter: contrast(1.06); }
+  }
+
+  .content{padding:12px 12px 14px;}
+  .title{
+    margin:0;
+    font-size:15px;
+    letter-spacing:-.01em;
+    line-height:1.25;
+    min-height: 38px;
+    font-weight:950;
+  }
+  .sub{
+    margin:8px 0 0;
+    color:rgba(20,20,20,.70);
+    line-height:1.45;
+    font-weight:800;
+    font-size:14px;
+    min-height: 24px;
+  }
+  .bottom{
+    margin-top:12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .price{
+    font-weight:1100;
+    color: rgba(11,95,118,.98);
+    white-space:nowrap;
+  }
+  .open{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:9px 12px;
+    border-radius:999px;
+    border:1px solid rgba(0,0,0,.14);
+    background: rgba(242,231,201,.38);
+    font-weight:1000;
+    white-space:nowrap;
+    transition: transform .14s ease, box-shadow .14s ease, background .14s ease;
+    user-select:none;
+  }
+  .card:hover .open{
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(0,0,0,.10);
+    background: rgba(242,231,201,.55);
+  }
+
+  /* empty state */
+  .emptyState{
+    grid-column: 1 / -1;
+    min-height: 45vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding: 14px 6px;
+    color: rgba(20,20,20,.70);
+    font-weight:950;
+  }
+  .emptyState h3{
+    margin:0 0 6px;
+    font-size:18px;
+    font-weight:1000;
+    letter-spacing:-.01em;
+  }
+  .emptyState p{
+    margin:0;
+    font-weight:900;
+  }
+
+  footer{
+    border-top:1px solid rgba(0,0,0,.12);
+    padding:18px 0 26px;
+    color:rgba(20,20,20,.72);
+    font-weight:900;
+  }
+  footer .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+
+  /* responsive
+  @media (max-width: 980px){
+    .headerRow{grid-template-columns: 1fr; gap:14px}
+    .assist{justify-self:start; width:240px}
+    .mininav .wrap{gap:12px; flex-direction:column; align-items:flex-start}
+    .searchTop input{width:min(460px, 86vw)}
+    .grid{grid-template-columns: repeat(2, minmax(0,1fr))}
+    .pageTitle{font-size:36px}
+    .metaRow{flex-direction:column; align-items:flex-start}
+    .metaRow .right{width:100%; justify-content:space-between}
+  }
+  @media (max-width: 560px){
+    .grid{grid-template-columns:1fr}
+    .pageTitle{font-size:32px}
+  }  */
+  
+  
+</style>
+</head>
+
+<body id="home">
+  <div class="page">
+
+    <!-- HEADER -->
+    <header class="headerHero">
+      <div class="wrap">
+        <div class="headerRow">
+
+          <!-- LOGO SINISTRA -->
+          <div class="headerLogo">
+            <img src="assets/img/logo/logo-transparent.svg" alt="Il Capitano (logo ancora)">
+          </div>
+
+          <!-- CENTRO -->
+          <div class="headerTitle">
+            <h1 class="brandName">Il Capitano</h1>
+            <p class="brandSub">Pesca • Nautica • Accessori</p>
+
+            <p class="brandDesc">
+              Dal <b>1938</b> ci occupiamo della vendita di accessori nautici e prodotti
+              per la pesca sportiva e professionale.
+            </p>
+
+            <div class="rope" aria-hidden="true"></div>
+
+            <span class="stamp"><span class="stampDot" aria-hidden="true"></span>Negozio storico • Salerno</span>
+          </div>
+
+          <!-- DESTRA -->
+          <aside class="assist" aria-label="Ordini e assistenza">
+            <strong>Ordini e<br>Assistenza</strong>
+            <div class="sub">Telefono</div>
+            <div class="phone">089 227779</div>
+            <div class="mini">
+              pesca.nautica@yahoo.it<br>
+              Via Roma 306, Salerno
+            </div>
+          </aside>
+
+        </div>
+      </div>
+    </header>
+
+    <!-- mini nav -->
+    <div class="mininav">
+      <div class="wrap">
+        <nav class="links" aria-label="Navigazione">
+          <a href="#home">Home</a>
+        </nav>
+
+        <div class="searchTop" aria-label="Cerca nel catalogo">
+          <span class="pill" id="countPill">3 prodotti</span>
+          <label class="sr" for="search">Cerca</label>
+          <input id="search" type="search" placeholder="Cerca (es. canna, amo, mulinello)..." autocomplete="off">
+        </div>
+      </div>
+    </div>
+
+    <!-- category bar -->
+    <div class="catbar" role="navigation" aria-label="Categorie">
+      <div class="wrap">
+        <a href="#" data-cat="tutti">Tutti</a>
+        <a href="#" data-cat="canne">Canne</a>
+        <a href="#" data-cat="mulinelli">Mulinelli</a>
+        <a href="#" data-cat="ami">Ami</a>
+        <a href="#" data-cat="offerte">Offerte</a>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <main class="page__content" id="catalogo">
+      <div class="wrap catalog">
+        <h2 class="pageTitle">Vetrina Prodotti</h2>
+
+        <div class="metaRow">
+          <div class="left" id="metaLeft">Stai visualizzando 3 prodotti</div>
+
+          <div class="right">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span>Ordina per</span>
+              <select id="sort">
+                <option value="rel">Rilevanza</option>
+                <option value="az">Nome (A-Z)</option>
+              </select>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span>Categoria</span>
+              <select id="catSelect">
+                <option value="tutti">Tutte</option>
+                <option value="canne">Canne</option>
+                <option value="mulinelli">Mulinelli</option>
+                <option value="ami">Ami</option>
+                <option value="offerte">Offerte</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <section class="grid" id="grid" aria-live="polite"></section>
+      </div>
+    </main>
+
+    <footer id="contatti">
+      <div class="wrap">
+        <div><strong></strong> Via Roma 306, Salerno</div>
+        <div>© <span id="y"></span> Il Capitano – Pesca Nautica</div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+
+  const DATA_URL = "./data/products.json"; // <- qui prende i prodotti
+  const PLACEHOLDER = "assets/img/prodotti/placeholder.jpg";
+
+  let ALL = [];
+  let state = { q:"", cat:"tutti", sort:"rel" };
+
+  const grid = document.getElementById("grid");
+  const search = document.getElementById("search");
+  const metaLeft = document.getElementById("metaLeft");
+  const countPill = document.getElementById("countPill");
+  const sort = document.getElementById("sort");
+  const catSelect = document.getElementById("catSelect");
+  const catbarWrap = document.querySelector(".catbar .wrap");
+
+  document.getElementById("y").textContent = new Date().getFullYear();
+
+  function esc(s){
+    return String(s ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  function euro(n){
+    const num = Number(n);
+    if (!Number.isFinite(num)) return "—";
+    return num.toLocaleString("it-IT", { style:"currency", currency:"EUR" });
+  }
+
+  // Normalizza testo categoria in uno "slug" semplice per filtri
+  function slugify(s){
+    return String(s ?? "")
+      .toLowerCase()
+      .trim()
+      .replaceAll("»", ">")
+      .replaceAll("&", "e")
+      .replace(/[^a-z0-9\s>-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
+  }
+
+  function pickBadge(category){
+    // badge corto = ultimo pezzo dopo "»" o ">"
+    const parts = String(category ?? "").split(/»|>/).map(x=>x.trim()).filter(Boolean);
+    const last = parts.length ? parts[parts.length-1] : "PRODOTTO";
+    return last.toUpperCase().slice(0, 18);
+  }
+
+  function buildCategories(list){
+    // prendiamo le categorie più frequenti per la barra (top 8) + "Tutti"
+    const map = new Map();
+    for (const p of list){
+      const c = p.category || "Senza categoria";
+      map.set(c, (map.get(c) || 0) + 1);
+    }
+    const sorted = [...map.entries()].sort((a,b)=>b[1]-a[1]).map(([c])=>c);
+
+    return sorted;
+  }
+
+  function renderCategoryUI(categories){
+    // Select (tutte)
+    catSelect.innerHTML = `<option value="tutti">Tutte</option>` +
+      categories.map(c => `<option value="${esc(slugify(c))}">${esc(c)}</option>`).join("");
+
+    // Catbar (solo top 8 per non affollare)
+    const top = categories.slice(0, 8);
+    catbarWrap.innerHTML =
+      `<a href="#" data-cat="tutti">Tutti</a>` +
+      top.map(c => `<a href="#" data-cat="${esc(slugify(c))}">${esc(c)}</a>`).join("");
+
+    // Eventi catbar
+    catbarWrap.querySelectorAll("a").forEach(a=>{
+      a.addEventListener("click", (e)=>{
+        e.preventDefault();
+        const cat = a.getAttribute("data-cat") || "tutti";
+        state.cat = cat;
+        catSelect.value = cat;
+        render();
+      });
+    });
+  }
+
+  function matches(p){
+    const q = state.q.trim().toLowerCase();
+    const catOk = (state.cat === "tutti") || (p.catSlug === state.cat);
+    if(!catOk) return false;
+    if(!q) return true;
+
+    const hay = (p.title + " " + p.brand + " " + p.sku + " " + p.category).toLowerCase();
+    return hay.includes(q);
+  }
+
+  function card(p){
+    return `
+      <article class="card" role="link" tabindex="0" data-sku="${esc(p.sku)}" aria-label="Apri ${esc(p.title)}">
+        <div class="thumb">
+          <span class="badge">${esc(p.badge)}</span>
+          <div class="photoFrame">
+            <img src="${esc(p.cover)}" alt="${esc(p.title)}" onerror="this.src='${esc(PLACEHOLDER)}'">
+          </div>
+        </div>
+        <div class="content">
+          <h3 class="title">${esc(p.title)}</h3>
+          <p class="sub">${esc(p.category)}${p.brand ? " • " + esc(p.brand) : ""}</p>
+          <div class="bottom">
+            <div class="price">${esc(p.priceLabel)}</div>
+            <span class="open">Apri →</span>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  function openProduct(sku){
+    // se non hai prodotto.html, puoi anche fare niente o aprire un link eBay (quando lo avrai)
+    window.location.href = `prodotto.html?sku=${encodeURIComponent(sku)}`;
+  }
+
+  function render(){
+    let list = ALL.filter(matches);
+
+    if(state.sort === "az"){
+      list = list.slice().sort((a,b)=>a.title.localeCompare(b.title, "it"));
+    }
+
+    metaLeft.textContent = `Stai visualizzando ${list.length} prodotti`;
+    countPill.textContent = `${list.length} prodotti`;
+
+    if(list.length === 0){
+      grid.innerHTML = `
+        <div class="emptyState">
+          <div>
+            <h3>Nessun prodotto trovato</h3>
+            <p>Prova a cambiare ricerca o categoria.</p>
+          </div>
+        </div>`;
+      return;
+    }
+
+    // Render "leggero": prime 60, poi estendiamo (evita lag su 5000)
+    const first = list.slice(0, 60);
+    grid.innerHTML = first.map(card).join("");
+
+    grid.querySelectorAll(".card").forEach(el=>{
+      const sku = el.getAttribute("data-sku");
+      el.addEventListener("click", ()=> openProduct(sku));
+      el.addEventListener("keydown", (e)=>{
+        if(e.key === "Enter" || e.key === " "){
+          e.preventDefault();
+          openProduct(sku);
+        }
+      });
+    });
+  }
+
+  async function boot(){
+    countPill.textContent = "Carico...";
+    metaLeft.textContent = "Caricamento catalogo...";
+
+    const res = await fetch(DATA_URL + "?t=" + Date.now(), { cache: "no-store" });
+    if(!res.ok) throw new Error("Impossibile caricare products.json");
+
+    const data = await res.json();
+
+    // Trasformiamo il JSON in oggetti compatibili con la tua UI
+    ALL = data.map(x => {
+      const category = (x.category && String(x.category).trim()) ? String(x.category).trim() : "Senza categoria";
+      return {
+        sku: String(x.sku ?? "").trim(),
+        title: String(x.name ?? "").trim() || "(Senza nome)",
+        brand: String(x.brand ?? "").trim(),
+        category,
+        catSlug: slugify(category),
+        badge: pickBadge(category),
+        price: x.price,
+        priceLabel: euro(x.price),
+        cover: PLACEHOLDER
+      };
+    });
+
+    // Categorie UI
+    const categories = buildCategories(ALL);
+    renderCategoryUI(categories);
+
+    // Select change
+    catSelect.addEventListener("change", ()=>{
+      state.cat = catSelect.value;
+      render();
+    });
+
+    // Sort
+    sort.addEventListener("change", ()=>{
+      state.sort = sort.value;
+      render();
+    });
+
+    // Search debounce
+    let t;
+    search.addEventListener("input", ()=>{
+      clearTimeout(t);
+      t = setTimeout(()=>{
+        state.q = search.value;
+        render();
+      }, 120);
+    });
+
+    render();
+  }
+
+  boot().catch(err=>{
+    console.error(err);
+    metaLeft.textContent = "Errore: non riesco a caricare il catalogo.";
+    countPill.textContent = "Errore";
+    grid.innerHTML = `
+      <div class="emptyState">
+        <div>
+          <h3>Errore caricamento</h3>
+          <p>Controlla che <b>data/products.json</b> esista e sia pubblicato.</p>
+        </div>
+      </div>`;
+  });
+
+
+  </script>
+</body>
+</html>
