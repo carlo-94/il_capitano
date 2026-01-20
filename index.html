@@ -715,6 +715,7 @@
     return num.toLocaleString("it-IT", { style:"currency", currency:"EUR" });
   }
 
+  // Normalizza testo categoria in uno "slug" semplice per filtri
   function slugify(s){
     return String(s ?? "")
       .toLowerCase()
@@ -727,6 +728,7 @@
   }
 
   function pickBadge(category){
+    // badge corto = ultimo pezzo dopo "»" o ">"
     const parts = String(category ?? "").split(/»|>/).map(x=>x.trim()).filter(Boolean);
     const last = parts.length ? parts[parts.length-1] : "PRODOTTO";
     return last.toUpperCase().slice(0, 18);
@@ -742,15 +744,18 @@
   }
 
   function renderCategoryUI(categories){
+    // Select (tutte)
     catSelect.innerHTML =
       `<option value="tutti">Tutte</option>` +
       categories.map(c => `<option value="${esc(slugify(c))}">${esc(c)}</option>`).join("");
 
+    // Catbar (solo top 8 per non affollare)
     const top = categories.slice(0, 8);
     catbarWrap.innerHTML =
       `<a href="#" data-cat="tutti">Tutti</a>` +
       top.map(c => `<a href="#" data-cat="${esc(slugify(c))}">${esc(c)}</a>`).join("");
 
+    // Eventi catbar
     catbarWrap.querySelectorAll("a").forEach(a=>{
       a.addEventListener("click", (e)=>{
         e.preventDefault();
@@ -767,6 +772,7 @@
     const catOk = (state.cat === "tutti") || (p.catSlug === state.cat);
     if(!catOk) return false;
     if(!q) return true;
+
     const hay = (p.title + " " + p.brand + " " + p.sku + " " + p.category).toLowerCase();
     return hay.includes(q);
   }
@@ -817,6 +823,7 @@
       return;
     }
 
+    // Render leggero (evita lag)
     const first = list.slice(0, 60);
     grid.innerHTML = first.map(card).join("");
 
@@ -832,156 +839,94 @@
     });
   }
 
- async function boot(){
-  countPill.textContent = "Carico...";
-  metaLeft.textContent = "Caricamento catalogo...";
+  async function boot(){
+    countPill.textContent = "Carico...";
+    metaLeft.textContent = "Caricamento catalogo...";
 
-  const res = await fetch(DATA_URL + "?t=" + Date.now(), { cache: "no-store" });
-  if(!res.ok) throw new Error("Impossibile caricare products.json");
-  const data = await res.json();
+    const res = await fetch(DATA_URL + "?t=" + Date.now(), { cache: "no-store" });
+    if(!res.ok) throw new Error("Impossibile caricare products.json");
+    const data = await res.json();
 
-  function parsePrice(v){
-    if (v === null || v === undefined) return NaN;
-    if (typeof v === "number") return v;
+    function parsePrice(v){
+      if (v === null || v === undefined) return NaN;
+      if (typeof v === "number") return v;
 
-    const s = String(v).trim();
-    if (!s) return NaN;
+      const s = String(v).trim();
+      if (!s) return NaN;
 
-    // "1.234,56 €" -> "1234.56"
-    let clean = s.replace(/\s/g, "").replace("€", "");
-    clean = clean.replace(/\./g, "").replace(",", ".");
-    const m = clean.match(/-?\d+(\.\d+)?/);
-    return m ? Number(m[0]) : NaN;
-  }
-
-  // === parser per il tuo export ===
-  let currentCategory = "Senza categoria";
-  const out = [];
-
-  for (const row of data){
-    // NB: la chiave è stringa vuota: row[""]
-    const marker = String(row[""] ?? "").trim();
-
-    // Riga separatore: 'Categoria : ...'
-    if (marker.toLowerCase().startsWith("categoria")){
-      // Esempio: "Categoria : ABBIGLIAMENTO  »  CAPPELLINI"
-      const parts = marker.split(":");
-      const found = (parts.length > 1 ? parts.slice(1).join(":") : "")
-        .trim()
-        .replace(/\s+/g, " "); // compatta spazi
-
-      if (found) currentCategory = found;
-      continue;
+      let clean = s.replace(/\s/g, "").replace("€", "");
+      clean = clean.replace(/\./g, "").replace(",", ".");
+      const m = clean.match(/-?\d+(\.\d+)?/);
+      return m ? Number(m[0]) : NaN;
     }
 
-    // Riga prodotto: ha "Cod."
-    const sku = String(row["Cod."] ?? "").trim();
-    if (!sku) continue;
+    // Parser per il tuo export: categoria in row[""] e/o row["Categoria"]
+    let currentCategory = "Senza categoria";
+    const out = [];
 
-    const title = String(row["Descrizione"] ?? "").trim() || "(Senza nome)";
-    const brand = String(row["Produttore"] ?? "").trim();
+    for (const row of data){
+      const marker = String(row[""] ?? "").trim();
 
-    const catRow = String(row["Categoria"] ?? "").trim();
-    const category = (catRow || currentCategory || "Senza categoria").replace(/\s+/g, " ");
+      // Riga separatore categoria: 'Categoria : ...'
+      if (marker.toLowerCase().startsWith("categoria")){
+        const parts = marker.split(":");
+        const found = (parts.length > 1 ? parts.slice(1).join(":") : "")
+          .trim()
+          .replace(/\s+/g, " ");
+        if (found) currentCategory = found;
+        continue;
+      }
 
-    const priceNum = parsePrice(row["Listino 1 (ivato)"]);
+      const sku = String(row["Cod."] ?? "").trim();
+      if (!sku) continue;
 
-    out.push({
-      sku,
-      title,
-      brand,
-      category,
-      catSlug: slugify(category),
-      badge: pickBadge(category),
-      price: priceNum,
-      priceLabel: euro(priceNum),
-      cover: PLACEHOLDER
+      const title = String(row["Descrizione"] ?? "").trim() || "(Senza nome)";
+      const brand = String(row["Produttore"] ?? "").trim();
+
+      const catRow = String(row["Categoria"] ?? "").trim();
+      const category = (catRow || currentCategory || "Senza categoria").replace(/\s+/g, " ");
+
+      const priceNum = parsePrice(row["Listino 1 (ivato)"]);
+
+      out.push({
+        sku,
+        title,
+        brand,
+        category,
+        catSlug: slugify(category),
+        badge: pickBadge(category),
+        price: priceNum,
+        priceLabel: euro(priceNum),
+        cover: PLACEHOLDER
+      });
+    }
+
+    ALL = out;
+
+    const categories = buildCategories(ALL);
+    renderCategoryUI(categories);
+
+    catSelect.addEventListener("change", ()=>{
+      state.cat = catSelect.value;
+      render();
     });
+
+    sort.addEventListener("change", ()=>{
+      state.sort = sort.value;
+      render();
+    });
+
+    let t;
+    search.addEventListener("input", ()=>{
+      clearTimeout(t);
+      t = setTimeout(()=>{
+        state.q = search.value;
+        render();
+      }, 120);
+    });
+
+    render();
   }
-
-  ALL = out;
-
-  // UI categorie
-  const categories = buildCategories(ALL);
-  renderCategoryUI(categories);
-
-  // eventi UI
-  catSelect.addEventListener("change", ()=>{
-    state.cat = catSelect.value;
-    render();
-  });
-
-  sort.addEventListener("change", ()=>{
-    state.sort = sort.value;
-    render();
-  });
-
-  let t;
-  search.addEventListener("input", ()=>{
-    clearTimeout(t);
-    t = setTimeout(()=>{
-      state.q = search.value;
-      render();
-    }, 120);
-  });
-
-  render();
-}
-
-
-  // UI categorie
-  const categories = buildCategories(ALL);
-  renderCategoryUI(categories);
-
-  // eventi UI
-  catSelect.addEventListener("change", ()=>{
-    state.cat = catSelect.value;
-    render();
-  });
-
-  sort.addEventListener("change", ()=>{
-    state.sort = sort.value;
-    render();
-  });
-
-  let t;
-  search.addEventListener("input", ()=>{
-    clearTimeout(t);
-    t = setTimeout(()=>{
-      state.q = search.value;
-      render();
-    }, 120);
-  });
-
-  render();
-}
-
-  // Categorie UI
-  const categories = buildCategories(ALL);
-  renderCategoryUI(categories);
-
-  // eventi
-  catSelect.addEventListener("change", ()=>{
-    state.cat = catSelect.value;
-    render();
-  });
-
-  sort.addEventListener("change", ()=>{
-    state.sort = sort.value;
-    render();
-  });
-
-  let t;
-  search.addEventListener("input", ()=>{
-    clearTimeout(t);
-    t = setTimeout(()=>{
-      state.q = search.value;
-      render();
-    }, 120);
-  });
-
-  render();
-}
 
   boot().catch(err=>{
     console.error(err);
@@ -996,6 +941,7 @@
       </div>`;
   });
 </script>
+
 </body>
 </html>
 
