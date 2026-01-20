@@ -35,7 +35,7 @@
     color:var(--ink);
     background:
       radial-gradient(1200px 460px at 50% -220px, rgba(11,95,118,.10), transparent 60%),
-    linear-gradient(180deg, var(--paper2) 0%, #fff 75%);
+      linear-gradient(180deg, var(--paper2) 0%, #fff 75%);
   }
 
   a{color:inherit; text-decoration:none}
@@ -43,32 +43,25 @@
   .sr{position:absolute; left:-9999px}
 
   /* =========================================================
-     STICKY FOOTER   footer sempre in basso se la pagina è corta
+     STICKY FOOTER
   ========================================================= */
   .page{
     min-height:100vh;
     display:flex;
     flex-direction:column;
   }
-  .page__content{
-    flex:1;
-    
-  }
+  .page__content{flex:1}
 
   /* =========================================================
-     HEADER  (texture carta + corda + timbro + targa)
+     HEADER
   ========================================================= */
-
   .headerHero{
     position:relative;
     padding:26px 0 16px;
     border-bottom:1px solid var(--line);
-    background:
-      linear-gradient(180deg, rgba(242,231,201,.48), rgba(255,255,255,.92));
+    background: linear-gradient(180deg, rgba(242,231,201,.48), rgba(255,255,255,.92));
     overflow:hidden;
   }
-
-  /* texture carta  */
   .headerHero::before{
     content:"";
     position:absolute;
@@ -92,7 +85,6 @@
     align-items:center;
   }
 
-  /* LOGO su cartoncino */
   .headerLogo{
     display:flex;
     align-items:center;
@@ -105,8 +97,7 @@
     position:absolute;
     inset:14px 18px;
     border-radius:14px;
-    background:
-      linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.80));
+    background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.80));
     border:1px solid rgba(0,0,0,.14);
     box-shadow: 0 12px 22px rgba(0,0,0,.08);
     transform: rotate(-1.4deg);
@@ -134,7 +125,6 @@
     filter:none;
   }
 
-  /* Titolo*/
   .headerTitle{
     min-width:0;
     display:flex;
@@ -164,7 +154,6 @@
     font-size:14px;
   }
 
-  /* corda sotto al titolo */
   .rope{
     position:relative;
     margin-top:8px;
@@ -177,10 +166,9 @@
     left:0; right:0;
     top:6px;
     height:2px;
-    background:
-      repeating-linear-gradient(90deg,
-        rgba(70,52,30,.55) 0 6px,
-        rgba(70,52,30,.35) 6px 10px);
+    background: repeating-linear-gradient(90deg,
+      rgba(70,52,30,.55) 0 6px,
+      rgba(70,52,30,.35) 6px 10px);
     border-radius:999px;
     opacity:.65;
   }
@@ -220,7 +208,6 @@
     box-shadow:0 0 0 3px rgba(11,95,118,.14);
   }
 
-  
   .assist{
     justify-self:end;
     width:250px;
@@ -307,7 +294,7 @@
     padding:6px 10px;
     border-radius:999px;
     border:1px solid transparent;
-    font-size: 24px;
+    font-size:24px;
   }
   .links a:hover{
     border-color: rgba(0,0,0,.10);
@@ -361,7 +348,7 @@
     padding:8px 10px;
     border-radius:999px;
     border:1px solid transparent;
-    font-size: 24px;
+    font-size:24px;
   }
   .catbar a:hover{
     border-color: rgba(255,255,255,.18);
@@ -572,7 +559,7 @@
     flex-wrap:wrap;
   }
 
-  /* responsive
+  /* responsive */
   @media (max-width: 980px){
     .headerRow{grid-template-columns: 1fr; gap:14px}
     .assist{justify-self:start; width:240px}
@@ -586,9 +573,7 @@
   @media (max-width: 560px){
     .grid{grid-template-columns:1fr}
     .pageTitle{font-size:32px}
-  }  */
-  
-  
+  }
 </style>
 </head>
 
@@ -640,24 +625,22 @@
       <div class="wrap">
         <nav class="links" aria-label="Navigazione">
           <a href="#home">Home</a>
+          <a href="#catalogo">Catalogo</a>
+          <a href="#contatti">Contatti</a>
         </nav>
 
         <div class="searchTop" aria-label="Cerca nel catalogo">
-          <span class="pill" id="countPill">3 prodotti</span>
+          <span class="pill" id="countPill">Carico...</span>
           <label class="sr" for="search">Cerca</label>
           <input id="search" type="search" placeholder="Cerca (es. canna, amo, mulinello)..." autocomplete="off">
         </div>
       </div>
     </div>
 
-    <!-- category bar -->
+    <!-- category bar (dinamica) -->
     <div class="catbar" role="navigation" aria-label="Categorie">
       <div class="wrap">
         <a href="#" data-cat="tutti">Tutti</a>
-        <a href="#" data-cat="canne">Canne</a>
-        <a href="#" data-cat="mulinelli">Mulinelli</a>
-        <a href="#" data-cat="ami">Ami</a>
-        <a href="#" data-cat="offerte">Offerte</a>
       </div>
     </div>
 
@@ -667,7 +650,7 @@
         <h2 class="pageTitle">Vetrina Prodotti</h2>
 
         <div class="metaRow">
-          <div class="left" id="metaLeft">Stai visualizzando 3 prodotti</div>
+          <div class="left" id="metaLeft">Caricamento catalogo...</div>
 
           <div class="right">
             <div style="display:flex; align-items:center; gap:10px;">
@@ -682,10 +665,6 @@
               <span>Categoria</span>
               <select id="catSelect">
                 <option value="tutti">Tutte</option>
-                <option value="canne">Canne</option>
-                <option value="mulinelli">Mulinelli</option>
-                <option value="ami">Ami</option>
-                <option value="offerte">Offerte</option>
               </select>
             </div>
           </div>
@@ -704,9 +683,8 @@
 
   </div>
 
-  <script>
-
-  const DATA_URL = "./data/products.json"; // <- qui prende i prodotti
+<script>
+  const DATA_URL = "./data/products.json";
   const PLACEHOLDER = "assets/img/prodotti/placeholder.jpg";
 
   let ALL = [];
@@ -737,7 +715,6 @@
     return num.toLocaleString("it-IT", { style:"currency", currency:"EUR" });
   }
 
-  // Normalizza testo categoria in uno "slug" semplice per filtri
   function slugify(s){
     return String(s ?? "")
       .toLowerCase()
@@ -750,36 +727,30 @@
   }
 
   function pickBadge(category){
-    // badge corto = ultimo pezzo dopo "»" o ">"
     const parts = String(category ?? "").split(/»|>/).map(x=>x.trim()).filter(Boolean);
     const last = parts.length ? parts[parts.length-1] : "PRODOTTO";
     return last.toUpperCase().slice(0, 18);
   }
 
   function buildCategories(list){
-    // prendiamo le categorie più frequenti per la barra (top 8) + "Tutti"
     const map = new Map();
     for (const p of list){
       const c = p.category || "Senza categoria";
       map.set(c, (map.get(c) || 0) + 1);
     }
-    const sorted = [...map.entries()].sort((a,b)=>b[1]-a[1]).map(([c])=>c);
-
-    return sorted;
+    return [...map.entries()].sort((a,b)=>b[1]-a[1]).map(([c])=>c);
   }
 
   function renderCategoryUI(categories){
-    // Select (tutte)
-    catSelect.innerHTML = `<option value="tutti">Tutte</option>` +
+    catSelect.innerHTML =
+      `<option value="tutti">Tutte</option>` +
       categories.map(c => `<option value="${esc(slugify(c))}">${esc(c)}</option>`).join("");
 
-    // Catbar (solo top 8 per non affollare)
     const top = categories.slice(0, 8);
     catbarWrap.innerHTML =
       `<a href="#" data-cat="tutti">Tutti</a>` +
       top.map(c => `<a href="#" data-cat="${esc(slugify(c))}">${esc(c)}</a>`).join("");
 
-    // Eventi catbar
     catbarWrap.querySelectorAll("a").forEach(a=>{
       a.addEventListener("click", (e)=>{
         e.preventDefault();
@@ -796,7 +767,6 @@
     const catOk = (state.cat === "tutti") || (p.catSlug === state.cat);
     if(!catOk) return false;
     if(!q) return true;
-
     const hay = (p.title + " " + p.brand + " " + p.sku + " " + p.category).toLowerCase();
     return hay.includes(q);
   }
@@ -823,7 +793,6 @@
   }
 
   function openProduct(sku){
-    // se non hai prodotto.html, puoi anche fare niente o aprire un link eBay (quando lo avrai)
     window.location.href = `prodotto.html?sku=${encodeURIComponent(sku)}`;
   }
 
@@ -848,7 +817,6 @@
       return;
     }
 
-    // Render "leggero": prime 60, poi estendiamo (evita lag su 5000)
     const first = list.slice(0, 60);
     grid.innerHTML = first.map(card).join("");
 
@@ -873,7 +841,6 @@
 
     const data = await res.json();
 
-    // Trasformiamo il JSON in oggetti compatibili con la tua UI
     ALL = data.map(x => {
       const category = (x.category && String(x.category).trim()) ? String(x.category).trim() : "Senza categoria";
       return {
@@ -889,23 +856,19 @@
       };
     });
 
-    // Categorie UI
     const categories = buildCategories(ALL);
     renderCategoryUI(categories);
 
-    // Select change
     catSelect.addEventListener("change", ()=>{
       state.cat = catSelect.value;
       render();
     });
 
-    // Sort
     sort.addEventListener("change", ()=>{
       state.sort = sort.value;
       render();
     });
 
-    // Search debounce
     let t;
     search.addEventListener("input", ()=>{
       clearTimeout(t);
@@ -930,8 +893,6 @@
         </div>
       </div>`;
   });
-
-
-  </script>
+</script>
 </body>
 </html>
