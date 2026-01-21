@@ -20,15 +20,13 @@
       --paper2:#f6f3ea;
 
       --line:rgba(0,0,0,.14);
-      --line2:rgba(11,95,118,.22);
       --shadow:0 14px 30px rgba(0,0,0,.10);
       --shadow2:0 10px 26px rgba(0,0,0,.08);
 
       --r:16px;
       --max:1200px;
 
-      --dark:#2b2b2b;
-      --dark2:#1f1f1f;
+      --priceRed:#d21717;
     }
 
     *{box-sizing:border-box}
@@ -46,7 +44,7 @@
     .wrap{max-width:var(--max); margin:0 auto; padding:0 18px;}
     .sr{position:absolute; left:-9999px}
 
-    /* ================= HEADER (UGUALE AL TUO) ================= */
+    /* ================= HEADER (come il tuo) ================= */
     .headerHero{
       position:relative;
       padding:26px 0 16px;
@@ -239,23 +237,17 @@
     }
     .searchTop input:focus{border-color: rgba(14,126,160,.45); box-shadow: 0 0 0 4px rgba(14,126,160,.12);}
 
-    /* ================= LAYOUT SHOP (sidebar + contenuto) ================= */
-    .shop{
-      padding:18px 0 44px;
-    }
+    /* ================= SHOP ================= */
+    .shop{padding:18px 0 44px;}
     .layout{
       display:grid;
-      grid-template-columns: 290px 1fr;
+      grid-template-columns: 300px 1fr;
       gap:18px;
       align-items:start;
     }
 
-    /* Sidebar */
-    .side{
-      position:sticky;
-      top: 12px;
-      align-self:start;
-    }
+    /* Sidebar: stile foto */
+    .side{position:sticky; top:12px; align-self:start;}
     .sideCard{
       border:1px solid rgba(0,0,0,.14);
       border-radius: var(--r);
@@ -294,47 +286,63 @@
       overflow:auto;
     }
 
-    .macro{
+    .treeItem{
+      padding:6px 6px;
       border-radius:12px;
       border:1px solid transparent;
-      padding:8px 8px;
-      margin-bottom:6px;
-      background: rgba(11,95,118,.04);
     }
-    .macro.active{
-      border-color: rgba(14,126,160,.26);
-      background: rgba(14,126,160,.08);
+    .treeItem:hover{
+      background: rgba(11,95,118,.05);
+      border-color: rgba(11,95,118,.10);
     }
-    .macroRow{
+    .treeItem.active{
+      background: rgba(14,126,160,.10);
+      border-color: rgba(14,126,160,.22);
+    }
+
+    .treeRow{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:10px;
     }
-    .macroLeft{
+    .treeLeft{
       display:flex;
       align-items:center;
       gap:8px;
       min-width:0;
       flex:1;
     }
-    .toggle{
-      width:26px; height:26px;
-      border-radius:8px;
-      border:1px solid rgba(0,0,0,.12);
-      background:#fff;
+
+    /* triangolino come foto */
+    .tri{
+      width:22px; height:22px;
+      border:0;
+      background: transparent;
       cursor:pointer;
-      flex:0 0 auto;
       display:inline-flex;
       align-items:center;
       justify-content:center;
+      flex:0 0 auto;
+      color:rgba(20,20,20,.70);
       font-weight:1000;
-      color:rgba(20,20,20,.65);
     }
+    .tri:focus{outline: none}
+    .triBox{
+      width:18px; height:18px;
+      border-radius:6px;
+      border:1px solid rgba(0,0,0,.10);
+      background:#fff;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      line-height:1;
+    }
+
     .macroBtn{
-      appearance:none;
       border:0;
-      background:transparent;
+      background: transparent;
       padding:0;
       cursor:pointer;
       text-align:left;
@@ -345,20 +353,23 @@
       white-space:nowrap;
       flex:1;
     }
-    .count{
+
+    .cnt{
       font-size:12px;
       font-weight:900;
       color:rgba(20,20,20,.55);
       flex:0 0 auto;
     }
+
     .children{
       display:none;
-      margin:8px 0 2px 26px;
+      margin:6px 0 0 28px;
       padding-left:10px;
       border-left:1px dashed rgba(0,0,0,.18);
       gap:6px;
     }
-    .macro.open .children{display:grid}
+    .treeItem.open .children{display:grid}
+
     .subBtn{
       display:flex;
       align-items:center;
@@ -367,17 +378,17 @@
       padding:8px 10px;
       border-radius:12px;
       border:1px solid transparent;
-      background: rgba(255,255,255,.85);
+      background: rgba(255,255,255,.92);
       cursor:pointer;
       font-weight:950;
       color:rgba(20,20,20,.82);
     }
     .subBtn:hover{
-      border-color: rgba(11,95,118,.16);
+      border-color: rgba(11,95,118,.14);
       background: rgba(11,95,118,.06);
     }
     .subBtn.active{
-      border-color: rgba(14,126,160,.34);
+      border-color: rgba(14,126,160,.30);
       background: rgba(14,126,160,.12);
     }
     .subBtn span{
@@ -563,16 +574,13 @@
     }
     .price{
       margin:8px 0 0;
-      font-size:14px;
+      font-size:15px;
       font-weight:1100;
-      color: rgba(11,95,118,.98);
+      color: var(--priceRed);
     }
 
     .grid.list{grid-template-columns:1fr;}
-    .grid.list .card{
-      display:grid;
-      grid-template-columns: 240px 1fr;
-    }
+    .grid.list .card{display:grid; grid-template-columns: 240px 1fr;}
     .grid.list .thumb{height:auto; min-height:190px;}
     .grid.list .content{padding:14px;}
 
@@ -641,7 +649,7 @@
 </head>
 
 <body>
-  <!-- HEADER (sempre così, come vuoi tu) -->
+  <!-- HEADER (sempre uguale come vuoi tu) -->
   <header class="headerHero" id="home">
     <div class="wrap">
       <div class="headerRow">
@@ -672,7 +680,7 @@
     </div>
   </header>
 
-  <!-- MINI NAV sotto header -->
+  <!-- MINI NAV -->
   <div class="mininav">
     <div class="wrap">
       <nav class="links" aria-label="Navigazione">
@@ -693,16 +701,15 @@
   <main class="shop" id="catalogo">
     <div class="wrap">
       <div class="layout">
+
         <!-- SIDEBAR -->
         <aside class="side" aria-label="Categorie">
           <div class="sideCard">
             <div class="sideHead">
-              <b>Categorie</b>
+              <b>Home</b>
               <button class="resetBtn" id="resetAll" type="button">Tutti</button>
             </div>
-            <div class="tree" id="tree">
-              <!-- JS -->
-            </div>
+            <div class="tree" id="tree"></div>
           </div>
         </aside>
 
@@ -714,7 +721,7 @@
               <span style="opacity:.45">/</span>
               <b id="crumbLabel">Home</b>
             </div>
-            <div style="color:rgba(20,20,20,.70); font-weight:900;" id="metaTop">Caricamento…</div>
+            <div id="metaTop" style="color:rgba(20,20,20,.70); font-weight:900;">Caricamento…</div>
           </div>
 
           <div class="mainInner">
@@ -757,6 +764,7 @@
 
           </div>
         </section>
+
       </div>
     </div>
   </main>
@@ -785,7 +793,7 @@
       sort: "rel",
       perPage: 12,
       page: 1,
-      openMacro: null // quale macro è aperta in sidebar (solo UI)
+      openMacros: new Set() // solo UI (aperti/chiusi)
     };
 
     const $ = (id) => document.getElementById(id);
@@ -998,40 +1006,41 @@
     }
 
     function renderTree(){
-      const open = state.openMacro;
-
       let html = "";
 
       // “Tutti”
       html += `
-        <div class="macro ${state.macro === "tutti" ? "active" : ""}">
-          <div class="macroRow">
-            <div class="macroLeft">
-              <button class="toggle" type="button" aria-label="Apri" data-action="toggleAll">›</button>
+        <div class="treeItem ${state.macro === "tutti" ? "active" : ""}">
+          <div class="treeRow">
+            <div class="treeLeft">
+              <button class="tri" type="button" data-action="noop" aria-label="tri">
+                <span class="triBox">▶</span>
+              </button>
               <button class="macroBtn" type="button" data-action="selectAll">Tutti</button>
             </div>
-            <span class="count">${ALL.length}</span>
+            <span class="cnt">${ALL.length}</span>
           </div>
         </div>
       `;
 
       for(const m of model){
-        const isOpen = (open === m.macroSlug);
-        const isActiveMacro = (state.macro === m.macroSlug && state.sub === "tutti");
+        const isOpen = state.openMacros.has(m.macroSlug);
+        const activeMacro = (state.macro === m.macroSlug && state.sub === "tutti");
+        const triChar = isOpen ? "▼" : "▶";
 
         html += `
-          <div class="macro ${isOpen ? "open" : ""} ${isActiveMacro ? "active" : ""}" data-macro="${esc(m.macroSlug)}">
-            <div class="macroRow">
-              <div class="macroLeft">
-                <button class="toggle" type="button" data-action="toggleMacro" data-macro="${esc(m.macroSlug)}" aria-label="Apri/chiudi">
-                  ${isOpen ? "⌄" : "›"}
+          <div class="treeItem ${isOpen ? "open" : ""} ${activeMacro ? "active" : ""}" data-macro="${esc(m.macroSlug)}">
+            <div class="treeRow">
+              <div class="treeLeft">
+                <button class="tri" type="button" data-action="toggle" data-macro="${esc(m.macroSlug)}" aria-label="Apri/chiudi">
+                  <span class="triBox">${triChar}</span>
                 </button>
                 <button class="macroBtn" type="button"
                         data-action="selectMacro"
                         data-macro="${esc(m.macroSlug)}"
                         data-macro-label="${esc(m.macro)}">${esc(m.macro)}</button>
               </div>
-              <span class="count">${m.total}</span>
+              <span class="cnt">${m.total}</span>
             </div>
 
             <div class="children">
@@ -1074,10 +1083,8 @@
       state.macroLabel = label || "";
       state.subLabel = "";
       state.page = 1;
-
-      // (solo UI) apri quella macro in sidebar
-      state.openMacro = macroSlug;
-
+      // UI: apri
+      state.openMacros.add(macroSlug);
       renderTree();
       render();
     }
@@ -1088,16 +1095,15 @@
       state.macroLabel = macroLabel || "";
       state.subLabel = subLabel || "";
       state.page = 1;
-
-      // (solo UI) assicurati che la macro sia aperta
-      state.openMacro = macroSlug;
-
+      // UI: apri
+      state.openMacros.add(macroSlug);
       renderTree();
       render();
     }
 
     function toggleMacro(macroSlug){
-      state.openMacro = (state.openMacro === macroSlug) ? null : macroSlug;
+      if(state.openMacros.has(macroSlug)) state.openMacros.delete(macroSlug);
+      else state.openMacros.add(macroSlug);
       renderTree();
     }
 
@@ -1154,34 +1160,31 @@
 
       // build sidebar model
       model = buildModel();
-      state.openMacro = model[0]?.macroSlug || null;
 
-      // sidebar render
+      // UI: apri le prime 2 macro per comodità
+      state.openMacros = new Set(model.slice(0,2).map(x=>x.macroSlug));
+
+      // render sidebar + main
       renderTree();
+      render();
 
-      // sidebar event delegation
+      // sidebar events (delegation)
       tree.addEventListener("click", (e)=>{
         const el = e.target.closest("[data-action]");
         if(!el) return;
 
         const action = el.getAttribute("data-action");
 
-        if(action === "toggleAll"){
-          // solo estetica: niente
+        if(action === "toggle"){
+          toggleMacro(el.getAttribute("data-macro"));
           return;
         }
         if(action === "selectAll"){
           setFilterAll();
           return;
         }
-        if(action === "toggleMacro"){
-          toggleMacro(el.getAttribute("data-macro"));
-          return;
-        }
         if(action === "selectMacro"){
-          const ms = el.getAttribute("data-macro");
-          const ml = el.getAttribute("data-macro-label");
-          setFilterMacro(ms, ml);
+          setFilterMacro(el.getAttribute("data-macro"), el.getAttribute("data-macro-label"));
           return;
         }
         if(action === "selectSub"){
@@ -1212,7 +1215,6 @@
         state.page = 1;
         render();
       });
-
       perPage.addEventListener("change", ()=>{
         state.perPage = Number(perPage.value) || 12;
         state.page = 1;
@@ -1248,8 +1250,6 @@
       // reset
       resetAll.addEventListener("click", setFilterAll);
 
-      // first render
-      render();
     }
 
     boot().catch(err=>{
