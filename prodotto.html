@@ -578,7 +578,6 @@
               </div>
 
               <div class="metaBox">
-                <div><b>Categoria:</b> <span id="catLabel">—</span></div>
                 <div><b>Produttore:</b> <span id="brandLabel">—</span></div>
 
                 <!-- RIMOSSO: "Categoria: ABBIGLIAMENTO » CAPPELLINI" -->
@@ -693,7 +692,6 @@
       $("skuLine").textContent = `SKU: ${p.sku || "—"}`;
 
       // Box meta: solo info utili, niente riga "Categoria: ... "
-      $("catLabel").textContent = fullCat || "—";
       $("brandLabel").textContent = (p.brand && String(p.brand).trim()) ? p.brand : "—";
 
       const metaParts = [];
@@ -794,3 +792,4 @@
   </script>
 </body>
 </html>
+
