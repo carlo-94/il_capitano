@@ -245,27 +245,13 @@
     cursor:pointer;
   }
 
-  .dropList{
+ .dropList{
   display:grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr)); /* ✅ 2 colonne */
+  grid-template-columns: 1fr;
   gap:6px;
-  max-height: 340px;
+  max-height: 320px;
   overflow:auto;
   padding-right:4px;
-}
-
-/* su schermi piccoli torna a 1 colonna */
-@media (max-width: 680px){
-  .dropList{
-    grid-template-columns: 1fr;
-    max-height: 320px;
-  }
-}
-
-  .dropA span{
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
 }
 
   .dropA{
