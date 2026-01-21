@@ -679,88 +679,81 @@
     }
 
     function renderProduct(p){
-      const fullCat = String(p.catLine || p.category || "").trim();
+  // categoria completa (dal tuo JSON già normalizzato in Catalogo.js)
+  const fullCat = String(p.catLine || p.category || p.Categoria || "").trim();
 
-// badge (card) = categoria completa
-$("badge").textContent = fullCat ? `Categoria: ${fullCat}` : "—";
+  // ✅ pill sopra e badge = categoria completa (senza "Categoria:" se vuoi puoi aggiungerlo)
+  $("crumbPill").textContent = fullCat || "Prodotto";
+  $("badge").textContent = fullCat || "PRODOTTO";
 
-// pill sopra = categoria completa (se vuoi come nello screenshot)
-$("crumbPill").textContent = fullCat ? `Categoria: ${fullCat}` : "—";
+  // ✅ card bianca sotto produttore = categoria completa
+  $("metaLine").textContent = fullCat || "—";
 
-// rettangolo = categoria completa
-$("metaLine").textContent = fullCat ? `Categoria: ${fullCat}` : "—";
+  document.title = `${p.title || "Prodotto"} • Il Capitano`;
 
+  $("title").textContent = p.title || "(Senza nome)";
+  $("price").textContent = p.priceLabel || "—";
+  $("skuLine").textContent = `SKU: ${p.sku || "—"}`;
 
-      $("crumbPill").textContent = fullCat || "Prodotto";
-      $("badge").textContent = fullCat || "PRODOTTO";
+  // ✅ produttore: se manca deve restare vuoto (non “—”)
+  const brand = (p.brand && String(p.brand).trim()) ? String(p.brand).trim() : "";
+  $("brandLabel").textContent = brand;
 
-      document.title = `${p.title || "Prodotto"} • Il Capitano`;
+  // WhatsApp
+  const msg = encodeURIComponent(`${WHATSAPP_TEXT}\n\nProdotto: ${p.title}\nCodice: ${p.sku}`);
+  $("wa").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
 
-      $("title").textContent = p.title || "(Senza nome)";
-      $("price").textContent = p.priceLabel || "—";
-      $("skuLine").textContent = `SKU: ${p.sku || "—"}`;
+  // immagini
+  const imgs = makeImagesForProduct(p);
+  setHero(imgs[0], p.title);
 
-      // Box meta: solo info utili, niente riga "Categoria: ... "
-      $("brandLabel").textContent = (p.brand && String(p.brand).trim()) ? p.brand : "—";
+  const thumbs = $("thumbs");
+  thumbs.innerHTML = imgs.map((src,i)=>`
+    <div class="thumb ${i===0 ? "active":""}" role="button" tabindex="0" data-i="${i}" aria-label="Foto ${i+1}">
+      <div class="frame">
+        <img src="${src}" alt="${(p.title || "Prodotto")} foto ${i+1}" onerror="this.src='${PLACEHOLDER}'">
+      </div>
+    </div>
+  `).join("");
 
-      const metaParts = [];
-      if((p.brand || "").trim()) metaParts.push(`Produttore: ${p.brand}`);
-      $("metaLine").textContent = metaParts.join(" • ") || "—";
+  thumbs.querySelectorAll(".thumb").forEach(el=>{
+    const activate = ()=>{
+      const i = Number(el.getAttribute("data-i"));
+      setHero(imgs[i], p.title);
+      setActiveThumb(i);
+    };
+    el.addEventListener("click", activate);
+    el.addEventListener("keydown", (e)=>{
+      if(e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        activate();
+      }
+    });
+  });
 
-      // WhatsApp
-      const msg = encodeURIComponent(`${WHATSAPP_TEXT}\n\nProdotto: ${p.title}\nCodice: ${p.sku}`);
-      $("wa").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+  // quantità
+  const qtyInput = $("qty");
+  const plus = $("qtyPlus");
+  const minus = $("qtyMinus");
 
-      // immagini
-      const imgs = makeImagesForProduct(p);
-      setHero(imgs[0], p.title);
+  const clampQty = ()=>{
+    let v = Number(qtyInput.value);
+    if(!Number.isFinite(v) || v < 1) v = 1;
+    qtyInput.value = String(v);
+    return v;
+  };
 
-      const thumbs = $("thumbs");
-      thumbs.innerHTML = imgs.map((src,i)=>`
-        <div class="thumb ${i===0 ? "active":""}" role="button" tabindex="0" data-i="${i}" aria-label="Foto ${i+1}">
-          <div class="frame">
-            <img src="${src}" alt="${(p.title || "Prodotto")} foto ${i+1}" onerror="this.src='${PLACEHOLDER}'">
-          </div>
-        </div>
-      `).join("");
+  plus.onclick = ()=>{ qtyInput.value = String(clampQty()+1); };
+  minus.onclick = ()=>{ qtyInput.value = String(Math.max(1, clampQty()-1)); };
+  qtyInput.addEventListener("change", clampQty);
 
-      thumbs.querySelectorAll(".thumb").forEach(el=>{
-        const activate = ()=>{
-          const i = Number(el.getAttribute("data-i"));
-          setHero(imgs[i], p.title);
-          setActiveThumb(i);
-        };
-        el.addEventListener("click", activate);
-        el.addEventListener("keydown", (e)=>{
-          if(e.key === "Enter" || e.key === " "){
-            e.preventDefault();
-            activate();
-          }
-        });
-      });
+  $("addCart").onclick = ()=>{
+    const qty = clampQty();
+    addToCart(p, qty);
+    toast(`Aggiunto al carrello: ${qty} × ${p.title}`);
+  };
+}
 
-      // quantità
-      const qtyInput = $("qty");
-      const plus = $("qtyPlus");
-      const minus = $("qtyMinus");
-
-      const clampQty = ()=>{
-        let v = Number(qtyInput.value);
-        if(!Number.isFinite(v) || v < 1) v = 1;
-        qtyInput.value = String(v);
-        return v;
-      };
-
-      plus.onclick = ()=>{ qtyInput.value = String(clampQty()+1); };
-      minus.onclick = ()=>{ qtyInput.value = String(Math.max(1, clampQty()-1)); };
-      qtyInput.addEventListener("change", clampQty);
-
-      $("addCart").onclick = ()=>{
-        const qty = clampQty();
-        addToCart(p, qty);
-        toast(`Aggiunto al carrello: ${qty} × ${p.title}`);
-      };
-    }
 
     async function boot(){
       const skuParam = (window.Catalogo && Catalogo.norm) ? Catalogo.norm(qs("sku") || qs("id") || "") : (qs("sku") || qs("id") || "");
@@ -801,3 +794,4 @@ $("metaLine").textContent = fullCat ? `Categoria: ${fullCat}` : "—";
   </script>
 </body>
 </html>
+
