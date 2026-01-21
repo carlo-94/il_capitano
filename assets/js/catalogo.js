@@ -10,7 +10,9 @@
   "use strict";
 
   const Catalogo = {};
-  window.CapitanoCatalogo = Catalogo;
+window.CapitanoCatalogo = Catalogo;
+window.Catalogo = Catalogo; // <-- AGGIUNGI QUESTO
+
 
   // ---------------- utils base ----------------
   const norm = (s)=> String(s ?? "").replace(/\s+/g," ").trim();
@@ -951,5 +953,23 @@
       setHero(cfg.placeholder, "Errore");
     }
   };
+
+     // =========================================================
+  // API PUBBLICA RICHIESTA (window.Catalogo)
+  // =========================================================
+
+  Catalogo.norm = norm;
+  Catalogo.slugify = slugify;
+  Catalogo.buildModel = buildModel;
+
+  Catalogo.loadCatalog = async function loadCatalog({ dataUrlCandidates, placeholderCover } = {}){
+    const raw = await fetchCatalogJson(dataUrlCandidates);
+    const ALL = parseDaneaRows(raw).map(p => Object.assign({ cover: placeholderCover }, p));
+    return { ALL };
+  };
+
+  // Export globale richiesto
+  window.Catalogo = Catalogo;
+
 
 })();
