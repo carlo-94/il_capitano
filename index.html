@@ -25,6 +25,9 @@
 
     --r:16px;
     --max:1200px;
+
+    --dark:#2b2b2b;
+    --dark2:#1f1f1f;
   }
 
   *{box-sizing:border-box}
@@ -42,19 +45,10 @@
   .wrap{max-width:var(--max); margin:0 auto; padding:8px 18px;}
   .sr{position:absolute; left:-9999px}
 
-  /* =========================================================
-     STICKY FOOTER
-  ========================================================= */
-  .page{
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-  }
+  .page{min-height:100vh; display:flex; flex-direction:column;}
   .page__content{flex:1}
 
-  /* =========================================================
-     HEADER
-  ========================================================= */
+  /* ================= HEADER ================= */
   .headerHero{
     position:relative;
     padding:26px 0 16px;
@@ -64,9 +58,7 @@
   }
   .headerHero::before{
     content:"";
-    position:absolute;
-    inset:0;
-    pointer-events:none;
+    position:absolute; inset:0; pointer-events:none;
     background:
       repeating-linear-gradient(0deg,
         rgba(0,0,0,.018) 0px, rgba(0,0,0,.018) 1px,
@@ -76,7 +68,6 @@
     opacity:.55;
     mix-blend-mode:multiply;
   }
-
   .headerRow{
     position:relative;
     display:grid;
@@ -85,18 +76,9 @@
     align-items:center;
   }
 
-  .headerLogo{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    position:relative;
-    min-height:140px;
-  }
+  .headerLogo{display:flex; align-items:center; justify-content:center; position:relative; min-height:140px;}
   .headerLogo::before{
-    content:"";
-    position:absolute;
-    inset:14px 18px;
-    border-radius:14px;
+    content:""; position:absolute; inset:14px 18px; border-radius:14px;
     background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.80));
     border:1px solid rgba(0,0,0,.14);
     box-shadow: 0 12px 22px rgba(0,0,0,.08);
@@ -104,12 +86,7 @@
     height:176px;
   }
   .headerLogo::after{
-    content:"";
-    position:absolute;
-    width:62px;
-    height:18px;
-    top:6px;
-    left:50%;
+    content:""; position:absolute; width:62px; height:18px; top:6px; left:50%;
     transform:translateX(-50%) rotate(-6deg);
     border-radius:6px;
     background: rgba(242,231,201,.72);
@@ -117,269 +94,191 @@
     box-shadow:0 8px 14px rgba(0,0,0,.07);
     opacity:.9;
   }
-  .headerLogo img{
-    position:relative;
-    width:151px;
-    height:auto;
-    display:block;
-  }
+  .headerLogo img{position:relative; width:151px; height:auto; display:block;}
 
-  .headerTitle{
-    min-width:0;
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    padding:6px 0;
-  }
-  .brandName{
-    margin:0;
-    font-size:34px;
-    font-weight:1000;
-    letter-spacing:.02em;
-  }
-  .brandSub{
-    margin:0;
-    font-size:13px;
-    font-weight:950;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    color:rgba(11,95,118,.92);
-  }
-  .brandDesc{
-    margin:2px 0 0;
-    color:rgba(20,20,20,.72);
-    font-weight:850;
-    line-height:1.35;
-    font-size:14px;
-  }
+  .headerTitle{min-width:0; display:flex; flex-direction:column; gap:6px; padding:6px 0;}
+  .brandName{margin:0; font-size:34px; font-weight:1000; letter-spacing:.02em;}
+  .brandSub{margin:0; font-size:13px; font-weight:950; letter-spacing:.14em; text-transform:uppercase; color:rgba(11,95,118,.92);}
+  .brandDesc{margin:2px 0 0; color:rgba(20,20,20,.72); font-weight:850; line-height:1.35; font-size:14px;}
 
-  .rope{
-    position:relative;
-    margin-top:8px;
-    height:14px;
-    width:min(680px, 100%);
-  }
+  .rope{position:relative; margin-top:8px; height:14px; width:min(680px, 100%);}
   .rope::before{
-    content:"";
-    position:absolute;
-    left:0; right:0;
-    top:6px;
-    height:2px;
-    background:
-      repeating-linear-gradient(90deg,
-        rgba(70,52,30,.55) 0 6px,
-        rgba(70,52,30,.35) 6px 10px);
-    border-radius:999px;
-    opacity:.65;
+    content:""; position:absolute; left:0; right:0; top:6px; height:2px;
+    background: repeating-linear-gradient(90deg, rgba(70,52,30,.55) 0 6px, rgba(70,52,30,.35) 6px 10px);
+    border-radius:999px; opacity:.65;
   }
   .rope::after{
-    content:"";
-    position:absolute;
-    left:0;
-    top:2px;
-    width:22px;
-    height:10px;
-    border:2px solid rgba(70,52,30,.45);
-    border-left:none;
-    border-radius: 0 999px 999px 0;
-    opacity:.55;
+    content:""; position:absolute; left:0; top:2px; width:22px; height:10px;
+    border:2px solid rgba(70,52,30,.45); border-left:none;
+    border-radius: 0 999px 999px 0; opacity:.55;
   }
 
   .stamp{
-    margin-top:8px;
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    width:max-content;
-    padding:7px 10px;
-    border-radius:12px;
+    margin-top:8px; display:inline-flex; align-items:center; gap:8px; width:max-content;
+    padding:7px 10px; border-radius:12px;
     border:1px dashed rgba(11,95,118,.35);
     background: rgba(238,246,247,.60);
     color: rgba(11,95,118,.95);
-    font-weight:1000;
-    letter-spacing:.10em;
-    text-transform:uppercase;
-    font-size:11px;
+    font-weight:1000; letter-spacing:.10em; text-transform:uppercase; font-size:11px;
   }
-  .stampDot{
-    width:8px; height:8px;
-    border-radius:999px;
-    background: rgba(11,95,118,.85);
-    box-shadow:0 0 0 3px rgba(11,95,118,.14);
-  }
+  .stampDot{width:8px; height:8px; border-radius:999px; background: rgba(11,95,118,.85); box-shadow:0 0 0 3px rgba(11,95,118,.14);}
 
   .assist{
-    justify-self:end;
-    width:250px;
-    aspect-ratio:1/1;
-    border-radius:999px;
-    border:2px solid rgba(11,95,118,.22);
-    box-shadow: var(--shadow);
+    justify-self:end; width:250px; aspect-ratio:1/1; border-radius:999px;
+    border:2px solid rgba(11,95,118,.22); box-shadow: var(--shadow);
     background:
       radial-gradient(220px 220px at 30% 25%, rgba(242,231,201,.72), transparent 60%),
       radial-gradient(240px 240px at 70% 70%, rgba(14,126,160,.16), transparent 62%),
       linear-gradient(180deg, rgba(255,255,255,.92), rgba(238,246,247,.86));
-    padding:18px 18px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    gap:8px;
+    padding:18px 18px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:8px;
     position:relative;
   }
-  .assist::before{
-    content:"";
-    position:absolute;
-    inset:10px;
-    border-radius:999px;
-    border:1px dashed rgba(11,95,118,.22);
-  }
-  .assist strong{
-    display:block;
-    text-transform:uppercase;
-    letter-spacing:.12em;
-    font-size:15px;
-  }
-  .assist .sub{
-    color:rgba(20,20,20,.65);
-    font-weight:950;
-    letter-spacing:.12em;
-    text-transform:uppercase;
-    font-size:14px;
-  }
-  .assist .phone{
-    font-weight:1100;
-    letter-spacing:.10em;
-    font-size:18px;
-    color:rgba(11,95,118,.98);
-    white-space:nowrap;
-  }
-  .assist .mini{
-    margin-top:8px;
-    padding-top:10px;
-    width:100%;
-    border-top:1px solid rgba(11,95,118,.18);
-    font-size:12px;
-    font-weight:900;
-    line-height:1.3;
-    color:rgba(20,20,20,.72);
-  }
+  .assist::before{content:""; position:absolute; inset:10px; border-radius:999px; border:1px dashed rgba(11,95,118,.22);}
+  .assist strong{display:block; text-transform:uppercase; letter-spacing:.12em; font-size:15px;}
+  .assist .sub{color:rgba(20,20,20,.65); font-weight:950; letter-spacing:.12em; text-transform:uppercase; font-size:14px;}
+  .assist .phone{font-weight:1100; letter-spacing:.10em; font-size:18px; color:rgba(11,95,118,.98); white-space:nowrap;}
+  .assist .mini{margin-top:8px; padding-top:10px; width:100%; border-top:1px solid rgba(11,95,118,.18); font-size:12px; font-weight:900; line-height:1.3; color:rgba(20,20,20,.72);}
 
-  /* =========================================================
-     NAV + SEARCH
-  ========================================================= */
+  /* ================= MINI NAV ================= */
   .mininav{
     border-top:1px solid var(--line);
     border-bottom:1px solid var(--line);
     background: rgba(255,255,255,.78);
     backdrop-filter: blur(6px);
   }
-  .mininav .wrap{
+  .mininav .wrap{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 18px;}
+  .links{display:flex; gap:12px; flex-wrap:wrap; font-weight:950; font-size:14px; color:rgba(20,20,20,.80);}
+  .links a{padding:6px 10px; border-radius:999px; border:1px solid transparent; font-size:22px;}
+  .links a:hover{border-color: rgba(0,0,0,.10); background: rgba(242,231,201,.35);}
+  .searchTop{display:flex; align-items:center; gap:10px;}
+  .pill{padding:8px 12px; border-radius:999px; border:1px solid rgba(0,0,0,.12); background: rgba(238,246,247,.70); font-weight:950; color: rgba(11,95,118,.92); white-space:nowrap;}
+  .searchTop input{width:320px; padding:9px 12px; border-radius:999px; border:1px solid rgba(0,0,0,.16); outline:none; background:#fff; font-weight:800;}
+  .searchTop input:focus{border-color: rgba(14,126,160,.45); box-shadow: 0 0 0 4px rgba(14,126,160,.12);}
+
+  /* ================= CATBAR DROPDOWN ================= */
+  .catbar{
+    position:sticky; top:0; z-index:500;
+    background: linear-gradient(180deg, var(--dark), var(--dark2));
+    border-bottom:1px solid rgba(255,255,255,.10);
+  }
+  .catbar .wrap{
+    padding:10px 18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width: thin;
+  }
+
+  .catItem{position:relative; flex:0 0 auto;}
+  .catBtn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 14px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.06);
+    color:rgba(255,255,255,.92);
+    font-weight:1000;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    font-size:13px;
+    cursor:pointer;
+    user-select:none;
+    transition: background .15s ease, border-color .15s ease, transform .15s ease;
+    white-space:nowrap;
+  }
+  .catBtn:hover{background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.22); transform: translateY(-1px);}
+  .catBtn.active{background: rgba(14,126,160,.22); border-color: rgba(14,126,160,.38);}
+
+  .chev{opacity:.85; font-size:12px;}
+
+  /* dropdown */
+  .drop{
+    position:absolute;
+    left:0;
+    top:calc(100% + 10px);
+    min-width: 260px;
+    max-width: 360px;
+    background: rgba(255,255,255,.98);
+    border:1px solid rgba(0,0,0,.12);
+    border-radius:14px;
+    box-shadow: 0 18px 50px rgba(0,0,0,.18);
+    padding:10px;
+    display:none;
+  }
+  .drop::before{
+    content:"";
+    position:absolute;
+    top:-7px; left:18px;
+    width:14px; height:14px;
+    background: rgba(255,255,255,.98);
+    border-left:1px solid rgba(0,0,0,.12);
+    border-top:1px solid rgba(0,0,0,.12);
+    transform: rotate(45deg);
+  }
+
+  /* hover desktop */
+  @media (hover:hover){
+    .catItem:hover .drop{display:block;}
+    .catItem:hover .catBtn{background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.22);}
+  }
+  /* open mobile via class */
+  .catItem.open .drop{display:block;}
+
+  .dropHead{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:6px 8px 10px;
+    border-bottom:1px solid rgba(0,0,0,.08);
+    margin-bottom:8px;
+  }
+  .dropHead b{font-size:13px; letter-spacing:.04em; text-transform:uppercase; color:rgba(20,20,20,.82);}
+  .dropHead .reset{
+    font-size:12px;
+    font-weight:900;
+    padding:6px 10px;
+    border-radius:999px;
+    border:1px solid rgba(0,0,0,.10);
+    background: rgba(242,231,201,.45);
+    cursor:pointer;
+  }
+
+  .dropList{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:6px;
+    max-height: 320px;
+    overflow:auto;
+    padding-right:4px;
+  }
+  .dropA{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:12px;
-    padding:10px 18px;
-  }
-  .links{
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-    font-weight:950;
-    font-size:14px;
-    color:rgba(20,20,20,.80);
-  }
-  .links a{
-    padding:6px 10px;
-    border-radius:999px;
-    border:1px solid transparent;
-    font-size: 22px;
-  }
-  .links a:hover{
-    border-color: rgba(0,0,0,.10);
-    background: rgba(242,231,201,.35);
-  }
-  .searchTop{
-    display:flex;
-    align-items:center;
     gap:10px;
-  }
-  .pill{
-    padding:8px 12px;
-    border-radius:999px;
-    border:1px solid rgba(0,0,0,.12);
-    background: rgba(238,246,247,.70);
-    font-weight:950;
-    color: rgba(11,95,118,.92);
-    white-space:nowrap;
-  }
-  .searchTop input{
-    width:320px;
-    padding:9px 12px;
-    border-radius:999px;
-    border:1px solid rgba(0,0,0,.16);
-    outline:none;
-    background:#fff;
-    font-weight:800;
-  }
-  .searchTop input:focus{
-    border-color: rgba(14,126,160,.45);
-    box-shadow: 0 0 0 4px rgba(14,126,160,.12);
-  }
-
-  /* =========================================================
-     CATBAR = MACRO CATEGORIE (CHIPS + SCROLL)
-  ========================================================= */
-  .catbar{
-    background:#2b2b2b;
-    color:#fff;
-    border-bottom:1px solid rgba(0,0,0,.25);
-  }
-  .catbar .wrap{
-    padding:12px 18px;
-    display:flex;
-    gap:10px;
-    flex-wrap:nowrap;
-    overflow-x:auto;
-    -webkit-overflow-scrolling: touch;
-    justify-content:flex-start;
-    align-items:center;
-    scrollbar-width: thin;
-  }
-  .catbar a{
-    flex:0 0 auto;
-    color:rgba(255,255,255,.92);
-    font-weight:950;
-    padding:10px 14px;
-    border-radius:999px;
+    padding:10px 10px;
+    border-radius:12px;
     border:1px solid transparent;
-    font-size:16px;
-    white-space:nowrap;
-    max-width:320px;
-    overflow:hidden;
-    text-overflow:ellipsis;
+    background: rgba(11,95,118,.06);
+    font-weight:950;
+    color:rgba(20,20,20,.86);
+    cursor:pointer;
   }
-  .catbar a:hover{
-    border-color: rgba(255,255,255,.18);
-    background: rgba(255,255,255,.06);
+  .dropA:hover{
+    border-color: rgba(11,95,118,.18);
+    background: rgba(11,95,118,.10);
   }
-  .catbar a.active{
-    border-color: rgba(255,255,255,.28);
-    background: rgba(255,255,255,.10);
+  .dropA.active{
+    border-color: rgba(14,126,160,.40);
+    background: rgba(14,126,160,.14);
   }
+  .dropA small{color:rgba(20,20,20,.55); font-weight:900;}
 
-  /* =========================================================
-     CATALOGO
-  ========================================================= */
-  .catalog{ padding:26px 0 44px; }
-  .pageTitle{
-    text-align:center;
-    font-size:40px;
-    letter-spacing:-.03em;
-    margin:18px 0 10px;
-    font-weight:1000;
-  }
+  /* ================= CATALOGO ================= */
+  .catalog{padding:26px 0 44px;}
+  .pageTitle{text-align:center; font-size:40px; letter-spacing:-.03em; margin:18px 0 10px; font-weight:1000;}
 
   .metaRow{
     margin: 0 auto 16px;
@@ -392,35 +291,24 @@
     color:rgba(20,20,20,.72);
     font-weight:900;
   }
-  .metaRow .right{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    flex-wrap:wrap;
-    justify-content:flex-end;
-  }
+  .metaRow .right{display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
   select{
-    padding:9px 12px;
-    border-radius:12px;
+    padding:9px 12px; border-radius:12px;
     border:1px solid rgba(0,0,0,.16);
-    outline:none;
-    background:#fff;
-    font-weight:900;
-    color:rgba(20,20,20,.86);
+    outline:none; background:#fff;
+    font-weight:900; color:rgba(20,20,20,.86);
   }
-  select:focus{
-    border-color: rgba(14,126,160,.45);
-    box-shadow: 0 0 0 4px rgba(14,126,160,.12);
-  }
+  select:focus{border-color: rgba(14,126,160,.45); box-shadow: 0 0 0 4px rgba(14,126,160,.12);}
 
   .grid{
-    max-width: 1080px;
+    max-width:1080px;
     margin:0 auto;
     display:grid;
     grid-template-columns: repeat(3, minmax(0,1fr));
     gap:16px;
-    padding: 0 6px;
+    padding:0 6px;
   }
+
   .card{
     border:1px solid rgba(0,0,0,.14);
     border-radius: var(--r);
@@ -430,16 +318,10 @@
     cursor:pointer;
     transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
   }
-  .card:hover{
-    transform: translateY(-2px);
-    border-color: rgba(11,95,118,.22);
-    box-shadow: 0 18px 40px rgba(0,0,0,.10);
-  }
+  .card:hover{transform: translateY(-2px); border-color: rgba(11,95,118,.22); box-shadow: 0 18px 40px rgba(0,0,0,.10);}
   .thumb{
     height:180px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display:flex; align-items:center; justify-content:center;
     background:
       radial-gradient(520px 240px at 15% 15%, rgba(14,126,160,.18), transparent 62%),
       radial-gradient(520px 240px at 80% 50%, rgba(242,231,201,.26), transparent 60%),
@@ -460,7 +342,6 @@
     border:1px solid rgba(255,255,255,.18);
     z-index:100;
   }
-
   .photoFrame{
     width:78%;
     height:78%;
@@ -468,22 +349,11 @@
     border:1px solid rgba(0,0,0,.10);
     border-radius:14px;
     box-shadow: 0 10px 22px rgba(0,0,0,.10);
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display:flex; align-items:center; justify-content:center;
     padding:12px;
   }
-  .photoFrame img{
-    max-width:100%;
-    max-height:100%;
-    object-fit:contain;
-    display:block;
-    mix-blend-mode: multiply;
-    filter: contrast(1.08) saturate(1.02);
-  }
-  @supports not (mix-blend-mode: multiply){
-    .photoFrame img{ filter: contrast(1.06); }
-  }
+  .photoFrame img{max-width:100%; max-height:100%; object-fit:contain; display:block; mix-blend-mode:multiply; filter: contrast(1.08) saturate(1.02);}
+  @supports not (mix-blend-mode: multiply){.photoFrame img{ filter: contrast(1.06); }}
 
   .content{padding:12px 12px 14px;}
   .title{
@@ -502,22 +372,10 @@
     font-size:14px;
     min-height: 24px;
   }
-  .bottom{
-    margin-top:12px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-  }
-  .price{
-    font-weight:1100;
-    color: rgba(11,95,118,.98);
-    white-space:nowrap;
-  }
+  .bottom{margin-top:12px; display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .price{font-weight:1100; color: rgba(11,95,118,.98); white-space:nowrap;}
   .open{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
+    display:inline-flex; align-items:center; justify-content:center;
     padding:9px 12px;
     border-radius:999px;
     border:1px solid rgba(0,0,0,.14);
@@ -527,44 +385,19 @@
     transition: transform .14s ease, box-shadow .14s ease, background .14s ease;
     user-select:none;
   }
-  .card:hover .open{
-    transform: translateY(-1px);
-    box-shadow: 0 10px 22px rgba(0,0,0,.10);
-    background: rgba(242,231,201,.55);
-  }
+  .card:hover .open{transform: translateY(-1px); box-shadow: 0 10px 22px rgba(0,0,0,.10); background: rgba(242,231,201,.55);}
 
   .emptyState{
     grid-column: 1 / -1;
     min-height: 45vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding: 14px 6px;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center; padding:14px 6px;
     color: rgba(20,20,20,.70);
     font-weight:950;
   }
-  .emptyState h3{
-    margin:0 0 6px;
-    font-size:18px;
-    font-weight:1000;
-    letter-spacing:-.01em;
-  }
-  .emptyState p{margin:0; font-weight:900;}
 
-  footer{
-    border-top:1px solid rgba(0,0,0,.12);
-    padding:18px 0 26px;
-    color:rgba(20,20,20,.72);
-    font-weight:900;
-  }
-  footer .wrap{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    flex-wrap:wrap;
-  }
+  footer{border-top:1px solid rgba(0,0,0,.12); padding:18px 0 26px; color:rgba(20,20,20,.72); font-weight:900;}
+  footer .wrap{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;}
 
   @media (max-width: 980px){
     .headerRow{grid-template-columns: 1fr; gap:14px}
@@ -605,7 +438,6 @@
             </p>
 
             <div class="rope" aria-hidden="true"></div>
-
             <span class="stamp"><span class="stampDot" aria-hidden="true"></span>Negozio storico • Salerno</span>
           </div>
 
@@ -639,10 +471,10 @@
       </div>
     </div>
 
-    <!-- MACRO CATEGORIE -->
-    <div class="catbar" role="navigation" aria-label="Macro categorie">
-      <div class="wrap" id="macroBar">
-        <!-- popolata via JS -->
+    <!-- CATBAR DROPDOWN -->
+    <div class="catbar" role="navigation" aria-label="Categorie">
+      <div class="wrap" id="catbar">
+        <!-- popolato via JS -->
       </div>
     </div>
 
@@ -663,9 +495,9 @@
             </div>
 
             <div style="display:flex; align-items:center; gap:10px;">
-              <span>Sotto-categoria</span>
-              <select id="catSelect">
-                <option value="tutte">Tutte</option>
+              <span>Filtro attivo</span>
+              <select id="activeFilter" disabled>
+                <option>—</option>
               </select>
             </div>
           </div>
@@ -689,15 +521,15 @@
   const PLACEHOLDER = "assets/img/prodotti/placeholder.jpg";
 
   let ALL = [];
-  let state = { q:"", macro:"tutti", sub:"tutte", sort:"rel" };
+  let state = { q:"", macro:"tutti", sub:"tutti", sort:"rel" };
 
   const grid = document.getElementById("grid");
   const search = document.getElementById("search");
   const metaLeft = document.getElementById("metaLeft");
   const countPill = document.getElementById("countPill");
   const sort = document.getElementById("sort");
-  const catSelect = document.getElementById("catSelect");
-  const macroBar = document.getElementById("macroBar");
+  const catbar = document.getElementById("catbar");
+  const activeFilter = document.getElementById("activeFilter");
 
   document.getElementById("y").textContent = new Date().getFullYear();
 
@@ -709,13 +541,11 @@
       .replaceAll('"',"&quot;")
       .replaceAll("'","&#039;");
   }
-
   function euro(n){
     const num = Number(n);
     if (!Number.isFinite(num)) return "—";
     return num.toLocaleString("it-IT", { style:"currency", currency:"EUR" });
   }
-
   function slugify(s){
     return String(s ?? "")
       .toLowerCase()
@@ -726,20 +556,16 @@
       .replace(/\s+/g, "-")
       .replace(/-+/g, "-");
   }
-
-  function normalizeSpaces(s){
-    return String(s ?? "").replace(/\s+/g, " ").trim();
-  }
+  function norm(s){ return String(s ?? "").replace(/\s+/g, " ").trim(); }
 
   function splitCategory(full){
-    // "ABBIGLIAMENTO » CAPPELLINI" => macro="ABBIGLIAMENTO", rest="CAPPELLINI"
-    const parts = String(full ?? "").split("»").map(x=>normalizeSpaces(x));
+    const parts = String(full ?? "").split("»").map(x=>norm(x)).filter(Boolean);
     const macro = parts[0] || "Senza categoria";
-    const rest = parts.slice(1).join(" » ").trim(); // può essere ""
-    return { macro, rest, parts };
+    const sub = parts.slice(1).join(" » ").trim(); // può essere ""
+    return { macro, sub, parts };
   }
 
-  function pickBadgeFromFullCategory(fullCategory){
+  function pickBadge(fullCategory){
     const parts = String(fullCategory ?? "").split(/»|>/).map(x=>x.trim()).filter(Boolean);
     const last = parts.length ? parts[parts.length-1] : "PRODOTTO";
     return last.toUpperCase().slice(0, 18);
@@ -754,17 +580,24 @@
 
     s = s.replace(/\s/g, "").replace("€", "");
 
-    // IT: "1.234,56" o "10,00"
     if (s.includes(",")){
       s = s.replace(/\./g, "");
       s = s.replace(",", ".");
     } else {
-      // EN: "1234.56" o "10.00" (NON togliere i punti)
       s = s.replace(/,/g, "");
     }
 
     const num = Number(s);
     return Number.isFinite(num) ? num : NaN;
+  }
+
+  function setActiveFilterLabel(){
+    let label = "Tutti";
+    if (state.macro !== "tutti"){
+      label = state.macroLabel;
+      if (state.sub !== "tutti") label += " → " + state.subLabel;
+    }
+    activeFilter.innerHTML = `<option>${esc(label)}</option>`;
   }
 
   function matches(p){
@@ -773,7 +606,7 @@
     const macroOk = (state.macro === "tutti") || (p.macroSlug === state.macro);
     if(!macroOk) return false;
 
-    const subOk = (state.sub === "tutte") || (p.catSlug === state.sub);
+    const subOk = (state.sub === "tutti") || (p.catSlug === state.sub);
     if(!subOk) return false;
 
     if(!q) return true;
@@ -815,13 +648,14 @@
 
     metaLeft.textContent = `Stai visualizzando ${list.length} prodotti`;
     countPill.textContent = `${list.length} prodotti`;
+    setActiveFilterLabel();
 
     if(list.length === 0){
       grid.innerHTML = `
         <div class="emptyState">
           <div>
             <h3>Nessun prodotto trovato</h3>
-            <p>Prova a cambiare ricerca o filtri.</p>
+            <p>Prova a cambiare ricerca o categoria.</p>
           </div>
         </div>`;
       return;
@@ -842,68 +676,178 @@
     });
   }
 
-  function buildMacroIndex(){
-    const map = new Map(); // macro -> count
+  // ====== COSTRUZIONE MENU: macro -> lista di categorie complete ======
+  function buildMenuModel(){
+    const macroMap = new Map(); // macro => Map(fullCategory => count)
+
     for(const p of ALL){
-      map.set(p.macro, (map.get(p.macro) || 0) + 1);
+      const macro = p.macro;
+      if(!macroMap.has(macro)) macroMap.set(macro, new Map());
+      const m = macroMap.get(macro);
+      m.set(p.category, (m.get(p.category) || 0) + 1);
     }
-    return [...map.entries()].sort((a,b)=>b[1]-a[1]).map(([macro])=>macro);
+
+    // ordina macro per frequenza totale
+    const macros = [...macroMap.entries()].map(([macro, cats])=>{
+      let total = 0;
+      for(const c of cats.values()) total += c;
+      return { macro, total, cats };
+    }).sort((a,b)=>b.total-a.total);
+
+    return macros;
   }
 
-  function buildSubcategoriesForMacro(macroSlug){
-    const map = new Map(); // full category -> count
-    for(const p of ALL){
-      if(macroSlug !== "tutti" && p.macroSlug !== macroSlug) continue;
-      map.set(p.category, (map.get(p.category) || 0) + 1);
+  function renderCatbar(macros){
+    // "Tutti" fisso
+    let html = `
+      <div class="catItem">
+        <div class="catBtn ${state.macro==="tutti" ? "active":""}" data-macro="tutti">Tutti</div>
+      </div>
+    `;
+
+    // massimo macro in barra (per non allungare troppo)
+    const maxMacros = 12;
+    for(const item of macros.slice(0, maxMacros)){
+      const macro = item.macro;
+      const macroSlug = slugify(macro);
+
+      // categorie dentro macro ordinate per count (top 24)
+      const catsSorted = [...item.cats.entries()]
+        .sort((a,b)=>b[1]-a[1])
+        .slice(0, 28);
+
+      const btnActive = (state.macro === macroSlug) ? "active" : "";
+
+      html += `
+        <div class="catItem" data-item="${esc(macroSlug)}">
+          <div class="catBtn ${btnActive}" data-macro="${esc(macroSlug)}" data-macro-label="${esc(macro)}">
+            ${esc(macro)} <span class="chev">▾</span>
+          </div>
+
+          <div class="drop" role="menu" aria-label="Sotto categorie ${esc(macro)}">
+            <div class="dropHead">
+              <b>${esc(macro)}</b>
+              <div class="reset" data-reset="${esc(macroSlug)}">Tutte</div>
+            </div>
+
+            <div class="dropList">
+              ${catsSorted.map(([fullCat, count])=>{
+                const slug = slugify(fullCat);
+                const active = (state.macro === macroSlug && state.sub === slug) ? "active" : "";
+                // etichetta corta = ultimo pezzo
+                const parts = String(fullCat).split("»").map(x=>norm(x)).filter(Boolean);
+                const short = parts.length ? parts[parts.length-1] : fullCat;
+                return `
+                  <div class="dropA ${active}" data-macro="${esc(macroSlug)}" data-macro-label="${esc(macro)}"
+                       data-sub="${esc(slug)}" data-sub-label="${esc(short)}" title="${esc(fullCat)}">
+                    <span>${esc(short)}</span>
+                    <small>${count}</small>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          </div>
+        </div>
+      `;
     }
-    return [...map.entries()].sort((a,b)=>b[1]-a[1]).map(([cat])=>cat);
-  }
 
-  function renderMacroBar(macros){
-    // includo "Tutti" sempre
-    macroBar.innerHTML =
-      `<a href="#" data-macro="tutti" class="${state.macro==="tutti" ? "active":""}">Tutti</a>` +
-      macros.map(m => `
-        <a href="#" data-macro="${esc(slugify(m))}" class="${state.macro===slugify(m) ? "active":""}" title="${esc(m)}">
-          ${esc(m)}
-        </a>
-      `).join("");
+    catbar.innerHTML = html;
 
-    macroBar.querySelectorAll("a").forEach(a=>{
-      a.addEventListener("click", (e)=>{
-        e.preventDefault();
-        const m = a.getAttribute("data-macro") || "tutti";
-        state.macro = m;
+    // eventi
+    // 1) click su "Tutti"
+    catbar.querySelector('[data-macro="tutti"]').addEventListener("click", ()=>{
+      state.macro = "tutti";
+      state.sub = "tutti";
+      state.macroLabel = "Tutti";
+      state.subLabel = "";
+      closeAllDrops();
+      syncActiveButtons();
+      render();
+    });
 
-        // quando cambi macro: reset sotto-categoria
-        state.sub = "tutte";
-        catSelect.value = "tutte";
+    // 2) click su macro (mobile: apre/chiude)
+    catbar.querySelectorAll(".catBtn[data-macro]:not([data-macro='tutti'])").forEach(btn=>{
+      btn.addEventListener("click", (e)=>{
+        const macroSlug = btn.getAttribute("data-macro");
+        const label = btn.getAttribute("data-macro-label") || "";
 
-        // active
-        macroBar.querySelectorAll("a").forEach(x=>x.classList.remove("active"));
-        a.classList.add("active");
+        // su mobile toggle dropdown
+        const item = btn.closest(".catItem");
+        const isOpen = item.classList.contains("open");
+        closeAllDrops();
+        if (!matchMedia("(hover:hover)").matches){
+          if(!isOpen) item.classList.add("open");
+        }
 
-        // aggiorna dropdown sub
-        renderSubDropdown();
+        // seleziono solo macro (senza sotto): mostra tutte della macro
+        state.macro = macroSlug;
+        state.sub = "tutti";
+        state.macroLabel = label;
+        state.subLabel = "";
+        syncActiveButtons();
+        render();
+      });
+    });
 
+    // 3) click su sotto-categoria
+    catbar.querySelectorAll(".dropA").forEach(a=>{
+      a.addEventListener("click", ()=>{
+        state.macro = a.getAttribute("data-macro");
+        state.sub = a.getAttribute("data-sub");
+        state.macroLabel = a.getAttribute("data-macro-label") || "";
+        state.subLabel = a.getAttribute("data-sub-label") || "";
+        closeAllDrops();
+        syncActiveButtons();
+        render();
+      });
+    });
+
+    // 4) reset "Tutte" dentro una macro
+    catbar.querySelectorAll("[data-reset]").forEach(r=>{
+      r.addEventListener("click", ()=>{
+        const macroSlug = r.getAttribute("data-reset");
+        const btn = catbar.querySelector(`.catBtn[data-macro="${CSS.escape(macroSlug)}"]`);
+        state.macro = macroSlug;
+        state.sub = "tutti";
+        state.macroLabel = btn?.getAttribute("data-macro-label") || "";
+        state.subLabel = "";
+        closeAllDrops();
+        syncActiveButtons();
         render();
       });
     });
   }
 
-  function renderSubDropdown(){
-    const cats = buildSubcategoriesForMacro(state.macro);
-
-    catSelect.innerHTML =
-      `<option value="tutte">Tutte</option>` +
-      cats.map(c => `<option value="${esc(slugify(c))}">${esc(c)}</option>`).join("");
+  function closeAllDrops(){
+    catbar.querySelectorAll(".catItem.open").forEach(x=>x.classList.remove("open"));
   }
+
+  function syncActiveButtons(){
+    // macro active
+    catbar.querySelectorAll(".catBtn").forEach(b=>b.classList.remove("active"));
+    if (state.macro === "tutti"){
+      catbar.querySelector('[data-macro="tutti"]')?.classList.add("active");
+      return;
+    }
+    catbar.querySelector(`.catBtn[data-macro="${CSS.escape(state.macro)}"]`)?.classList.add("active");
+
+    // sub active
+    catbar.querySelectorAll(".dropA").forEach(x=>x.classList.remove("active"));
+    if(state.sub !== "tutti"){
+      catbar.querySelector(`.dropA[data-macro="${CSS.escape(state.macro)}"][data-sub="${CSS.escape(state.sub)}"]`)?.classList.add("active");
+    }
+  }
+
+  // chiudi dropdown cliccando fuori (mobile)
+  document.addEventListener("click", (e)=>{
+    if(!catbar.contains(e.target)) closeAllDrops();
+  });
 
   async function boot(){
     countPill.textContent = "Carico...";
     metaLeft.textContent = "Caricamento catalogo...";
 
-    const res = await fetch(DATA_URL + "?t=" + Date.now(), { cache: "no-store" });
+    const res = await fetch(DATA_URL + "?t=" + Date.now(), { cache:"no-store" });
     if(!res.ok) throw new Error("Impossibile caricare products.json");
     const data = await res.json();
 
@@ -914,25 +858,23 @@
     for(const row of data){
       const marker = String(row[""] ?? "").trim();
 
-      // Riga separatore: "Categoria : ..."
       if(marker.toLowerCase().startsWith("categoria")){
         const parts = marker.split(":");
-        const found = normalizeSpaces(parts.length > 1 ? parts.slice(1).join(":") : "");
+        const found = norm(parts.length > 1 ? parts.slice(1).join(":") : "");
         if(found) currentCategory = found;
         continue;
       }
 
-      const sku = String(row["Cod."] ?? "").trim();
+      const sku = norm(row["Cod."]);
       if(!sku) continue;
 
-      const title = normalizeSpaces(row["Descrizione"]) || "(Senza nome)";
-      const brand = normalizeSpaces(row["Produttore"]);
+      const title = norm(row["Descrizione"]) || "(Senza nome)";
+      const brand = norm(row["Produttore"]);
 
-      const catRow = normalizeSpaces(row["Categoria"]);
-      const category = normalizeSpaces(catRow || currentCategory || "Senza categoria");
+      const catRow = norm(row["Categoria"]);
+      const category = norm(catRow || currentCategory || "Senza categoria");
 
       const { macro } = splitCategory(category);
-      const macroSlug = slugify(macro);
 
       const priceNum = parsePrice(row["Listino 1 (ivato)"]);
 
@@ -943,8 +885,8 @@
         category,
         catSlug: slugify(category),
         macro,
-        macroSlug,
-        badge: pickBadgeFromFullCategory(category),
+        macroSlug: slugify(macro),
+        badge: pickBadge(category),
         price: priceNum,
         priceLabel: euro(priceNum),
         cover: PLACEHOLDER
@@ -953,19 +895,11 @@
 
     ALL = out;
 
-    // Macro bar (ordina per frequenza)
-    const macros = buildMacroIndex().slice(0, 12); // massimo 12 macro per non esagerare
-    renderMacroBar(macros);
+    // build + render menu
+    const model = buildMenuModel();
+    renderCatbar(model);
 
-    // Sub dropdown iniziale
-    renderSubDropdown();
-
-    // eventi
-    catSelect.addEventListener("change", ()=>{
-      state.sub = catSelect.value;
-      render();
-    });
-
+    // eventi base
     sort.addEventListener("change", ()=>{
       state.sort = sort.value;
       render();
@@ -980,8 +914,11 @@
       }, 120);
     });
 
-    // mostra totale prodotti (tutti)
-    countPill.textContent = `${ALL.length} prodotti`;
+    // default label
+    state.macroLabel = "Tutti";
+    state.subLabel = "";
+    setActiveFilterLabel();
+
     render();
   }
 
