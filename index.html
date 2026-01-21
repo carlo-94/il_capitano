@@ -1045,14 +1045,16 @@
   </footer>
 
   <script>
-   /* =========================
-   IL CAPITANO — CATALOGO JS (overlay pulito)
-   Sostituisci tutto il tuo <script> con questo.
-========================= */
+
+/* =========================================================
+   IL CAPITANO — SCRIPT COMPLETO
+   - Carica products.json (Danea)
+   - Sidebar categorie + ricerca + sorting + paginazione
+   - Mega-menu overlay stile FOTO 2 (3 colonne, grigio, link con ›)
+========================================================= */
 
 const PLACEHOLDER = "assets/img/prodotti/placeholder.jpg";
 
-// fallback percorsi (evita errori se cambia cartella su GitHub Pages)
 const DATA_URL_CANDIDATES = [
   "./data/products.json",
   "data/products.json",
@@ -1101,34 +1103,34 @@ const btnList = $("btnList");
 const pgBtns = $("pgBtns");
 const resetAll = $("resetAll");
 
-// ===== overlay catalogo
+// ===== overlay catalogo (ids nel tuo HTML)
 const megaBtn = $("megaBtn");
 const megaClose = $("megaClose");
 const megaAll = $("megaAll");
 
 const catOverlay = $("catOverlay");
-const catTree = $("catTree");
 const catCount = $("catCount");
 const megaGrid = $("megaGrid");
+const catTree = $("catTree"); // c'è ma in stile foto 2 lo nascondiamo via CSS iniettato
 
 $("y").textContent = new Date().getFullYear();
 
 /* ---------------- helpers ---------------- */
-function esc(s) {
+function esc(s){
   return String(s ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
-function norm(s) { return String(s ?? "").replace(/\s+/g, " ").trim(); }
-function euro(n) {
+function norm(s){ return String(s ?? "").replace(/\s+/g," ").trim(); }
+function euro(n){
   const num = Number(n);
-  if (!Number.isFinite(num)) return "—";
-  return num.toLocaleString("it-IT", { style: "currency", currency: "EUR" });
+  if(!Number.isFinite(num)) return "—";
+  return num.toLocaleString("it-IT", { style:"currency", currency:"EUR" });
 }
-function slugify(s) {
+function slugify(s){
   return String(s ?? "")
     .toLowerCase()
     .trim()
@@ -1138,40 +1140,40 @@ function slugify(s) {
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-");
 }
-function splitParts(full) {
+function splitParts(full){
   return String(full ?? "")
     .split("»")
-    .map(x => norm(x))
+    .map(x=>norm(x))
     .filter(Boolean);
 }
-function parsePrice(v) {
+function parsePrice(v){
   if (v === null || v === undefined) return NaN;
   if (typeof v === "number") return v;
   let s = String(v).trim();
-  if (!s) return NaN;
-  s = s.replace(/\s/g, "").replace("€", "");
-  if (s.includes(",")) {
-    s = s.replace(/\./g, "");
-    s = s.replace(",", ".");
+  if(!s) return NaN;
+  s = s.replace(/\s/g,"").replace("€","");
+  if (s.includes(",")){
+    s = s.replace(/\./g,"");
+    s = s.replace(",",".");
   } else {
-    s = s.replace(/,/g, "");
+    s = s.replace(/,/g,"");
   }
   const num = Number(s);
   return Number.isFinite(num) ? num : NaN;
 }
 
-async function fetchCatalogJson() {
+async function fetchCatalogJson(){
   const tries = DATA_URL_CANDIDATES.map(u => new URL(u, location.href).toString());
   let lastErr = null;
 
-  for (const url of tries) {
-    try {
-      const res = await fetch(url, { cache: "no-store" });
-      if (!res.ok) throw new Error(`HTTP ${res.status} su ${url}`);
+  for(const url of tries){
+    try{
+      const res = await fetch(url, { cache:"no-store" });
+      if(!res.ok) throw new Error(`HTTP ${res.status} su ${url}`);
       const data = await res.json();
       console.log("✅ Catalogo caricato da:", url);
       return data;
-    } catch (e) {
+    }catch(e){
       lastErr = e;
       console.warn("Tentativo fallito:", e.message);
     }
@@ -1180,41 +1182,42 @@ async function fetchCatalogJson() {
 }
 
 /* ---------------- filtro prodotti ---------------- */
-function currentLabel() {
+function currentLabel(){
   if (state.macro === "tutti") return "Home";
   if (state.sub === "tutti") return state.macroLabel || "Categoria";
   return state.subLabel || state.macroLabel || "Categoria";
 }
 
-function matches(p) {
+function matches(p){
   const q = state.q.trim().toLowerCase();
+
   const macroOk = (state.macro === "tutti") || (p.macroSlug === state.macro);
-  if (!macroOk) return false;
+  if(!macroOk) return false;
 
   const subOk = (state.sub === "tutti") || (p.catSlug === state.sub);
-  if (!subOk) return false;
+  if(!subOk) return false;
 
-  if (!q) return true;
-  const hay = (p.title + " " + (p.brand || "") + " " + p.sku + " " + p.category).toLowerCase();
+  if(!q) return true;
+  const hay = (p.title + " " + (p.brand||"") + " " + p.sku + " " + p.category).toLowerCase();
   return hay.includes(q);
 }
 
-function sortList(list) {
-  if (state.sort === "az") {
-    return list.slice().sort((a, b) => a.title.localeCompare(b.title, "it"));
+function sortList(list){
+  if(state.sort === "az"){
+    return list.slice().sort((a,b)=>a.title.localeCompare(b.title, "it"));
   }
-  if (state.sort === "priceUp") {
-    return list.slice().sort((a, b) => (a.price || Infinity) - (b.price || Infinity));
+  if(state.sort === "priceUp"){
+    return list.slice().sort((a,b)=>(a.price||Infinity) - (b.price||Infinity));
   }
-  if (state.sort === "priceDown") {
-    return list.slice().sort((a, b) => (b.price || -Infinity) - (a.price || -Infinity));
+  if(state.sort === "priceDown"){
+    return list.slice().sort((a,b)=>(b.price||-Infinity) - (a.price||-Infinity));
   }
   return list;
 }
 
 /* ---------------- card prodotto ---------------- */
-function card(p) {
-  const badge = p.microBadge ? String(p.microBadge).toUpperCase().slice(0, 22) : "SENZA CATEGORIA";
+function card(p){
+  const badge = p.microBadge ? String(p.microBadge).toUpperCase().slice(0,22) : "SENZA CATEGORIA";
   const brandLine = (p.brand && p.brand.trim()) ? esc(p.brand) : "";
   const meta = esc(p.catLine || p.category || "");
 
@@ -1242,63 +1245,64 @@ function card(p) {
   `;
 }
 
-function openProduct(sku) {
+function openProduct(sku){
   window.location.href = `prodotto.html?sku=${encodeURIComponent(sku)}`;
 }
 
 /* ---------------- render griglia + paginazione ---------------- */
-function goPage(p) {
+function goPage(p){
   state.page = p;
   render();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function buildPager(pages) {
+function buildPager(pages){
   const cur = state.page;
 
-  const btn = (label, page, opts = {}) => {
+  const btn = (label, page, opts={}) => {
     const cls = ["pgBtn"];
-    if (opts.num) cls.push("num");
-    if (opts.active) cls.push("active");
+    if(opts.num) cls.push("num");
+    if(opts.active) cls.push("active");
     const disabled = opts.disabled ? "disabled" : "";
     const data = (page != null) ? `data-page="${page}"` : "";
     return `<button class="${cls.join(" ")}" type="button" ${disabled} ${data}>${label}</button>`;
   };
 
   let html = "";
-  html += btn("←", cur - 1, { disabled: cur <= 1 });
+  html += btn("←", cur-1, {disabled: cur<=1});
 
-  const addDots = () => html += `<span class="dots">…</span>`;
-  const pushNum = (p) => html += btn(String(p), p, { num: true, active: p === cur });
+  const addDots = ()=> html += `<span class="dots">…</span>`;
+  const pushNum = (p)=> html += btn(String(p), p, {num:true, active: p===cur});
 
-  if (pages <= 7) {
-    for (let p = 1; p <= pages; p++) pushNum(p);
+  if(pages <= 7){
+    for(let p=1;p<=pages;p++) pushNum(p);
   } else {
     pushNum(1);
+
     const w = 2;
     let start = Math.max(2, cur - w);
-    let end = Math.min(pages - 1, cur + w);
+    let end = Math.min(pages-1, cur + w);
 
-    if (start > 2) addDots();
-    for (let p = start; p <= end; p++) pushNum(p);
-    if (end < pages - 1) addDots();
+    if(start > 2) addDots();
+    for(let p=start; p<=end; p++) pushNum(p);
+    if(end < pages-1) addDots();
 
     pushNum(pages);
   }
 
-  html += btn("→", cur + 1, { disabled: cur >= pages });
+  html += btn("→", cur+1, {disabled: cur>=pages});
 
   pgBtns.innerHTML = html;
 
-  pgBtns.querySelectorAll("button[data-page]").forEach(b => {
-    b.addEventListener("click", () => {
+  pgBtns.querySelectorAll("button[data-page]").forEach(b=>{
+    b.addEventListener("click", ()=>{
       const p = Number(b.getAttribute("data-page"));
-      if (Number.isFinite(p)) goPage(Math.max(1, Math.min(p, pages)));
+      if(Number.isFinite(p)) goPage(Math.max(1, Math.min(p, pages)));
     });
   });
 }
 
-function render() {
+function render(){
   const label = currentLabel();
   crumbLabel.textContent = label;
   titleLabel.textContent = label;
@@ -1323,12 +1327,12 @@ function render() {
   metaTop.textContent = metaText;
   metaBottom.textContent = metaText;
 
-  // pill in alto: totale del catalogo (non filtrato)
+  // pill in alto sempre totale catalogo
   countPill.textContent = `${ALL.length} prodotti`;
 
   grid.classList.toggle("list", state.view === "list");
 
-  if (total === 0) {
+  if(total === 0){
     grid.innerHTML = `
       <div class="emptyState">
         <div>
@@ -1343,11 +1347,11 @@ function render() {
 
   grid.innerHTML = slice.map(card).join("");
 
-  grid.querySelectorAll(".card").forEach(el => {
+  grid.querySelectorAll(".card").forEach(el=>{
     const sku = el.getAttribute("data-sku");
-    el.addEventListener("click", () => openProduct(sku));
-    el.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
+    el.addEventListener("click", ()=> openProduct(sku));
+    el.addEventListener("keydown", (e)=>{
+      if(e.key === "Enter" || e.key === " "){
         e.preventDefault();
         openProduct(sku);
       }
@@ -1358,25 +1362,25 @@ function render() {
 }
 
 /* ---------------- costruzione modello categorie ---------------- */
-function buildModel() {
+function buildModel(){
   const macroMap = new Map();
 
-  for (const p of ALL) {
+  for(const p of ALL){
     const macro = p.macro || "Senza categoria";
-    if (!macroMap.has(macro)) macroMap.set(macro, new Map());
+    if(!macroMap.has(macro)) macroMap.set(macro, new Map());
     const m = macroMap.get(macro);
     m.set(p.category, (m.get(p.category) || 0) + 1);
   }
 
-  const macros = [...macroMap.entries()].map(([macro, cats]) => {
+  const macros = [...macroMap.entries()].map(([macro, cats])=>{
     let total = 0;
-    for (const c of cats.values()) total += c;
+    for(const c of cats.values()) total += c;
 
     const catsSorted = [...cats.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .map(([full, count]) => {
+      .sort((a,b)=>b[1]-a[1])
+      .map(([full, count])=>{
         const parts = splitParts(full);
-        const short = parts.length ? parts[parts.length - 1] : full;
+        const short = parts.length ? parts[parts.length-1] : full;
         return { full, short, slug: slugify(full), count };
       });
 
@@ -1386,13 +1390,13 @@ function buildModel() {
       total,
       cats: catsSorted
     };
-  }).sort((a, b) => b.total - a.total);
+  }).sort((a,b)=>b.total - a.total);
 
   return macros;
 }
 
-/* ---------------- sidebar sinistra (sempre visibile) ---------------- */
-function renderTree() {
+/* ---------------- sidebar sinistra ---------------- */
+function renderTree(){
   let html = "";
 
   html += `
@@ -1409,7 +1413,7 @@ function renderTree() {
     </div>
   `;
 
-  for (const m of model) {
+  for(const m of model){
     const isOpen = state.openMacros.has(m.macroSlug);
     const activeMacro = (state.macro === m.macroSlug && state.sub === "tutti");
     const triChar = isOpen ? "▼" : "▶";
@@ -1430,7 +1434,7 @@ function renderTree() {
         </div>
 
         <div class="children">
-          ${m.cats.map(c => {
+          ${m.cats.map(c=>{
             const active = (state.macro === m.macroSlug && state.sub === c.slug) ? "active" : "";
             return `
               <div class="subBtn ${active}"
@@ -1454,7 +1458,7 @@ function renderTree() {
 }
 
 /* ---------------- set filtri ---------------- */
-function setFilterAll() {
+function setFilterAll(){
   state.macro = "tutti";
   state.sub = "tutti";
   state.macroLabel = "Tutti";
@@ -1462,10 +1466,9 @@ function setFilterAll() {
   state.page = 1;
   renderTree();
   render();
-  renderOverlay(); // sync
 }
 
-function setFilterMacro(macroSlug, label) {
+function setFilterMacro(macroSlug, label){
   state.macro = macroSlug;
   state.sub = "tutti";
   state.macroLabel = label || "";
@@ -1474,10 +1477,9 @@ function setFilterMacro(macroSlug, label) {
   state.openMacros.add(macroSlug);
   renderTree();
   render();
-  renderOverlay(); // sync
 }
 
-function setFilterSub(macroSlug, macroLabel, subSlug, subLabel) {
+function setFilterSub(macroSlug, macroLabel, subSlug, subLabel){
   state.macro = macroSlug;
   state.sub = subSlug;
   state.macroLabel = macroLabel || "";
@@ -1486,217 +1488,174 @@ function setFilterSub(macroSlug, macroLabel, subSlug, subLabel) {
   state.openMacros.add(macroSlug);
   renderTree();
   render();
-  renderOverlay(); // sync
 }
 
-function toggleMacro(macroSlug) {
-  if (state.openMacros.has(macroSlug)) state.openMacros.delete(macroSlug);
+function toggleMacro(macroSlug){
+  if(state.openMacros.has(macroSlug)) state.openMacros.delete(macroSlug);
   else state.openMacros.add(macroSlug);
   renderTree();
-  renderOverlay(); // sync
 }
 
 /* =========================================================
-   OVERLAY CATALOGO — bello e coerente (tree + 3 colonne)
+   MEGA MENU OVERLAY — STILE FOTO 2 (piatto + 3 colonne)
 ========================================================= */
+function injectMegaStylePhoto2(){
+  if(document.getElementById("megaStylePhoto2")) return;
 
-// split bilanciato in 3 colonne in base al "peso" (totale prodotti macro)
-function splitIntoColumns(macros, cols = 3) {
-  const columns = Array.from({ length: cols }, () => ({ items: [], weight: 0 }));
-  const sorted = macros.slice().sort((a, b) => (b.total || 0) - (a.total || 0));
+  const st = document.createElement("style");
+  st.id = "megaStylePhoto2";
+  st.textContent = `
+    .catPanel{
+      background:#f3f4f6 !important;
+      border-radius: 10px !important;
+      overflow:hidden;
+    }
+    .catTop{
+      background:#f3f4f6 !important;
+      border-bottom:1px solid rgba(0,0,0,.10) !important;
+      padding:12px 16px !important;
+    }
+    .catBody{
+      display:block !important;
+      max-height: calc(100vh - 210px) !important;
+    }
+    .catTree{display:none !important;}
 
-  for (const m of sorted) {
-    columns.sort((a, b) => a.weight - b.weight);
-    columns[0].items.push(m);
-    columns[0].weight += (m.total || 0);
-  }
-  return columns.map(c => c.items);
-}
+    .catCols{
+      padding:16px !important;
+      overflow:auto !important;
+    }
+    .catCols .mega2{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 26px;
+    }
+    @media (max-width: 980px){
+      .catCols .mega2{grid-template-columns:1fr;}
+    }
 
-function openMega() {
-  catOverlay.classList.add("open");
-  megaBtn.setAttribute("aria-expanded", "true");
-  // sync al momento dell'apertura
-  renderOverlay();
-}
-
-function closeMega() {
-  catOverlay.classList.remove("open");
-  megaBtn.setAttribute("aria-expanded", "false");
-}
-
-function toggleMega() {
-  catOverlay.classList.contains("open") ? closeMega() : openMega();
-}
-
-function renderOverlayTree() {
-  if (!catTree) return;
-
-  let html = "";
-
-  html += `
-    <div class="tItem ${state.macro === "tutti" ? "active" : ""}">
-      <div class="tRow">
-        <div class="tLeft">
-          <button class="tToggle" type="button" data-act="all">•</button>
-          <div class="tName" data-act="all">Tutti</div>
-        </div>
-        <div class="tCnt">${ALL.length}</div>
-      </div>
-    </div>
+    .mega2-colTitle{
+      font-weight:1000;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      font-size:12px;
+      color: rgba(20,20,20,.88);
+      padding-bottom:10px;
+      border-bottom: 2px solid rgba(0,0,0,.08);
+      margin: 0 0 10px 0;
+    }
+    .mega2-list{display:grid; gap:6px;}
+    .mega2-item{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:6px 0;
+      cursor:pointer;
+      user-select:none;
+      color: rgba(20,20,20,.86);
+      font-weight:850;
+    }
+    .mega2-item:hover{color: rgba(11,95,118,.95);}
+    .mega2-arrow{
+      width:16px;
+      opacity:.55;
+      flex:0 0 auto;
+      font-weight:1100;
+    }
+    .mega2-label{
+      min-width:0;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .mega2-count{
+      margin-left:auto;
+      opacity:.55;
+      font-weight:900;
+      font-size:12px;
+      flex:0 0 auto;
+    }
   `;
-
-  for (const m of model) {
-    const isOpen = state.openMacros.has(m.macroSlug);
-    const activeMacro = (state.macro === m.macroSlug && state.sub === "tutti");
-
-    html += `
-      <div class="tItem ${isOpen ? "open" : ""} ${activeMacro ? "active" : ""}" data-m="${esc(m.macroSlug)}">
-        <div class="tRow">
-          <div class="tLeft">
-            <button class="tToggle" type="button" data-act="toggle" data-m="${esc(m.macroSlug)}">${isOpen ? "–" : "+"}</button>
-            <div class="tName" data-act="macro" data-m="${esc(m.macroSlug)}" data-ml="${esc(m.macro)}">${esc(m.macro)}</div>
-          </div>
-          <div class="tCnt">${m.total}</div>
-        </div>
-
-        <div class="tKids">
-          ${m.cats.map(c => {
-            const active = (state.macro === m.macroSlug && state.sub === c.slug) ? "active" : "";
-            return `
-              <div class="tSub ${active}"
-                   data-act="sub"
-                   data-m="${esc(m.macroSlug)}"
-                   data-ml="${esc(m.macro)}"
-                   data-s="${esc(c.slug)}"
-                   data-sl="${esc(c.short)}"
-                   title="${esc(c.full)}">
-                <span style="min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${esc(c.short)}</span>
-                <small>${c.count}</small>
-              </div>
-            `;
-          }).join("")}
-        </div>
-      </div>
-    `;
-  }
-
-  catTree.innerHTML = html;
+  document.head.appendChild(st);
 }
 
-function renderOverlayCols() {
-  if (!megaGrid) return;
+function splitIntoColumnsPhoto2(macros, cols=3){
+  const columns = Array.from({length: cols}, ()=>({items:[], w:0}));
+  const sorted = macros.slice().sort((a,b)=>(b.total||0)-(a.total||0));
 
-  if (catCount) catCount.textContent = `${ALL.length} prodotti`;
+  for(const m of sorted){
+    columns.sort((a,b)=>a.w-b.w);
+    columns[0].items.push(m);
+    columns[0].w += (m.total||0);
+  }
+  return columns.map(c=>c.items);
+}
 
-  const cols = splitIntoColumns(model, 3);
+function renderMegaPhoto2(){
+  injectMegaStylePhoto2();
+
+  if(catCount) catCount.textContent = `${ALL.length} prodotti`;
+
+  const cols = splitIntoColumnsPhoto2(model, 3);
 
   megaGrid.innerHTML = `
-    <div class="cols">
+    <div class="mega2">
       ${cols.map(col => `
-        <div class="colCard">
-          <div class="colHead">
-            <span>Categorie</span>
-            <small>${col.reduce((s, x) => s + (x.total || 0), 0)}</small>
-          </div>
-          <div class="colList">
-            ${col.map(m => {
-              const macroRow = `
-                <div class="colItem" data-act="macro"
-                     data-m="${esc(m.macroSlug)}"
-                     data-ml="${esc(m.macro)}"
-                     title="${esc(m.macro)}">
-                  <span class="label" style="font-weight:1100; text-transform:uppercase; letter-spacing:.06em; color:rgba(11,95,118,.95)">${esc(m.macro)}</span>
-                  <small>${m.total}</small>
-                </div>
-              `;
-
-              const subs = m.cats.slice(0, 10).map(c => `
-                <div class="colItem" data-act="sub"
+        <div>
+          ${col.map(m => `
+            <div class="mega2-colTitle">${esc(m.macro)}</div>
+            <div class="mega2-list">
+              ${m.cats.map(c => `
+                <div class="mega2-item"
+                     data-act="sub"
                      data-m="${esc(m.macroSlug)}"
                      data-ml="${esc(m.macro)}"
                      data-s="${esc(c.slug)}"
                      data-sl="${esc(c.short)}"
                      title="${esc(c.full)}">
-                  <span class="label">${esc(c.short)}</span>
-                  <small>${c.count}</small>
+                  <span class="mega2-arrow">›</span>
+                  <span class="mega2-label">${esc(c.short)}</span>
+                  <span class="mega2-count">${c.count}</span>
                 </div>
-              `).join("");
-
-              return macroRow + subs;
-            }).join("")}
-          </div>
+              `).join("")}
+            </div>
+            <div style="height:18px"></div>
+          `).join("")}
         </div>
       `).join("")}
     </div>
   `;
+
+  megaGrid.onclick = (e)=>{
+    const el = e.target.closest("[data-act]");
+    if(!el) return;
+
+    setFilterSub(
+      el.getAttribute("data-m"),
+      el.getAttribute("data-ml"),
+      el.getAttribute("data-s"),
+      el.getAttribute("data-sl")
+    );
+    closeMega();
+    document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
+  };
 }
 
-function renderOverlay() {
-  renderOverlayTree();
-  renderOverlayCols();
+function openMega(){
+  catOverlay.classList.add("open");
+  megaBtn.setAttribute("aria-expanded","true");
+  renderMegaPhoto2();
 }
-
-// click overlay (sinistra + destra)
-function bindOverlayEvents() {
-  // sinistra
-  catTree?.addEventListener("click", (e) => {
-    const el = e.target.closest("[data-act]");
-    if (!el) return;
-    const act = el.getAttribute("data-act");
-
-    if (act === "all") {
-      setFilterAll();
-      closeMega();
-      document.querySelector("#catalogo")?.scrollIntoView({ behavior: "smooth" });
-      return;
-    }
-
-    if (act === "toggle") {
-      toggleMacro(el.getAttribute("data-m"));
-      // toggleMacro già richiama renderOverlay
-      return;
-    }
-
-    if (act === "macro") {
-      setFilterMacro(el.getAttribute("data-m"), el.getAttribute("data-ml"));
-      closeMega();
-      document.querySelector("#catalogo")?.scrollIntoView({ behavior: "smooth" });
-      return;
-    }
-
-    if (act === "sub") {
-      setFilterSub(el.getAttribute("data-m"), el.getAttribute("data-ml"), el.getAttribute("data-s"), el.getAttribute("data-sl"));
-      closeMega();
-      document.querySelector("#catalogo")?.scrollIntoView({ behavior: "smooth" });
-      return;
-    }
-  });
-
-  // destra
-  megaGrid?.addEventListener("click", (e) => {
-    const el = e.target.closest("[data-act]");
-    if (!el) return;
-    const act = el.getAttribute("data-act");
-
-    if (act === "macro") {
-      setFilterMacro(el.getAttribute("data-m"), el.getAttribute("data-ml"));
-      closeMega();
-      document.querySelector("#catalogo")?.scrollIntoView({ behavior: "smooth" });
-      return;
-    }
-
-    if (act === "sub") {
-      setFilterSub(el.getAttribute("data-m"), el.getAttribute("data-ml"), el.getAttribute("data-s"), el.getAttribute("data-sl"));
-      closeMega();
-      document.querySelector("#catalogo")?.scrollIntoView({ behavior: "smooth" });
-      return;
-    }
-  });
+function closeMega(){
+  catOverlay.classList.remove("open");
+  megaBtn.setAttribute("aria-expanded","false");
+}
+function toggleMega(){
+  catOverlay.classList.contains("open") ? closeMega() : openMega();
 }
 
 /* ---------------- boot ---------------- */
-async function boot() {
+async function boot(){
   countPill.textContent = "Carico...";
   metaHead.textContent = "Caricamento catalogo…";
   metaTop.textContent = "Caricamento…";
@@ -1706,22 +1665,22 @@ async function boot() {
   let currentCategory = "Senza categoria";
   const out = [];
 
-  for (const row of data) {
+  for(const row of data){
     const marker = String(row[""] ?? "").trim();
 
     // righe "Categoria: ..."
-    if (marker.toLowerCase().startsWith("categoria")) {
+    if(marker.toLowerCase().startsWith("categoria")){
       const parts = marker.split(":");
       const found = norm(parts.length > 1 ? parts.slice(1).join(":") : "");
-      if (found) currentCategory = found;
+      if(found) currentCategory = found;
       continue;
     }
 
     const sku = norm(row["Cod."]);
-    if (!sku) continue;
+    if(!sku) continue;
 
     const title = norm(row["Descrizione"]) || "(Senza nome)";
-    const brand = norm(row["Produttore"]); // se vuoto -> lasciamo vuoto
+    const brand = norm(row["Produttore"]); // se vuoto -> resta vuoto
     const catRow = norm(row["Categoria"]);
     const category = norm(catRow || currentCategory || "Senza categoria");
 
@@ -1751,32 +1710,32 @@ async function boot() {
   ALL = out;
   model = buildModel();
 
-  // apri di default le prime 2 macro
-  state.openMacros = new Set(model.slice(0, 2).map(x => x.macroSlug));
+  // default: apri prime 2 macro nella sidebar
+  state.openMacros = new Set(model.slice(0,2).map(x=>x.macroSlug));
 
   renderTree();
-  renderOverlay();
   render();
 
   // sidebar events
-  tree.addEventListener("click", (e) => {
+  tree.addEventListener("click", (e)=>{
     const el = e.target.closest("[data-action]");
-    if (!el) return;
+    if(!el) return;
+
     const action = el.getAttribute("data-action");
 
-    if (action === "toggle") {
+    if(action === "toggle"){
       toggleMacro(el.getAttribute("data-macro"));
       return;
     }
-    if (action === "selectAll") {
+    if(action === "selectAll"){
       setFilterAll();
       return;
     }
-    if (action === "selectMacro") {
+    if(action === "selectMacro"){
       setFilterMacro(el.getAttribute("data-macro"), el.getAttribute("data-macro-label"));
       return;
     }
-    if (action === "selectSub") {
+    if(action === "selectSub"){
       setFilterSub(
         el.getAttribute("data-macro"),
         el.getAttribute("data-macro-label"),
@@ -1789,35 +1748,35 @@ async function boot() {
 
   // search debounce
   let t;
-  search.addEventListener("input", () => {
+  search.addEventListener("input", ()=>{
     clearTimeout(t);
-    t = setTimeout(() => {
+    t = setTimeout(()=>{
       state.q = search.value;
       state.page = 1;
       render();
     }, 140);
   });
 
-  sort.addEventListener("change", () => {
+  sort.addEventListener("change", ()=>{
     state.sort = sort.value;
     state.page = 1;
     render();
   });
 
-  perPage.addEventListener("change", () => {
+  perPage.addEventListener("change", ()=>{
     state.perPage = Number(perPage.value) || 12;
     state.page = 1;
     render();
   });
 
-  btnGrid.addEventListener("click", () => {
+  btnGrid.addEventListener("click", ()=>{
     state.view = "grid";
     btnGrid.classList.add("active");
     btnList.classList.remove("active");
     render();
   });
 
-  btnList.addEventListener("click", () => {
+  btnList.addEventListener("click", ()=>{
     state.view = "list";
     btnList.classList.add("active");
     btnGrid.classList.remove("active");
@@ -1830,25 +1789,23 @@ async function boot() {
   megaBtn?.addEventListener("click", toggleMega);
   megaClose?.addEventListener("click", closeMega);
 
-  megaAll?.addEventListener("click", () => {
+  megaAll?.addEventListener("click", ()=>{
     setFilterAll();
     closeMega();
-    document.querySelector("#catalogo")?.scrollIntoView({ behavior: "smooth" });
+    document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
   });
 
-  // chiudi cliccando fuori dal pannello
-  catOverlay?.addEventListener("click", (e) => {
-    if (e.target === catOverlay) closeMega();
+  // chiudi cliccando fuori
+  catOverlay?.addEventListener("click", (e)=>{
+    if(e.target === catOverlay) closeMega();
   });
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeMega();
+  document.addEventListener("keydown", (e)=>{
+    if(e.key === "Escape") closeMega();
   });
-
-  bindOverlayEvents();
 }
 
-boot().catch(err => {
+boot().catch(err=>{
   console.error(err);
   countPill.textContent = "Errore";
   metaHead.textContent = "Errore: non riesco a caricare il catalogo.";
@@ -1865,10 +1822,11 @@ boot().catch(err => {
   metaBottom.textContent = "Errore";
   pgBtns.innerHTML = "";
 });
+</script>
 
-  </script>
 </body>
 </html>
+
 
 
 
