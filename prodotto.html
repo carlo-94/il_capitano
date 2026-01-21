@@ -762,26 +762,57 @@
       };
     }
 
-    async function boot(){
-      const skuParam = Catalogo.norm(qs("sku") || qs("id") || "");
+    <script>
+  async function boot(){
+    // 1) Se catalogo.js non è caricato, te lo dico chiaramente
+    if(!window.Catalogo){
+      throw new Error("Catalogo.js non caricato: controlla <script src='assets/js/catalogo.js'> (404 o path errato).");
+    }
 
-      const { ALL } = await Catalogo.loadCatalog({
-        dataUrlCandidates: ["./data/products.json", "data/products.json"],
+    const skuParam = Catalogo.norm(qs("sku") || qs("id") || "");
+
+    // 2) Provo più URL, inclusi quelli “sicuri” rispetto alla pagina corrente
+    const candidates = [
+      new URL("./data/products.json", location.href).toString(),
+      new URL("data/products.json", location.href).toString(),
+      new URL("./products.json", location.href).toString()
+    ];
+
+    let ALL;
+    try{
+      const res = await Catalogo.loadCatalog({
+        dataUrlCandidates: candidates,
         placeholderCover: PLACEHOLDER
       });
-
-      const p = Catalogo.findBySku(ALL, skuParam);
-
-      if(!p){
-        $("pLayout").style.display = "none";
-        $("empty").style.display = "block";
-        $("crumbPill").textContent = "Prodotto non trovato";
-        setHero(PLACEHOLDER, "Prodotto non trovato");
-        return;
-      }
-
-      renderProduct(p);
+      ALL = res.ALL;
+    }catch(e){
+      console.error("Tentativi URL JSON:", candidates);
+      throw e;
     }
+
+    const p = Catalogo.findBySku(ALL, skuParam);
+
+    if(!p){
+      $("pLayout").style.display = "none";
+      $("empty").style.display = "block";
+      $("crumbPill").textContent = "Prodotto non trovato";
+      setHero(PLACEHOLDER, "Prodotto non trovato");
+      return;
+    }
+
+    renderProduct(p);
+  }
+
+  boot().catch(err=>{
+    console.error(err);
+    $("crumbPill").textContent = "Errore";
+    $("title").textContent = "Errore caricamento prodotto";
+    $("desc").textContent = String(err?.message || err);
+    $("price").textContent = "—";
+    setHero(PLACEHOLDER, "Errore");
+  });
+</script>
+
 
     boot().catch(err=>{
       console.error(err);
@@ -794,3 +825,4 @@
   </script>
 </body>
 </html>
+
