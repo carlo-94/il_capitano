@@ -663,6 +663,176 @@
     }
     footer .wrap{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;}
 
+    /* ============ MEGA MENU (Catalogo) ============ */
+.megaWrap{ position:relative; display:inline-flex; align-items:center; }
+.megaBtn{
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid transparent;
+  background:transparent;
+  cursor:pointer;
+  font-weight:950;
+  font-size:18px;
+  color:rgba(20,20,20,.80);
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+.megaBtn:hover{
+  border-color: rgba(0,0,0,.10);
+  background: rgba(242,231,201,.35);
+}
+.megaBtn .chev{ opacity:.7; font-weight:1100; }
+
+.megaPanel{
+  position:absolute;
+  left:0;
+  top:calc(100% + 10px);
+  width:min(980px, calc(100vw - 36px));
+  background: rgba(255,255,255,.98);
+  border:1px solid rgba(0,0,0,.14);
+  border-radius:16px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.14);
+  overflow:hidden;
+  display:none;
+  z-index:999;
+}
+.megaPanel.open{ display:block; }
+
+.megaInner{
+  background:
+    radial-gradient(900px 320px at 10% 0%, rgba(14,126,160,.10), transparent 60%),
+    radial-gradient(800px 320px at 90% 0%, rgba(242,231,201,.34), transparent 60%),
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(238,246,247,.45));
+}
+
+.megaTopRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 14px;
+  border-bottom:1px solid rgba(0,0,0,.08);
+}
+.megaTitle{
+  font-weight:1000;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  font-size:12px;
+  color:rgba(20,20,20,.75);
+}
+.megaClose{
+  border:1px solid rgba(0,0,0,.12);
+  background:#fff;
+  border-radius:10px;
+  padding:6px 10px;
+  cursor:pointer;
+  font-weight:1000;
+}
+
+.megaGrid{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap:0;
+  padding:12px 10px 8px;
+}
+.megaCol{
+  padding:10px 10px 12px;
+  border-right:1px solid rgba(0,0,0,.06);
+}
+.megaCol:last-child{ border-right:none; }
+
+.megaGroup{ margin-bottom:14px; }
+.megaGroupTitle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  font-weight:1100;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  font-size:12px;
+  color: rgba(11,95,118,.95);
+  margin:0 0 8px;
+}
+.megaGroupTitle button{
+  border:0;
+  background:transparent;
+  padding:0;
+  cursor:pointer;
+  font:inherit;
+  color:inherit;
+  text-align:left;
+}
+.megaGroupTitle .mcount{
+  font-size:12px;
+  color:rgba(20,20,20,.55);
+  font-weight:900;
+}
+
+.megaList{ display:grid; gap:6px; }
+.megaItem{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid transparent;
+  cursor:pointer;
+  background: rgba(255,255,255,.82);
+}
+.megaItem:hover{
+  border-color: rgba(11,95,118,.14);
+  background: rgba(11,95,118,.06);
+}
+.megaItem .label{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-weight:950;
+  color:rgba(20,20,20,.82);
+}
+.megaItem small{
+  flex:0 0 auto;
+  font-size:12px;
+  font-weight:900;
+  color:rgba(20,20,20,.55);
+}
+
+.megaFooter{
+  display:flex;
+  justify-content:flex-end;
+  padding:10px 12px 12px;
+  border-top:1px solid rgba(0,0,0,.08);
+}
+.megaAll{
+  padding:9px 12px;
+  border-radius:999px;
+  border:1px solid rgba(0,0,0,.14);
+  background: rgba(242,231,201,.40);
+  font-weight:1000;
+  cursor:pointer;
+}
+
+/* Responsive mega menu */
+@media (max-width: 980px){
+  .megaPanel{
+    position:fixed;
+    left:18px;
+    right:18px;
+    top:86px;
+    width:auto;
+    max-height: calc(100vh - 120px);
+    overflow:auto;
+  }
+  .megaGrid{ grid-template-columns: 1fr; }
+  .megaCol{ border-right:none; border-bottom:1px solid rgba(0,0,0,.06); }
+  .megaCol:last-child{ border-bottom:none; }
+}
+
+
     @media (max-width: 1100px){
       .grid{grid-template-columns: repeat(2, minmax(0,1fr))}
       .searchTop input{width:min(460px, 46vw)}
@@ -717,11 +887,35 @@
 
   <div class="mininav">
     <div class="wrap">
-      <nav class="links" aria-label="Navigazione">
-        <a href="#home">Home</a>
-        <a href="#catalogo">Catalogo</a>
-        <a href="#contatti">Contatti</a>
-      </nav>
+     <nav class="links" aria-label="Navigazione">
+  <a href="#home">Home</a>
+
+  <!-- CATALOGO MEGA MENU -->
+  <div class="megaWrap" id="megaWrap">
+    <button class="megaBtn" id="megaBtn" type="button" aria-haspopup="true" aria-expanded="false">
+      Catalogo <span class="chev">▾</span>
+    </button>
+
+    <div class="megaPanel" id="megaPanel" role="menu" aria-label="Catalogo">
+      <div class="megaInner">
+        <div class="megaTopRow">
+          <div class="megaTitle">Categorie</div>
+          <button class="megaClose" id="megaClose" type="button" aria-label="Chiudi catalogo">✕</button>
+        </div>
+
+        <!-- qui dentro renderizziamo dal JSON -->
+        <div class="megaGrid" id="megaGrid"></div>
+
+        <div class="megaFooter">
+          <button class="megaAll" id="megaAll" type="button">Vedi tutto</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="#contatti">Contatti</a>
+</nav>
+
 
       <div class="searchTop" aria-label="Cerca nel catalogo">
         <span class="pill" id="countPill">Carico...</span>
@@ -855,6 +1049,15 @@
 
     const pgBtns = $("pgBtns");
     const resetAll = $("resetAll");
+
+    // Mega menu refs
+const megaWrap  = $("megaWrap");
+const megaBtn   = $("megaBtn");
+const megaPanel = $("megaPanel");
+const megaGrid  = $("megaGrid");
+const megaClose = $("megaClose");
+const megaAll   = $("megaAll");
+
 
     $("y").textContent = new Date().getFullYear();
 
@@ -1227,6 +1430,107 @@
       renderTree();
     }
 
+    function openMega(){
+  megaPanel.classList.add("open");
+  megaBtn.setAttribute("aria-expanded", "true");
+}
+function closeMega(){
+  megaPanel.classList.remove("open");
+  megaBtn.setAttribute("aria-expanded", "false");
+}
+function toggleMega(){
+  megaPanel.classList.contains("open") ? closeMega() : openMega();
+}
+
+// distribuisce i macro in 3 colonne bilanciate (per quantità prodotti)
+function splitIntoColumns(macros, cols=3){
+  const columns = Array.from({length: cols}, ()=>({items:[], weight:0}));
+  const sorted = macros.slice().sort((a,b)=>b.total - a.total);
+
+  for(const m of sorted){
+    columns.sort((a,b)=>a.weight - b.weight);
+    columns[0].items.push(m);
+    columns[0].weight += (m.total || 0);
+  }
+  return columns.map(c=>c.items);
+}
+
+function renderMegaMenu(){
+  if(!megaGrid) return;
+
+  const cols = splitIntoColumns(model, 3);
+
+  megaGrid.innerHTML = cols.map(col => `
+    <div class="megaCol">
+      ${col.map(m => `
+        <div class="megaGroup">
+          <div class="megaGroupTitle">
+            <button type="button"
+              data-mega="macro"
+              data-macro="${esc(m.macroSlug)}"
+              data-macro-label="${esc(m.macro)}"
+              title="${esc(m.macro)}">
+              ${esc(m.macro)}
+            </button>
+            <span class="mcount">${m.total}</span>
+          </div>
+
+          <div class="megaList">
+            ${m.cats.slice(0, 10).map(c => `
+              <div class="megaItem"
+                role="menuitem"
+                tabindex="0"
+                data-mega="sub"
+                data-macro="${esc(m.macroSlug)}"
+                data-macro-label="${esc(m.macro)}"
+                data-sub="${esc(c.slug)}"
+                data-sub-label="${esc(c.short)}"
+                title="${esc(c.full)}">
+                <span class="label">${esc(c.short)}</span>
+                <small>${c.count}</small>
+              </div>
+            `).join("")}
+
+            ${m.cats.length > 10 ? `
+              <div class="megaItem"
+                role="menuitem"
+                tabindex="0"
+                data-mega="macro"
+                data-macro="${esc(m.macroSlug)}"
+                data-macro-label="${esc(m.macro)}"
+                title="Vedi tutte le sottocategorie di ${esc(m.macro)}">
+                <span class="label">Vedi tutto →</span>
+                <small>${m.cats.length}</small>
+              </div>
+            ` : ``}
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `).join("");
+}
+
+function megaActivate(el){
+  const type = el.getAttribute("data-mega");
+  if(type === "macro"){
+    setFilterMacro(el.getAttribute("data-macro"), el.getAttribute("data-macro-label"));
+    closeMega();
+    document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
+    return;
+  }
+  if(type === "sub"){
+    setFilterSub(
+      el.getAttribute("data-macro"),
+      el.getAttribute("data-macro-label"),
+      el.getAttribute("data-sub"),
+      el.getAttribute("data-sub-label")
+    );
+    closeMega();
+    document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
+  }
+}
+
+
     async function boot(){
       countPill.textContent = "Carico...";
       metaHead.textContent = "Caricamento catalogo…";
@@ -1280,6 +1584,8 @@
 
       ALL = out;
       model = buildModel();
+      renderMegaMenu();
+
 
       state.openMacros = new Set(model.slice(0,2).map(x=>x.macroSlug));
 
@@ -1350,6 +1656,42 @@
       });
 
       resetAll.addEventListener("click", setFilterAll);
+
+    // Toggle mega menu
+megaBtn?.addEventListener("click", toggleMega);
+megaClose?.addEventListener("click", closeMega);
+megaAll?.addEventListener("click", ()=>{
+  setFilterAll();
+  closeMega();
+  document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
+});
+
+// Click su voci mega menu
+megaPanel?.addEventListener("click", (e)=>{
+  const el = e.target.closest("[data-mega]");
+  if(!el) return;
+  megaActivate(el);
+});
+megaPanel?.addEventListener("keydown", (e)=>{
+  if(e.key === "Enter" || e.key === " "){
+    const el = e.target.closest("[data-mega]");
+    if(!el) return;
+    e.preventDefault();
+    megaActivate(el);
+  }
+});
+
+// Chiudi cliccando fuori / ESC
+document.addEventListener("click", (e)=>{
+  if(!megaPanel?.classList.contains("open")) return;
+  if(megaWrap?.contains(e.target)) return;
+  closeMega();
+});
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "Escape") closeMega();
+});
+
+
     }
 
     boot().catch(err=>{
@@ -1372,3 +1714,4 @@
   </script>
 </body>
 </html>
+
