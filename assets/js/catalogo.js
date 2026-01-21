@@ -968,6 +968,11 @@ window.Catalogo = Catalogo; // <-- AGGIUNGI QUESTO
     return { ALL };
   };
 
+   Catalogo.findBySku = function(list, sku){
+  const key = Catalogo.norm(String(sku || ""));
+  return (list || []).find(p => Catalogo.norm(String(p.sku ?? p.SKU ?? p.id ?? p.ID ?? p.codice ?? "")) === key) || null;
+};
+
   // Export globale richiesto
   window.Catalogo = Catalogo;
 
