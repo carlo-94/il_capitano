@@ -186,6 +186,9 @@
       border-bottom:1px solid var(--line);
       background: rgba(255,255,255,.78);
       backdrop-filter: blur(6px);
+      position:sticky;
+      top:0;
+      z-index:50;
     }
     .mininav .wrap{
       display:flex;
@@ -241,7 +244,7 @@
     }
 
     /* Sidebar */
-    .side{position:sticky; top:12px; align-self:start;}
+    .side{position:sticky; top:76px; align-self:start;}
     .sideCard{
       border:1px solid rgba(0,0,0,.14);
       border-radius: var(--r);
@@ -275,7 +278,7 @@
     }
     .tree{
       padding:10px 10px 12px;
-      max-height: calc(100vh - 160px);
+      max-height: calc(100vh - 170px);
       overflow:auto;
     }
     .treeItem{
@@ -486,7 +489,7 @@
       gap:16px;
     }
 
-    /* ===== CARD (foto 2) ===== */
+    /* ===== CARD (stile foto 2) ===== */
     .card{
       border:1px solid rgba(0,0,0,.14);
       border-radius: 14px;
@@ -663,179 +666,214 @@
     }
     footer .wrap{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;}
 
-    /* ============ MEGA MENU (Catalogo) ============ */
-.megaWrap{ position:relative; display:inline-flex; align-items:center; }
-.megaBtn{
-  padding:8px 12px;
-  border-radius:999px;
-  border:1px solid transparent;
-  background:transparent;
-  cursor:pointer;
-  font-weight:950;
-  font-size:18px;
-  color:rgba(20,20,20,.80);
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-}
-.megaBtn:hover{
-  border-color: rgba(0,0,0,.10);
-  background: rgba(242,231,201,.35);
-}
-.megaBtn .chev{ opacity:.7; font-weight:1100; }
+    /* ============ CATALOGO OVERLAY (bello) ============ */
+    .catBtn{
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid transparent;
+      background:transparent;
+      cursor:pointer;
+      font-weight:950;
+      font-size:18px;
+      color:rgba(20,20,20,.80);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .catBtn:hover{
+      border-color: rgba(0,0,0,.10);
+      background: rgba(242,231,201,.35);
+    }
+    .catOverlay{
+      position:fixed;
+      inset:0;
+      background: rgba(10,14,18,.34);
+      display:none;
+      z-index:9999;
+    }
+    .catOverlay.open{display:block;}
 
-.megaPanel{
-  position:absolute;
-  left:0;
-  top:calc(100% + 10px);
-  width:min(980px, calc(100vw - 36px));
-  background: rgba(255,255,255,.98);
-  border:1px solid rgba(0,0,0,.14);
-  border-radius:16px;
-  box-shadow: 0 18px 55px rgba(0,0,0,.14);
-  overflow:hidden;
-  display:none;
-  z-index:999;
-}
-.megaPanel.open{ display:block; }
+    .catPanel{
+      position:absolute;
+      left:50%;
+      top:86px;
+      transform:translateX(-50%);
+      width:min(1100px, calc(100vw - 34px));
+      max-height: calc(100vh - 130px);
+      background: rgba(255,255,255,.98);
+      border:1px solid rgba(0,0,0,.14);
+      border-radius:18px;
+      box-shadow: 0 26px 90px rgba(0,0,0,.22);
+      overflow:hidden;
+      background:
+        radial-gradient(900px 320px at 12% 0%, rgba(14,126,160,.10), transparent 60%),
+        radial-gradient(800px 320px at 90% 0%, rgba(242,231,201,.34), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.98), rgba(238,246,247,.40));
+    }
 
-.megaInner{
-  background:
-    radial-gradient(900px 320px at 10% 0%, rgba(14,126,160,.10), transparent 60%),
-    radial-gradient(800px 320px at 90% 0%, rgba(242,231,201,.34), transparent 60%),
-    linear-gradient(180deg, rgba(255,255,255,.98), rgba(238,246,247,.45));
-}
+    .catTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 14px;
+      border-bottom:1px solid rgba(0,0,0,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(238,246,247,.35));
+    }
+    .catTopLeft{display:flex; align-items:center; gap:10px;}
+    .catTitle{
+      font-weight:1100;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      font-size:12px;
+      color:rgba(20,20,20,.72);
+    }
+    .catCount{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.75);
+      font-weight:1000;
+      color: rgba(11,95,118,.95);
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .catClose{
+      border:1px solid rgba(0,0,0,.12);
+      background:#fff;
+      border-radius:12px;
+      padding:8px 12px;
+      cursor:pointer;
+      font-weight:1100;
+    }
 
-.megaTopRow{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  padding:12px 14px;
-  border-bottom:1px solid rgba(0,0,0,.08);
-}
-.megaTitle{
-  font-weight:1000;
-  letter-spacing:.10em;
-  text-transform:uppercase;
-  font-size:12px;
-  color:rgba(20,20,20,.75);
-}
-.megaClose{
-  border:1px solid rgba(0,0,0,.12);
-  background:#fff;
-  border-radius:10px;
-  padding:6px 10px;
-  cursor:pointer;
-  font-weight:1000;
-}
+    .catBody{
+      display:grid;
+      grid-template-columns: 300px 1fr;
+      max-height: calc(100vh - 210px);
+    }
+    .catTree{
+      border-right:1px solid rgba(0,0,0,.08);
+      background: linear-gradient(180deg, rgba(242,231,201,.30), rgba(255,255,255,.75));
+      padding:10px;
+      overflow:auto;
+    }
 
-.megaGrid{
-  display:grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap:0;
-  padding:12px 10px 8px;
-}
-.megaCol{
-  padding:10px 10px 12px;
-  border-right:1px solid rgba(0,0,0,.06);
-}
-.megaCol:last-child{ border-right:none; }
+    .catTree .tItem{
+      padding:8px 8px;
+      border-radius:12px;
+      border:1px solid transparent;
+    }
+    .catTree .tItem:hover{background: rgba(11,95,118,.06); border-color: rgba(11,95,118,.14);}
+    .catTree .tItem.active{background: rgba(14,126,160,.12); border-color: rgba(14,126,160,.26);}
 
-.megaGroup{ margin-bottom:14px; }
-.megaGroupTitle{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  font-weight:1100;
-  text-transform:uppercase;
-  letter-spacing:.06em;
-  font-size:12px;
-  color: rgba(11,95,118,.95);
-  margin:0 0 8px;
-}
-.megaGroupTitle button{
-  border:0;
-  background:transparent;
-  padding:0;
-  cursor:pointer;
-  font:inherit;
-  color:inherit;
-  text-align:left;
-}
-.megaGroupTitle .mcount{
-  font-size:12px;
-  color:rgba(20,20,20,.55);
-  font-weight:900;
-}
+    .catTree .tRow{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+    .catTree .tLeft{display:flex; align-items:center; gap:8px; min-width:0;}
+    .catTree .tToggle{
+      width:22px; height:22px;
+      border-radius:8px;
+      border:1px solid rgba(0,0,0,.12);
+      background:#fff;
+      cursor:pointer;
+      font-weight:1100;
+      color:rgba(20,20,20,.72);
+      flex:0 0 auto;
+    }
+    .catTree .tName{
+      font-weight:1050;
+      color:rgba(20,20,20,.86);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      cursor:pointer;
+    }
+    .catTree .tCnt{font-size:12px; font-weight:950; color:rgba(20,20,20,.55);}
 
-.megaList{ display:grid; gap:6px; }
-.megaItem{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  padding:8px 10px;
-  border-radius:12px;
-  border:1px solid transparent;
-  cursor:pointer;
-  background: rgba(255,255,255,.82);
-}
-.megaItem:hover{
-  border-color: rgba(11,95,118,.14);
-  background: rgba(11,95,118,.06);
-}
-.megaItem .label{
-  min-width:0;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  font-weight:950;
-  color:rgba(20,20,20,.82);
-}
-.megaItem small{
-  flex:0 0 auto;
-  font-size:12px;
-  font-weight:900;
-  color:rgba(20,20,20,.55);
-}
+    .catTree .tKids{
+      display:none;
+      margin:8px 0 0 28px;
+      padding-left:10px;
+      border-left:1px dashed rgba(0,0,0,.18);
+      gap:6px;
+    }
+    .catTree .tItem.open .tKids{display:grid;}
+    .catTree .tSub{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid transparent;
+      background: rgba(255,255,255,.85);
+      cursor:pointer;
+      font-weight:950;
+      color:rgba(20,20,20,.82);
+    }
+    .catTree .tSub:hover{border-color: rgba(11,95,118,.14); background: rgba(11,95,118,.06);}
+    .catTree .tSub.active{border-color: rgba(14,126,160,.30); background: rgba(14,126,160,.12);}
 
-.megaFooter{
-  display:flex;
-  justify-content:flex-end;
-  padding:10px 12px 12px;
-  border-top:1px solid rgba(0,0,0,.08);
-}
-.megaAll{
-  padding:9px 12px;
-  border-radius:999px;
-  border:1px solid rgba(0,0,0,.14);
-  background: rgba(242,231,201,.40);
-  font-weight:1000;
-  cursor:pointer;
-}
+    .catCols{padding:12px; overflow:auto;}
+    .catCols .cols{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:12px;
+    }
+    .catCols .colCard{
+      border:1px solid rgba(0,0,0,.10);
+      border-radius:16px;
+      background: rgba(255,255,255,.78);
+      box-shadow: 0 12px 26px rgba(0,0,0,.08);
+      overflow:hidden;
+    }
+    .catCols .colHead{
+      padding:10px 12px;
+      border-bottom:1px solid rgba(0,0,0,.08);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      font-weight:1100;
+    }
+    .catCols .colHead span{overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+    .catCols .colHead small{font-weight:950; color:rgba(20,20,20,.55);}
 
-/* Responsive mega menu */
-@media (max-width: 980px){
-  .megaPanel{
-    position:fixed;
-    left:18px;
-    right:18px;
-    top:86px;
-    width:auto;
-    max-height: calc(100vh - 120px);
-    overflow:auto;
-  }
-  .megaGrid{ grid-template-columns: 1fr; }
-  .megaCol{ border-right:none; border-bottom:1px solid rgba(0,0,0,.06); }
-  .megaCol:last-child{ border-bottom:none; }
-}
+    .catCols .colList{padding:10px; display:grid; gap:8px;}
+    .catCols .colItem{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid transparent;
+      background: rgba(255,255,255,.86);
+      cursor:pointer;
+    }
+    .catCols .colItem:hover{border-color: rgba(11,95,118,.14); background: rgba(11,95,118,.06);}
+    .catCols .colItem .label{
+      min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+      font-weight:950;
+      color:rgba(20,20,20,.82);
+    }
+    .catCols .colItem small{flex:0 0 auto; font-size:12px; font-weight:900; color:rgba(20,20,20,.55);}
 
+    .catFoot{
+      display:flex;
+      justify-content:flex-end;
+      padding:10px 12px 12px;
+      border-top:1px solid rgba(0,0,0,.08);
+    }
+    .catAll{
+      padding:9px 12px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.14);
+      background: rgba(242,231,201,.40);
+      font-weight:1000;
+      cursor:pointer;
+    }
 
     @media (max-width: 1100px){
       .grid{grid-template-columns: repeat(2, minmax(0,1fr))}
       .searchTop input{width:min(460px, 46vw)}
+      .catCols .cols{grid-template-columns: 1fr;}
     }
     @media (max-width: 980px){
       .headerRow{grid-template-columns: 1fr; gap:14px}
@@ -845,6 +883,10 @@
       .layout{grid-template-columns: 1fr}
       .side{position:relative; top:0}
       .tree{max-height:none}
+
+      .catPanel{ top:74px; max-height: calc(100vh - 110px); }
+      .catBody{ grid-template-columns: 1fr; }
+      .catTree{ display:none; }
     }
     @media (max-width: 560px){
       .grid{grid-template-columns: 1fr}
@@ -887,40 +929,43 @@
 
   <div class="mininav">
     <div class="wrap">
-     <nav class="links" aria-label="Navigazione">
-  <a href="#home">Home</a>
+      <nav class="links" aria-label="Navigazione">
+        <a href="#home">Home</a>
 
-  <!-- CATALOGO MEGA MENU -->
-  <div class="megaWrap" id="megaWrap">
-    <button class="megaBtn" id="megaBtn" type="button" aria-haspopup="true" aria-expanded="false">
-      Catalogo <span class="chev">▾</span>
-    </button>
+        <!-- CATALOGO (overlay serio) -->
+        <button class="catBtn" id="megaBtn" type="button" aria-haspopup="dialog" aria-expanded="false">
+          Catalogo <span class="chev">▾</span>
+        </button>
 
-    <div class="megaPanel" id="megaPanel" role="menu" aria-label="Catalogo">
-      <div class="megaInner">
-        <div class="megaTopRow">
-          <div class="megaTitle">Categorie</div>
-          <button class="megaClose" id="megaClose" type="button" aria-label="Chiudi catalogo">✕</button>
-        </div>
-
-        <!-- qui dentro renderizziamo dal JSON -->
-        <div class="megaGrid" id="megaGrid"></div>
-
-        <div class="megaFooter">
-          <button class="megaAll" id="megaAll" type="button">Vedi tutto</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <a href="#contatti">Contatti</a>
-</nav>
-
+        <a href="#contatti">Contatti</a>
+      </nav>
 
       <div class="searchTop" aria-label="Cerca nel catalogo">
         <span class="pill" id="countPill">Carico...</span>
         <label class="sr" for="search">Cerca</label>
         <input id="search" type="search" placeholder="Cerca (es. canna, amo, mulinello)..." autocomplete="off">
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERLAY CATALOGO -->
+  <div class="catOverlay" id="catOverlay" role="dialog" aria-modal="true" aria-label="Catalogo">
+    <div class="catPanel">
+      <div class="catTop">
+        <div class="catTopLeft">
+          <div class="catTitle">Categorie</div>
+          <div class="catCount" id="catCount">0 prodotti</div>
+        </div>
+        <button class="catClose" id="megaClose" type="button" aria-label="Chiudi">✕</button>
+      </div>
+
+      <div class="catBody">
+        <aside class="catTree" id="catTree" aria-label="Albero categorie"></aside>
+        <section class="catCols" id="megaGrid" aria-label="Elenco categorie"></section>
+      </div>
+
+      <div class="catFoot">
+        <button class="catAll" id="megaAll" type="button">Vedi tutto</button>
       </div>
     </div>
   </div>
@@ -1430,17 +1475,8 @@ const megaAll   = $("megaAll");
       renderTree();
     }
 
-    function openMega(){
-  megaPanel.classList.add("open");
-  megaBtn.setAttribute("aria-expanded", "true");
-}
-function closeMega(){
-  megaPanel.classList.remove("open");
-  megaBtn.setAttribute("aria-expanded", "false");
-}
-function toggleMega(){
-  megaPanel.classList.contains("open") ? closeMega() : openMega();
-}
+  
+
 
 // distribuisce i macro in 3 colonne bilanciate (per quantità prodotti)
 function splitIntoColumns(macros, cols=3){
@@ -1455,60 +1491,7 @@ function splitIntoColumns(macros, cols=3){
   return columns.map(c=>c.items);
 }
 
-function renderMegaMenu(){
-  if(!megaGrid) return;
 
-  const cols = splitIntoColumns(model, 3);
-
-  megaGrid.innerHTML = cols.map(col => `
-    <div class="megaCol">
-      ${col.map(m => `
-        <div class="megaGroup">
-          <div class="megaGroupTitle">
-            <button type="button"
-              data-mega="macro"
-              data-macro="${esc(m.macroSlug)}"
-              data-macro-label="${esc(m.macro)}"
-              title="${esc(m.macro)}">
-              ${esc(m.macro)}
-            </button>
-            <span class="mcount">${m.total}</span>
-          </div>
-
-          <div class="megaList">
-            ${m.cats.slice(0, 10).map(c => `
-              <div class="megaItem"
-                role="menuitem"
-                tabindex="0"
-                data-mega="sub"
-                data-macro="${esc(m.macroSlug)}"
-                data-macro-label="${esc(m.macro)}"
-                data-sub="${esc(c.slug)}"
-                data-sub-label="${esc(c.short)}"
-                title="${esc(c.full)}">
-                <span class="label">${esc(c.short)}</span>
-                <small>${c.count}</small>
-              </div>
-            `).join("")}
-
-            ${m.cats.length > 10 ? `
-              <div class="megaItem"
-                role="menuitem"
-                tabindex="0"
-                data-mega="macro"
-                data-macro="${esc(m.macroSlug)}"
-                data-macro-label="${esc(m.macro)}"
-                title="Vedi tutte le sottocategorie di ${esc(m.macro)}">
-                <span class="label">Vedi tutto →</span>
-                <small>${m.cats.length}</small>
-              </div>
-            ` : ``}
-          </div>
-        </div>
-      `).join("")}
-    </div>
-  `).join("");
-}
 
 function megaActivate(el){
   const type = el.getAttribute("data-mega");
@@ -1681,15 +1664,194 @@ megaPanel?.addEventListener("keydown", (e)=>{
   }
 });
 
-// Chiudi cliccando fuori / ESC
-document.addEventListener("click", (e)=>{
-  if(!megaPanel?.classList.contains("open")) return;
-  if(megaWrap?.contains(e.target)) return;
+// Refs overlay nuovo
+const catOverlay = $("catOverlay");    // nuovo id
+const catTree    = $("catTree");       // nuovo id
+const catCount   = $("catCount");      // nuovo id
+
+function openMega(){
+  catOverlay.classList.add("open");
+  megaBtn.setAttribute("aria-expanded","true");
+}
+function closeMega(){
+  catOverlay.classList.remove("open");
+  megaBtn.setAttribute("aria-expanded","false");
+}
+function toggleMega(){
+  catOverlay.classList.contains("open") ? closeMega() : openMega();
+}
+
+function renderCatTree(){
+  if(!catTree) return;
+
+  let html = "";
+
+  // Tutti
+  html += `
+    <div class="tItem ${state.macro==="tutti" ? "active" : ""}">
+      <div class="tRow">
+        <div class="tLeft">
+          <button class="tToggle" type="button" data-act="all">•</button>
+          <div class="tName">Tutti</div>
+        </div>
+        <div class="tCnt">${ALL.length}</div>
+      </div>
+    </div>
+  `;
+
+  for(const m of model){
+    const isOpen = state.openMacros.has(m.macroSlug);
+    const activeMacro = (state.macro===m.macroSlug && state.sub==="tutti");
+
+    html += `
+      <div class="tItem ${isOpen ? "open" : ""} ${activeMacro ? "active" : ""}" data-m="${esc(m.macroSlug)}">
+        <div class="tRow">
+          <div class="tLeft">
+            <button class="tToggle" type="button" data-act="toggle" data-m="${esc(m.macroSlug)}">${isOpen ? "–" : "+"}</button>
+            <div class="tName" data-act="macro" data-m="${esc(m.macroSlug)}" data-ml="${esc(m.macro)}">${esc(m.macro)}</div>
+          </div>
+          <div class="tCnt">${m.total}</div>
+        </div>
+
+        <div class="tKids">
+          ${m.cats.map(c=>{
+            const active = (state.macro===m.macroSlug && state.sub===c.slug) ? "active" : "";
+            return `
+              <div class="tSub ${active}"
+                   data-act="sub"
+                   data-m="${esc(m.macroSlug)}"
+                   data-ml="${esc(m.macro)}"
+                   data-s="${esc(c.slug)}"
+                   data-sl="${esc(c.short)}"
+                   title="${esc(c.full)}">
+                <span style="min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${esc(c.short)}</span>
+                <small>${c.count}</small>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      </div>
+    `;
+  }
+
+  catTree.innerHTML = html;
+
+  catTree.onclick = (e)=>{
+    const el = e.target.closest("[data-act]");
+    if(!el) return;
+
+    const act = el.getAttribute("data-act");
+    if(act === "all"){ setFilterAll(); closeMega(); document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"}); return; }
+
+    if(act === "toggle"){
+      const m = el.getAttribute("data-m");
+      toggleMacro(m);
+      // toggleMacro fa già renderTree, ma noi vogliamo aggiornare anche l'overlay
+      renderCatTree();
+      return;
+    }
+
+    if(act === "macro"){
+      setFilterMacro(el.getAttribute("data-m"), el.getAttribute("data-ml"));
+      closeMega();
+      document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
+      return;
+    }
+
+    if(act === "sub"){
+      setFilterSub(el.getAttribute("data-m"), el.getAttribute("data-ml"), el.getAttribute("data-s"), el.getAttribute("data-sl"));
+      closeMega();
+      document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
+      return;
+    }
+  };
+}
+
+// colonne a destra (3 cards come nello screen)
+function renderMegaMenu(){
+  if(!megaGrid) return;
+
+  // aggiornamento contatore in alto
+  if(catCount) catCount.textContent = `${ALL.length} prodotti`;
+
+  // split bilanciato per total
+  const cols = splitIntoColumns(model, 3);
+
+  megaGrid.innerHTML = `
+    <div class="cols">
+      ${cols.map(col => `
+        <div class="colCard">
+          <div class="colHead">
+            <span>${esc(col[0]?.macro || "Categorie")}</span>
+            <small>${col.reduce((s,x)=>s+(x.total||0),0)}</small>
+          </div>
+
+          <div class="colList">
+            ${col.flatMap(m => {
+              // Titolo macro + 8 sub
+              const head = `
+                <div class="colItem" data-type="macro" data-m="${esc(m.macroSlug)}" data-ml="${esc(m.macro)}">
+                  <span class="label" style="font-weight:1100; text-transform:uppercase; letter-spacing:.06em; color:rgba(11,95,118,.95)">${esc(m.macro)}</span>
+                  <small>${m.total}</small>
+                </div>
+              `;
+              const subs = m.cats.slice(0,8).map(c => `
+                <div class="colItem" data-type="sub"
+                     data-m="${esc(m.macroSlug)}" data-ml="${esc(m.macro)}"
+                     data-s="${esc(c.slug)}" data-sl="${esc(c.short)}"
+                     title="${esc(c.full)}">
+                  <span class="label">${esc(c.short)}</span>
+                  <small>${c.count}</small>
+                </div>
+              `);
+              return [head, ...subs];
+            }).join("")}
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  megaGrid.onclick = (e)=>{
+    const el = e.target.closest("[data-type]");
+    if(!el) return;
+
+    const type = el.getAttribute("data-type");
+    if(type === "macro"){
+      setFilterMacro(el.getAttribute("data-m"), el.getAttribute("data-ml"));
+      closeMega();
+      document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
+      return;
+    }
+    if(type === "sub"){
+      setFilterSub(el.getAttribute("data-m"), el.getAttribute("data-ml"), el.getAttribute("data-s"), el.getAttribute("data-sl"));
+      closeMega();
+      document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
+    }
+  };
+
+  renderCatTree();
+}
+
+// Eventi overlay
+megaBtn?.addEventListener("click", toggleMega);
+megaClose?.addEventListener("click", closeMega);
+
+megaAll?.addEventListener("click", ()=>{
+  setFilterAll();
   closeMega();
+  document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
 });
+
+// chiudi cliccando fuori pannello
+catOverlay?.addEventListener("click", (e)=>{
+  if(e.target === catOverlay) closeMega();
+});
+
 document.addEventListener("keydown", (e)=>{
   if(e.key === "Escape") closeMega();
 });
+
 
 
     }
@@ -1714,4 +1876,5 @@ document.addEventListener("keydown", (e)=>{
   </script>
 </body>
 </html>
+
 
