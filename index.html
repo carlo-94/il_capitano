@@ -489,7 +489,7 @@
       gap:16px;
     }
 
-    /* ===== CARD (stile foto 2) ===== */
+    /* ===== CARD ===== */
     .card{
       border:1px solid rgba(0,0,0,.14);
       border-radius: 14px;
@@ -583,7 +583,7 @@
     .price{
       font-size:15px;
       font-weight:1100;
-      color: rgba(11,95,118,.92); /* NON rosso */
+      color: rgba(11,95,118,.92);
       white-space:nowrap;
     }
     .openBtn{
@@ -621,7 +621,7 @@
       font-weight:950;
     }
 
-    /* ===== Pagination numerica ===== */
+    /* ===== Pagination ===== */
     .pager{
       margin-top:14px;
       display:flex;
@@ -666,7 +666,7 @@
     }
     footer .wrap{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;}
 
-    /* ============ CATALOGO OVERLAY (bello) ============ */
+    /* ============ CATALOGO OVERLAY (stile foto 2 + SCROLL FIX) ============ */
     .catBtn{
       padding:8px 12px;
       border-radius:999px;
@@ -700,15 +700,14 @@
       transform:translateX(-50%);
       width:min(1100px, calc(100vw - 34px));
       max-height: calc(100vh - 130px);
-      background: rgba(255,255,255,.98);
+      background:#f3f4f6;               /* FOTO 2 */
       border:1px solid rgba(0,0,0,.14);
-      border-radius:18px;
+      border-radius:10px;               /* FOTO 2 */
       box-shadow: 0 26px 90px rgba(0,0,0,.22);
       overflow:hidden;
-      background:
-        radial-gradient(900px 320px at 12% 0%, rgba(14,126,160,.10), transparent 60%),
-        radial-gradient(800px 320px at 90% 0%, rgba(242,231,201,.34), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.98), rgba(238,246,247,.40));
+
+      display:flex;                     /* SCROLL FIX */
+      flex-direction:column;            /* SCROLL FIX */
     }
 
     .catTop{
@@ -716,9 +715,10 @@
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      padding:12px 14px;
-      border-bottom:1px solid rgba(0,0,0,.08);
-      background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(238,246,247,.35));
+      padding:12px 16px;
+      border-bottom:1px solid rgba(0,0,0,.10);
+      background:#f3f4f6;
+      flex:0 0 auto;
     }
     .catTopLeft{display:flex; align-items:center; gap:10px;}
     .catTitle{
@@ -747,119 +747,22 @@
       font-weight:1100;
     }
 
+    /* SCROLL FIX: la parte scrollabile è solo il body */
     .catBody{
-      display:grid;
-      grid-template-columns: 300px 1fr;
-      max-height: calc(100vh - 210px);
-    }
-    .catTree{
-      border-right:1px solid rgba(0,0,0,.08);
-      background: linear-gradient(180deg, rgba(242,231,201,.30), rgba(255,255,255,.75));
-      padding:10px;
+      flex:1 1 auto;
+      min-height:0;
       overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      padding:16px;
     }
-
-    .catTree .tItem{
-      padding:8px 8px;
-      border-radius:12px;
-      border:1px solid transparent;
-    }
-    .catTree .tItem:hover{background: rgba(11,95,118,.06); border-color: rgba(11,95,118,.14);}
-    .catTree .tItem.active{background: rgba(14,126,160,.12); border-color: rgba(14,126,160,.26);}
-
-    .catTree .tRow{display:flex; align-items:center; justify-content:space-between; gap:10px;}
-    .catTree .tLeft{display:flex; align-items:center; gap:8px; min-width:0;}
-    .catTree .tToggle{
-      width:22px; height:22px;
-      border-radius:8px;
-      border:1px solid rgba(0,0,0,.12);
-      background:#fff;
-      cursor:pointer;
-      font-weight:1100;
-      color:rgba(20,20,20,.72);
-      flex:0 0 auto;
-    }
-    .catTree .tName{
-      font-weight:1050;
-      color:rgba(20,20,20,.86);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      cursor:pointer;
-    }
-    .catTree .tCnt{font-size:12px; font-weight:950; color:rgba(20,20,20,.55);}
-
-    .catTree .tKids{
-      display:none;
-      margin:8px 0 0 28px;
-      padding-left:10px;
-      border-left:1px dashed rgba(0,0,0,.18);
-      gap:6px;
-    }
-    .catTree .tItem.open .tKids{display:grid;}
-    .catTree .tSub{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      padding:8px 10px;
-      border-radius:12px;
-      border:1px solid transparent;
-      background: rgba(255,255,255,.85);
-      cursor:pointer;
-      font-weight:950;
-      color:rgba(20,20,20,.82);
-    }
-    .catTree .tSub:hover{border-color: rgba(11,95,118,.14); background: rgba(11,95,118,.06);}
-    .catTree .tSub.active{border-color: rgba(14,126,160,.30); background: rgba(14,126,160,.12);}
-
-    .catCols{padding:12px; overflow:auto;}
-    .catCols .cols{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap:12px;
-    }
-    .catCols .colCard{
-      border:1px solid rgba(0,0,0,.10);
-      border-radius:16px;
-      background: rgba(255,255,255,.78);
-      box-shadow: 0 12px 26px rgba(0,0,0,.08);
-      overflow:hidden;
-    }
-    .catCols .colHead{
-      padding:10px 12px;
-      border-bottom:1px solid rgba(0,0,0,.08);
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      font-weight:1100;
-    }
-    .catCols .colHead span{overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
-    .catCols .colHead small{font-weight:950; color:rgba(20,20,20,.55);}
-
-    .catCols .colList{padding:10px; display:grid; gap:8px;}
-    .catCols .colItem{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      padding:8px 10px;
-      border-radius:12px;
-      border:1px solid transparent;
-      background: rgba(255,255,255,.86);
-      cursor:pointer;
-    }
-    .catCols .colItem:hover{border-color: rgba(11,95,118,.14); background: rgba(11,95,118,.06);}
-    .catCols .colItem .label{
-      min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-      font-weight:950;
-      color:rgba(20,20,20,.82);
-    }
-    .catCols .colItem small{flex:0 0 auto; font-size:12px; font-weight:900; color:rgba(20,20,20,.55);}
 
     .catFoot{
+      flex:0 0 auto;
       display:flex;
       justify-content:flex-end;
       padding:10px 12px 12px;
-      border-top:1px solid rgba(0,0,0,.08);
+      border-top:1px solid rgba(0,0,0,.10);
+      background:#f3f4f6;
     }
     .catAll{
       padding:9px 12px;
@@ -870,10 +773,42 @@
       cursor:pointer;
     }
 
+    /* Mega contenuto FOTO 2 */
+    .mega2{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:26px;
+    }
+    .mega2-colTitle{
+      font-weight:1000;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      font-size:12px;
+      color: rgba(20,20,20,.88);
+      padding-bottom:10px;
+      border-bottom: 2px solid rgba(0,0,0,.08);
+      margin: 0 0 10px 0;
+    }
+    .mega2-list{display:grid; gap:6px;}
+    .mega2-item{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:6px 0;
+      cursor:pointer;
+      user-select:none;
+      color: rgba(20,20,20,.86);
+      font-weight:850;
+    }
+    .mega2-item:hover{color: rgba(11,95,118,.95);}
+    .mega2-arrow{width:16px; opacity:.55; flex:0 0 auto; font-weight:1100;}
+    .mega2-label{min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+    .mega2-count{margin-left:auto; opacity:.55; font-weight:900; font-size:12px; flex:0 0 auto;}
+
     @media (max-width: 1100px){
       .grid{grid-template-columns: repeat(2, minmax(0,1fr))}
       .searchTop input{width:min(460px, 46vw)}
-      .catCols .cols{grid-template-columns: 1fr;}
+      .mega2{grid-template-columns:1fr;}
     }
     @media (max-width: 980px){
       .headerRow{grid-template-columns: 1fr; gap:14px}
@@ -883,10 +818,9 @@
       .layout{grid-template-columns: 1fr}
       .side{position:relative; top:0}
       .tree{max-height:none}
-
       .catPanel{ top:74px; max-height: calc(100vh - 110px); }
-      .catBody{ grid-template-columns: 1fr; }
-      .catTree{ display:none; }
+      .catBody{ padding:14px; }
+      .mega2{grid-template-columns:1fr;}
     }
     @media (max-width: 560px){
       .grid{grid-template-columns: 1fr}
@@ -932,7 +866,6 @@
       <nav class="links" aria-label="Navigazione">
         <a href="#home">Home</a>
 
-        <!-- CATALOGO (overlay serio) -->
         <button class="catBtn" id="megaBtn" type="button" aria-haspopup="dialog" aria-expanded="false">
           Catalogo <span class="chev">▾</span>
         </button>
@@ -950,7 +883,7 @@
 
   <!-- OVERLAY CATALOGO -->
   <div class="catOverlay" id="catOverlay" role="dialog" aria-modal="true" aria-label="Catalogo">
-    <div class="catPanel">
+    <div class="catPanel" role="document">
       <div class="catTop">
         <div class="catTopLeft">
           <div class="catTitle">Categorie</div>
@@ -959,9 +892,9 @@
         <button class="catClose" id="megaClose" type="button" aria-label="Chiudi">✕</button>
       </div>
 
+      <!-- QUI deve scorrere -->
       <div class="catBody">
-        <aside class="catTree" id="catTree" aria-label="Albero categorie"></aside>
-        <section class="catCols" id="megaGrid" aria-label="Elenco categorie"></section>
+        <section id="megaGrid" aria-label="Elenco categorie"></section>
       </div>
 
       <div class="catFoot">
@@ -1044,6 +977,7 @@
     </div>
   </footer>
 
+ 
   <script>
 
 /* =========================================================
@@ -1845,6 +1779,7 @@ boot().catch(err=>{
 
 </body>
 </html>
+
 
 
 
