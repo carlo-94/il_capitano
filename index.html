@@ -1505,10 +1505,17 @@ function injectMegaStylePhoto2(){
   const st = document.createElement("style");
   st.id = "megaStylePhoto2";
   st.textContent = `
+  /* SCROLL FIX overlay */
+.catOverlay.open{ overflow:hidden; }
+
+
     .catPanel{
       background:#f3f4f6 !important;
       border-radius: 10px !important;
       overflow:hidden;
+      max-height: calc(100vh - 130px) !important;
+  display:flex !important;
+  flex-direction:column !important;
     }
     .catTop{
       background:#f3f4f6 !important;
@@ -1518,12 +1525,20 @@ function injectMegaStylePhoto2(){
     .catBody{
       display:block !important;
       max-height: calc(100vh - 210px) !important;
+       flex: 1 1 auto !important;
+  min-height: 0 !important;          /* fondamentale */
+  overflow: auto !important;          /* QUI lo scroll */
+  -webkit-overflow-scrolling: touch;
     }
     .catTree{display:none !important;}
 
     .catCols{
       padding:16px !important;
       overflow:auto !important;
+      flex: 1 1 auto !important;
+  min-height: 0 !important;          /* fondamentale */
+  overflow: auto !important;          /* QUI lo scroll */
+  -webkit-overflow-scrolling: touch;
     }
     .catCols .mega2{
       display:grid;
@@ -1644,12 +1659,16 @@ function renderMegaPhoto2(){
 function openMega(){
   catOverlay.classList.add("open");
   megaBtn.setAttribute("aria-expanded","true");
+  document.body.style.overflow = "hidden";   // blocca scroll pagina sotto
   renderMegaPhoto2();
 }
+
 function closeMega(){
   catOverlay.classList.remove("open");
   megaBtn.setAttribute("aria-expanded","false");
+  document.body.style.overflow = "";         // ripristina scroll pagina
 }
+
 function toggleMega(){
   catOverlay.classList.contains("open") ? closeMega() : openMega();
 }
@@ -1826,6 +1845,7 @@ boot().catch(err=>{
 
 </body>
 </html>
+
 
 
 
