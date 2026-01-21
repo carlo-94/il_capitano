@@ -7,175 +7,250 @@
   <meta name="description" content="Scheda prodotto • Il Capitano Pesca Nautica. Acquisto su eBay." />
 
   <style>
-  
-   :root{
-    --ink:#141414;
-    --muted:#4c5a60;
+    :root{
+      --ink:#141414;
+      --muted:#4c5a60;
 
-    --sea:#0b5f76;
-    --sea2:#0e7ea0;
-    --foam:#eef6f7;
-    --sand:#f2e7c9;
+      --sea:#0b5f76;
+      --sea2:#0e7ea0;
+      --foam:#eef6f7;
+      --sand:#f2e7c9;
 
-    --paper:#fbfaf6;
-    --paper2:#f6f3ea;
+      --paper:#fbfaf6;
+      --paper2:#f6f3ea;
 
-    --line:rgba(0,0,0,.14);
-    --line2:rgba(11,95,118,.22);
-    --shadow:0 14px 30px rgba(0,0,0,.10);
+      --line:rgba(0,0,0,.14);
+      --shadow:0 14px 30px rgba(0,0,0,.10);
+      --shadow2:0 10px 26px rgba(0,0,0,.08);
 
-    --r:16px;
-    --max:1200px;
-  }
-
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    color:var(--ink);
-    background:
-    radial-gradient(1200px 460px at 50% -220px, rgba(11,95,118,.10), transparent 60%),
-    linear-gradient(180deg, var(--paper2) 0%, #fff 75%);
-      min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  }
-  a{color:inherit; text-decoration:none}
-  .wrap{max-width:var(--max); margin:0 auto; padding:8px 18px;}
-  .sr{position:absolute; left:-9999px}
-  
-  
-    /* Sticky footer: footer sempre in basso se la pagina è corta */
-html, body { height: 100%; }
-
-
-.wrap{
-  flex: 1;
-}
-    
-    /* =========================
-       TOP BAR 
-    ========================= */
-    .top{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:6px 0 14px;
-      position:relative;
+      --r:16px;
+      --max:1200px;
     }
 
-    /* leggera “carta” sopra */
-    .top::before{
+    *{box-sizing:border-box}
+    html, body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 460px at 50% -220px, rgba(11,95,118,.10), transparent 60%),
+        linear-gradient(180deg, var(--paper2) 0%, #fff 75%);
+    }
+    a{color:inherit; text-decoration:none}
+    button, input, select{font:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:0 18px;}
+    .sr{position:absolute; left:-9999px}
+
+    /* ================= HEADER (uguale home) ================= */
+    .headerHero{
+      position:relative;
+      padding:22px 0 14px;
+      border-bottom:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(242,231,201,.48), rgba(255,255,255,.92));
+      overflow:hidden;
+    }
+    .headerHero::before{
       content:"";
       position:absolute;
-      inset:-10px -14px 0 -14px;
+      inset:0;
       pointer-events:none;
       background:
-        repeating-linear-gradient(0deg,
-          rgba(0,0,0,.015) 0px, rgba(0,0,0,.015) 1px,
-          rgba(255,255,255,0) 2px, rgba(255,255,255,0) 6px);
+        repeating-linear-gradient(0deg, rgba(0,0,0,.018) 0px, rgba(0,0,0,.018) 1px, rgba(255,255,255,0) 2px, rgba(255,255,255,0) 6px),
+        radial-gradient(900px 360px at 20% 10%, rgba(11,95,118,.08), transparent 60%),
+        radial-gradient(700px 300px at 90% 0%, rgba(242,231,201,.24), transparent 60%);
       opacity:.55;
       mix-blend-mode:multiply;
     }
-
-    .brandMini{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width:0;
-    }
-
-    /* mini-cartoncino per logo */
-    .brandCard{
+    .headerRow{
       position:relative;
-      width:62px;
-      height:62px;
+      display:grid;
+      grid-template-columns: 170px 1fr 260px;
+      gap:18px;
+      align-items:center;
+    }
+    .headerLogo{
       display:flex;
       align-items:center;
       justify-content:center;
-      border-radius:14px;
-      background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.84));
-      border:1px solid rgba(0,0,0,.14);
-      box-shadow: 0 10px 18px rgba(0,0,0,.08);
-      transform: rotate(-1deg);
-      flex:0 0 auto;
+      position:relative;
+      min-height:120px;
     }
-    .brandCard::after{
+    .headerLogo::before{
       content:"";
       position:absolute;
-      width:40px;
-      height:14px;
-      top:-6px;
+      inset:12px 16px;
+      border-radius:14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.80));
+      border:1px solid rgba(0,0,0,.14);
+      box-shadow: 0 12px 22px rgba(0,0,0,.08);
+      transform: rotate(-1.2deg);
+      height:150px;
+    }
+    .headerLogo::after{
+      content:"";
+      position:absolute;
+      width:58px;
+      height:18px;
+      top:6px;
       left:50%;
       transform:translateX(-50%) rotate(-6deg);
       border-radius:6px;
       background: rgba(242,231,201,.72);
       border:1px solid rgba(0,0,0,.10);
-      box-shadow:0 8px 14px rgba(0,0,0,.06);
+      box-shadow:0 8px 14px rgba(0,0,0,.07);
+      opacity:.9;
     }
-    .brandCard img{
-      width:42px;
+    .headerLogo img{
+      position:relative;
+      width:138px;
       height:auto;
       display:block;
     }
+    .headerTitle{min-width:0; display:flex; flex-direction:column; gap:6px; padding:6px 0;}
+    .brandName{margin:0; font-size:30px; font-weight:1000; letter-spacing:.02em;}
+    .brandSub{margin:0; font-size:12px; font-weight:950; letter-spacing:.14em; text-transform:uppercase; color:rgba(11,95,118,.92);}
+    .brandDesc{margin:2px 0 0; color:rgba(20,20,20,.72); font-weight:850; line-height:1.35; font-size:14px;}
 
-    .brandText{
+    .rope{position:relative; margin-top:8px; height:14px; width:min(680px, 100%);}
+    .rope::before{
+      content:"";
+      position:absolute;
+      left:0; right:0; top:6px;
+      height:2px;
+      background: repeating-linear-gradient(90deg, rgba(70,52,30,.55) 0 6px, rgba(70,52,30,.35) 6px 10px);
+      border-radius:999px;
+      opacity:.65;
+    }
+    .stamp{
+      margin-top:8px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      width:max-content;
+      padding:7px 10px;
+      border-radius:12px;
+      border:1px dashed rgba(11,95,118,.35);
+      background: rgba(238,246,247,.60);
+      color: rgba(11,95,118,.95);
+      font-weight:1000;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      font-size:11px;
+    }
+    .stampDot{
+      width:8px; height:8px;
+      border-radius:999px;
+      background: rgba(11,95,118,.85);
+      box-shadow:0 0 0 3px rgba(11,95,118,.14);
+    }
+
+    .assist{
+      justify-self:end;
+      width:240px;
+      aspect-ratio: 1/1;
+      border-radius:999px;
+      border:2px solid rgba(11,95,118,.22);
+      box-shadow: var(--shadow);
+      background:
+        radial-gradient(220px 220px at 30% 25%, rgba(242,231,201,.72), transparent 60%),
+        radial-gradient(240px 240px at 70% 70%, rgba(14,126,160,.16), transparent 62%),
+        linear-gradient(180deg, rgba(255,255,255,.92), rgba(238,246,247,.86));
+      padding:16px 16px;
       display:flex;
       flex-direction:column;
-      gap:3px;
-      min-width:0;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      gap:8px;
+      position:relative;
     }
-    .brandText strong{
-      font-size:14px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      font-weight:1000;
-      color:rgba(11,95,118,.92);
-    }
-    .brandText span{
-      font-size:12px;
-      font-weight:850;
-      color:rgba(20,20,20,.70);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      max-width: 64vw;
-    }
+    .assist::before{content:""; position:absolute; inset:10px; border-radius:999px; border:1px dashed rgba(11,95,118,.22);}
+    .assist strong{display:block; text-transform:uppercase; letter-spacing:.12em; font-size:14px;}
+    .assist .sub{color:rgba(20,20,20,.65); font-weight:950; letter-spacing:.12em; text-transform:uppercase; font-size:13px;}
+    .assist .phone{font-weight:1100; letter-spacing:.10em; font-size:17px; color:rgba(11,95,118,.98); white-space:nowrap;}
+    .assist .mini{margin-top:8px; padding-top:10px; width:100%; border-top:1px solid rgba(11,95,118,.18); font-size:12px; font-weight:900; line-height:1.3; color:rgba(20,20,20,.72);}
 
-    .back{
+    /* ================= MINI NAV ================= */
+    .mininav{
+      border-top:1px solid var(--line);
+      border-bottom:1px solid var(--line);
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(6px);
+      position:sticky;
+      top:0;
+      z-index:50;
+    }
+    .mininav .wrap{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 18px;
+    }
+    .links{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      font-weight:950;
+      font-size:18px;
+      color:rgba(20,20,20,.80);
+      align-items:center;
+    }
+    .links a{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid transparent;
+    }
+    .links a:hover{border-color: rgba(0,0,0,.10); background: rgba(242,231,201,.35);}
+
+    .rightTop{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .pill{
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(238,246,247,.70);
+      font-weight:950;
+      color: rgba(11,95,118,.92);
+      white-space:nowrap;
+    }
+    .backBtn{
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      padding:10px 14px;
+      padding:9px 12px;
       border-radius:999px;
       border:1px solid rgba(0,0,0,.14);
-      background: rgba(238,246,247,.70);
-      font-weight:950;
+      background: rgba(242,231,201,.40);
+      font-weight:1000;
       box-shadow: 0 10px 18px rgba(0,0,0,.06);
       transition: transform .14s ease, box-shadow .14s ease, background .14s ease;
-      flex:0 0 auto;
     }
-    .back:hover{
+    .backBtn:hover{
       transform: translateY(-1px);
       box-shadow: 0 14px 26px rgba(0,0,0,.10);
-      background: rgba(238,246,247,.92);
+      background: rgba(242,231,201,.55);
     }
 
-    /* =========================
-       PANEL
-    ========================= */
+    /* ================= PRODUCT ================= */
+    .product{
+      padding:18px 0 44px;
+    }
+
     .panel{
-      position:relative;
       border:1px solid rgba(0,0,0,.14);
       border-radius: calc(var(--r) + 10px);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.92), rgba(251,250,246,.90));
-      box-shadow: var(--shadow);
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(251,250,246,.90));
+      box-shadow: var(--shadow2);
       overflow:hidden;
+      position:relative;
     }
-
-    /* texture carta dentro al panel */
     .panel::before{
       content:"";
       position:absolute;
@@ -184,23 +259,19 @@ html, body { height: 100%; }
       background:
         radial-gradient(900px 340px at 20% 0%, rgba(11,95,118,.06), transparent 62%),
         radial-gradient(700px 300px at 90% 0%, rgba(242,231,201,.22), transparent 60%),
-        repeating-linear-gradient(0deg,
-          rgba(0,0,0,.012) 0px, rgba(0,0,0,.012) 1px,
-          rgba(255,255,255,0) 2px, rgba(255,255,255,0) 7px);
+        repeating-linear-gradient(0deg, rgba(0,0,0,.012) 0px, rgba(0,0,0,.012) 1px, rgba(255,255,255,0) 2px, rgba(255,255,255,0) 7px);
       opacity:.6;
       mix-blend-mode:multiply;
     }
 
-    .layout{
+    .pLayout{
       position:relative;
       display:grid;
-      grid-template-columns: 1.05fr .95fr;
+      grid-template-columns: 1.08fr .92fr;
       gap:0;
     }
 
-    /* =========================
-       GALLERY 
-    ========================= */
+    /* left: gallery */
     .gallery{
       padding:16px;
       border-right:1px solid rgba(0,0,0,.14);
@@ -220,8 +291,10 @@ html, body { height: 100%; }
       display:flex;
       flex-direction:column;
       gap:10px;
+      max-height: 560px;
+      overflow:auto;
+      padding-right:6px;
     }
-
     .thumb{
       border:1px solid rgba(0,0,0,.14);
       border-radius:14px;
@@ -230,10 +303,7 @@ html, body { height: 100%; }
       cursor:pointer;
       box-shadow: 0 10px 18px rgba(0,0,0,.06);
       transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
-      position:relative;
     }
-
-    /* micro “spago” sotto la thumb attiva */
     .thumb.active{
       border-color: rgba(11,95,118,.38);
       box-shadow:0 0 0 4px rgba(11,95,118,.10), 0 14px 24px rgba(0,0,0,.10);
@@ -242,8 +312,6 @@ html, body { height: 100%; }
       transform: translateY(-1px);
       box-shadow:0 14px 24px rgba(0,0,0,.10);
     }
-
-    /* cornice interna uniforme per nascondere sfondi brutti di img*/
     .thumb .frame{
       width:100%;
       height:64px;
@@ -261,7 +329,7 @@ html, body { height: 100%; }
       height:100%;
       object-fit:contain;
       display:block;
-      mix-blend-mode:multiply;     /* “sparisce” il bianco */
+      mix-blend-mode:multiply;
       filter: contrast(1.08) saturate(1.02);
     }
 
@@ -276,8 +344,6 @@ html, body { height: 100%; }
       justify-content:center;
       box-shadow: 0 14px 26px rgba(0,0,0,.08);
     }
-
-    /* frame interno anche per l’immagine grande */
     .mainFrame{
       width:100%;
       height:100%;
@@ -300,9 +366,7 @@ html, body { height: 100%; }
       filter: drop-shadow(0 18px 26px rgba(0,0,0,.10)) contrast(1.06);
     }
 
-    /* =========================
-       DETTAGLIO (destra)
-    ========================= */
+    /* right: detail */
     .detail{
       padding:18px 18px 20px;
       background: rgba(255,255,255,.55);
@@ -310,8 +374,8 @@ html, body { height: 100%; }
 
     .kicker{
       display:inline-flex;
-      gap:10px;
       align-items:center;
+      gap:10px;
       padding:8px 12px;
       border-radius:999px;
       border:1px solid rgba(0,0,0,.14);
@@ -323,8 +387,6 @@ html, body { height: 100%; }
       font-size:11px;
       position:relative;
     }
-
-  
     .kicker::after{
       content:"";
       position:absolute;
@@ -342,7 +404,15 @@ html, body { height: 100%; }
       line-height:1.08;
       font-weight:1000;
     }
-
+    .metaLine{
+      margin:10px 0 0;
+      color:rgba(20,20,20,.62);
+      font-weight:950;
+      text-transform:uppercase;
+      letter-spacing:.10em;
+      font-size:12px;
+      line-height:1.4;
+    }
     .desc{
       margin:10px 0 0;
       color:rgba(20,20,20,.75);
@@ -351,22 +421,37 @@ html, body { height: 100%; }
       font-size:14px;
     }
 
-    .price{
+    .priceRow{
       margin:14px 0 0;
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .price{
       font-weight:1100;
       color: rgba(11,95,118,.98);
-      font-size:24px;
+      font-size:26px;
       letter-spacing:.02em;
+      white-space:nowrap;
+    }
+    .sku{
+      font-weight:950;
+      color:rgba(20,20,20,.62);
+      font-size:12px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      white-space:nowrap;
     }
 
-    /* corda separatore */
-    .rope{
+    .rope2{
       margin:14px 0 0;
       height:14px;
       width:100%;
       position:relative;
     }
-    .rope::before{
+    .rope2::before{
       content:"";
       position:absolute;
       left:0; right:0; top:6px;
@@ -399,6 +484,7 @@ html, body { height: 100%; }
       white-space:nowrap;
       transition: transform .14s ease, box-shadow .14s ease, background .14s ease;
       box-shadow: 0 10px 18px rgba(0,0,0,.06);
+      cursor:pointer;
     }
     .btn:hover{
       transform: translateY(-1px);
@@ -410,6 +496,33 @@ html, body { height: 100%; }
       background: rgba(242,231,201,.58);
     }
 
+    .qtyBox{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.14);
+      background:#fff;
+      box-shadow: 0 10px 18px rgba(0,0,0,.06);
+    }
+    .qtyBox button{
+      width:34px; height:34px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(242,231,201,.40);
+      font-weight:1100;
+      cursor:pointer;
+    }
+    .qtyBox input{
+      width:52px;
+      text-align:center;
+      border:0;
+      outline:none;
+      font-weight:1100;
+      background:transparent;
+    }
+
     .infoBox{
       margin-top:16px;
       border-top:1px solid rgba(0,0,0,.14);
@@ -419,206 +532,444 @@ html, body { height: 100%; }
       font-size:13px;
       line-height:1.55;
     }
-     footer{
-    border-top:1px solid rgba(0,0,0,.12);
-    padding:18px 0 26px;
-    color:rgba(20,20,20,.72);
-    font-weight:900;
-  }
-  footer .wrap{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    flex-wrap:wrap;
-  }
+    .infoBox b{color:rgba(20,20,20,.92)}
 
-    /* responsive 
+    /* ================= TOAST ================= */
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform:translateX(-50%) translateY(30px);
+      opacity:0;
+      pointer-events:none;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.14);
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 16px 40px rgba(0,0,0,.18);
+      font-weight:950;
+      color: rgba(11,95,118,.95);
+      transition: opacity .18s ease, transform .18s ease;
+      z-index:9999;
+      max-width: calc(100vw - 24px);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+    /* ================= footer ================= */
+    footer{
+      border-top:1px solid rgba(0,0,0,.12);
+      padding:18px 0 26px;
+      color:rgba(20,20,20,.72);
+      font-weight:900;
+      margin-top:24px;
+    }
+    footer .wrap{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;}
+
+    /* ================= responsive ================= */
     @media (max-width: 980px){
-      .layout{grid-template-columns: 1fr}
+      .headerRow{grid-template-columns: 1fr; gap:14px}
+      .assist{justify-self:start; width:240px}
+      .mininav .wrap{flex-direction:column; align-items:flex-start}
+      .pLayout{grid-template-columns: 1fr}
       .gallery{border-right:none; border-bottom:1px solid rgba(0,0,0,.14)}
       .galleryGrid{grid-template-columns: 1fr}
-      .thumbs{flex-direction:row; overflow:auto; padding-bottom:6px}
+      .thumbs{flex-direction:row; max-height:none; overflow:auto; padding:0 0 6px; }
       .thumb{min-width:96px}
       .mainImg{min-height:320px}
-    }  */
-    
-    
+    }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="top">
-      <div class="brandMini">
-        <div class="brandCard">
-          
-          <img src="assets/img/logo/logo-transparent.svg" alt="Il Capitano">
+  <!-- HEADER uguale index -->
+  <header class="headerHero" id="home">
+    <div class="wrap">
+      <div class="headerRow">
+        <div class="headerLogo">
+          <img src="assets/img/logo/logo-transparent.svg" alt="Il Capitano (logo ancora)">
         </div>
-        <div class="brandText">
-          <strong>Il Capitano • Pesca Nautica</strong>
-          <span>Dal 1938 • Accessori nautici & pesca sportiva e professionale</span>
+
+        <div class="headerTitle">
+          <h1 class="brandName">Il Capitano</h1>
+          <p class="brandSub">Pesca • Nautica • Accessori</p>
+          <p class="brandDesc">
+            Dal <b>1938</b> ci occupiamo della vendita di accessori nautici e prodotti per la pesca sportiva e professionale.
+          </p>
+          <div class="rope" aria-hidden="true"></div>
+          <span class="stamp"><span class="stampDot" aria-hidden="true"></span>Negozio storico • Salerno</span>
         </div>
+
+        <aside class="assist" aria-label="Ordini e assistenza">
+          <strong>Ordini e<br>Assistenza</strong>
+          <div class="sub">Telefono</div>
+          <div class="phone">089 227779</div>
+          <div class="mini">
+            pesca.nautica@yahoo.it<br>
+            Via Roma 306, Salerno
+          </div>
+        </aside>
       </div>
-
-      <a class="back" href="index.html">← Torna ai prodotti</a>
     </div>
+  </header>
 
-    <section class="panel" id="panel">
-      <div class="layout">
+  <div class="mininav">
+    <div class="wrap">
+      <nav class="links" aria-label="Navigazione">
+        <a href="index.html#home">Home</a>
+        <a href="index.html#catalogo">Catalogo</a>
+        <a href="index.html#contatti">Contatti</a>
+      </nav>
 
-        <!-- GALLERY -->
-        <div class="gallery">
-          <div class="galleryGrid">
-            <div class="thumbs" id="thumbs"></div>
+      <div class="rightTop">
+        <span class="pill" id="crumbPill">Carico…</span>
+        <a class="backBtn" id="backBtn" href="index.html#catalogo">← Torna ai prodotti</a>
+      </div>
+    </div>
+  </div>
 
-            <div class="mainImg">
-              <div class="mainFrame">
-                <img id="heroImg" alt="Immagine prodotto">
+  <main class="product">
+    <div class="wrap">
+      <section class="panel" id="panel" aria-label="Scheda prodotto">
+        <div class="pLayout">
+
+          <!-- GALLERY -->
+          <div class="gallery">
+            <div class="galleryGrid">
+              <div class="thumbs" id="thumbs" aria-label="Miniature"></div>
+
+              <div class="mainImg" aria-label="Immagine principale">
+                <div class="mainFrame">
+                  <img id="heroImg" alt="Immagine prodotto">
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- DETTAGLIO -->
-        <div class="detail">
-          <div class="kicker" id="badge">PRODOTTO</div>
-          <h1 id="title">Titolo prodotto</h1>
-          <p class="desc" id="desc">Descrizione prodotto...</p>
-          <div class="price" id="price">€ 0,00</div>
+          <!-- DETTAGLIO -->
+          <div class="detail">
+            <div class="kicker" id="badge">PRODOTTO</div>
+            <h1 id="title">Titolo prodotto</h1>
 
-          <div class="rope" aria-hidden="true"></div>
+            <div class="metaLine" id="metaLine">—</div>
 
-          <div class="actions">
-            <a class="btn btnPrimary" id="buy" href="#" target="_blank" rel="noopener noreferrer">Compra su eBay →</a>
-            <a class="btn" id="wa" href="#" target="_blank" rel="noopener noreferrer">WhatsApp assistenza</a>
+            <p class="desc" id="desc">Descrizione prodotto…</p>
+
+            <div class="priceRow">
+              <div class="price" id="price">—</div>
+              <div class="sku" id="skuLine">SKU: —</div>
+            </div>
+
+            <div class="rope2" aria-hidden="true"></div>
+
+            <div class="actions">
+              <div class="qtyBox" aria-label="Quantità">
+                <button type="button" id="qtyMinus" aria-label="Diminuisci">−</button>
+                <input id="qty" type="number" min="1" value="1" aria-label="Quantità">
+                <button type="button" id="qtyPlus" aria-label="Aumenta">+</button>
+              </div>
+
+              <button class="btn btnPrimary" id="addCart" type="button">Aggiungi al carrello</button>
+              <a class="btn" id="buy" href="#" target="_blank" rel="noopener noreferrer">Compra su eBay →</a>
+              <a class="btn" id="wa" href="#" target="_blank" rel="noopener noreferrer">WhatsApp assistenza</a>
+            </div>
+
+            <div class="infoBox" id="infoBox">
+              <div><b>Categoria:</b> <span id="catLabel">—</span></div>
+              <div><b>Produttore:</b> <span id="brandLabel">—</span></div>
+              <div style="margin-top:10px; opacity:.9">
+                Per acquistare, clicca <b>“Compra su eBay”</b>. Per dubbi, scrivici su WhatsApp.
+              </div>
+            </div>
+
           </div>
 
-          
         </div>
+      </section>
+    </div>
+  </main>
 
-      </div>
-    </section>
-  </div>
-  
   <footer id="contatti">
     <div class="wrap">
-      <div><strong></strong> Via Roma 306, Salerno</div>
+      <div>Via Roma 306, Salerno • Tel. 089 227779 • pesca.nautica@yahoo.it</div>
       <div>© <span id="y"></span> Il Capitano – Pesca Nautica</div>
     </div>
   </footer>
 
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
   <script>
-   
-  document.getElementById("y").textContent = new Date().getFullYear();
-  
-  
-    const PRODUCTS = [
-      {
-        id: "p1",
-        title: "Canna Spinning 2.10m",
-        desc: "Azione rapida, perfetta per mare e scogli. Ottima sensibilità e controllo in ferrata.",
-        price: "€ 59,90",
-        badge: "CANNE",
-        ebay: "https://www.ebay.it/",
-        images: [
-          "assets/img/prodotti/p1-1.jpg",
-          "assets/img/prodotti/p1-2.png",
-          "assets/img/prodotti/p1-3.jpg"
-        ]
-      },
-      {
-        id: "p2",
-        title: "Mulinello 2500",
-        desc: "Frizione precisa, bobina in alluminio. Fluido in recupero, perfetto per uso mare.",
-        price: "€ 44,90",
-        badge: "MULINELLI",
-        ebay: "https://www.ebay.it/",
-        images: [
-          "assets/img/prodotti/p2-1.jpg",
-          "assets/img/prodotti/p2-2.png",
-          "assets/img/prodotti/p2-3.jpg"
-        ]
-      },
-      {
-        id: "p3",
-        title: "Ami Black Nickel (mis. 6)",
-        desc: "Confezione da 20, robusti e affidabili. Ideali per pesche leggere e medie.",
-        price: "€ 4,90",
-        badge: "AMI",
-        ebay: "https://www.ebay.it/",
-        images: [
-          "assets/img/prodotti/p3-1.jpg",
-          "assets/img/prodotti/p3-2.png",
-          "assets/img/prodotti/p3-3.jpg"
-        ]
-      }
+    // ===== config
+    const PLACEHOLDER = "assets/img/prodotti/placeholder.jpg";
+    const DATA_URL_CANDIDATES = [
+      "./data/products.json",
+      "data/products.json",
+      "/data/products.json",
+      "./assets/data/products.json",
+      "/assets/data/products.json"
     ];
 
     const WHATSAPP_NUMBER = "390000000000"; // metti senza + e senza spazi (es: 393891820567)
     const WHATSAPP_TEXT = "Ciao! Mi dai info su questo prodotto?";
 
-    function qs(name){
-      return new URLSearchParams(location.search).get(name);
-    }
+    // ===== utils
+    const $ = (id)=>document.getElementById(id);
+    $("y").textContent = new Date().getFullYear();
 
+    function qs(name){ return new URLSearchParams(location.search).get(name); }
+    function norm(s){ return String(s ?? "").replace(/\s+/g," ").trim(); }
     function esc(s){
-      return String(s)
+      return String(s ?? "")
         .replaceAll("&","&amp;")
         .replaceAll("<","&lt;")
         .replaceAll(">","&gt;")
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
     }
+    function euro(n){
+      const num = Number(n);
+      if(!Number.isFinite(num)) return "—";
+      return num.toLocaleString("it-IT", { style:"currency", currency:"EUR" });
+    }
+    function parsePrice(v){
+      if (v === null || v === undefined) return NaN;
+      if (typeof v === "number") return v;
+      let s = String(v).trim();
+      if(!s) return NaN;
+      s = s.replace(/\s/g,"").replace("€","");
+      if (s.includes(",")){
+        s = s.replace(/\./g,"");
+        s = s.replace(",",".");
+      } else {
+        s = s.replace(/,/g,"");
+      }
+      const num = Number(s);
+      return Number.isFinite(num) ? num : NaN;
+    }
+    function splitParts(full){
+      return String(full ?? "")
+        .split("»")
+        .map(x=>norm(x))
+        .filter(Boolean);
+    }
 
+    async function fetchCatalogJson(){
+      const tries = DATA_URL_CANDIDATES.map(u => new URL(u, location.href).toString());
+      let lastErr = null;
+
+      for(const url of tries){
+        try{
+          const res = await fetch(url, { cache:"no-store" });
+          if(!res.ok) throw new Error(\`HTTP \${res.status} su \${url}\`);
+          const data = await res.json();
+          return data;
+        }catch(e){
+          lastErr = e;
+        }
+      }
+      throw lastErr || new Error("Impossibile caricare products.json");
+    }
+
+    function toast(msg){
+      const t = $("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      clearTimeout(toast._t);
+      toast._t = setTimeout(()=>t.classList.remove("show"), 1600);
+    }
+
+    // ===== gallery helpers
     function setActiveThumb(idx){
       document.querySelectorAll(".thumb").forEach((t,i)=>{
         t.classList.toggle("active", i === idx);
       });
     }
 
+    function setHero(src, alt){
+      const heroImg = $("heroImg");
+      heroImg.src = src || PLACEHOLDER;
+      heroImg.alt = alt || "Immagine prodotto";
+      heroImg.onerror = ()=>{ heroImg.src = PLACEHOLDER; };
+    }
+
+    function makeImagesForProduct(p){
+      // Se in futuro aggiungi immagini reali nel JSON, puoi popolare qui.
+      // Per ora: 1 immagine placeholder coerente.
+      return [PLACEHOLDER, PLACEHOLDER, PLACEHOLDER];
+    }
+
     function renderProduct(p){
+      // header pill
+      $("crumbPill").textContent = p.catLine ? p.catLine : "Prodotto";
+
       document.title = `${p.title} • Il Capitano`;
 
-      document.getElementById("badge").textContent = p.badge;
-      document.getElementById("title").textContent = p.title;
-      document.getElementById("desc").textContent = p.desc;
-      document.getElementById("price").textContent = p.price;
+      $("badge").textContent = p.microBadge || "PRODOTTO";
+      $("title").textContent = p.title || "(Senza nome)";
 
-      document.getElementById("buy").href = p.ebay;
+      // descrizione: se non hai descrizione nel JSON, usiamo categoria + SKU
+      const fallbackDesc = `Prodotto selezionato dal catalogo Il Capitano. Codice: ${p.sku}.`;
+      $("desc").textContent = p.desc || fallbackDesc;
 
-      const wa = document.getElementById("wa");
-      const msg = encodeURIComponent(`${WHATSAPP_TEXT}\n\nProdotto: ${p.title}`);
-      wa.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+      $("price").textContent = p.priceLabel || "—";
+      $("skuLine").textContent = `SKU: ${p.sku || "—"}`;
 
-      const heroImg = document.getElementById("heroImg");
-      const thumbs = document.getElementById("thumbs");
+      $("metaLine").textContent = [
+        p.catLine ? `Categoria: ${p.catLine}` : "",
+        (p.brand && p.brand.trim()) ? `Produttore: ${p.brand}` : ""
+      ].filter(Boolean).join(" • ") || "—";
 
-      const imgs = (p.images && p.images.length) ? p.images : [""];
+      $("catLabel").textContent = p.catLine || p.category || "—";
+      $("brandLabel").textContent = (p.brand && p.brand.trim()) ? p.brand : "—";
 
-      heroImg.src = imgs[0] || "";
-      heroImg.alt = p.title;
+      // link ebay: se in futuro metti nel JSON il link, qui lo usi.
+      // Per adesso: manda alla ricerca eBay con SKU + titolo
+      const q = encodeURIComponent(`${p.title} ${p.sku}`.trim());
+      const ebayUrl = `https://www.ebay.it/sch/i.html?_nkw=${q}`;
+      $("buy").href = ebayUrl;
+
+      // whatsapp
+      const msg = encodeURIComponent(`${WHATSAPP_TEXT}\n\nProdotto: ${p.title}\nCodice: ${p.sku}`);
+      $("wa").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+
+      // gallery
+      const imgs = makeImagesForProduct(p);
+      const thumbs = $("thumbs");
+
+      setHero(imgs[0], p.title);
 
       thumbs.innerHTML = imgs.map((src,i)=>`
-        <div class="thumb ${i===0 ? "active":""}" data-i="${i}">
+        <div class="thumb ${i===0 ? "active":""}" role="button" tabindex="0" data-i="${i}" aria-label="Foto ${i+1}">
           <div class="frame">
-            <img src="${esc(src)}" alt="${esc(p.title)} foto ${i+1}">
+            <img src="${esc(src)}" alt="${esc(p.title)} foto ${i+1}" onerror="this.src='${esc(PLACEHOLDER)}'">
           </div>
         </div>
       `).join("");
 
       thumbs.querySelectorAll(".thumb").forEach(el=>{
-        el.addEventListener("click", ()=>{
+        const activate = ()=>{
           const i = Number(el.getAttribute("data-i"));
-          heroImg.src = imgs[i];
+          setHero(imgs[i], p.title);
           setActiveThumb(i);
+        };
+        el.addEventListener("click", activate);
+        el.addEventListener("keydown", (e)=>{
+          if(e.key === "Enter" || e.key === " "){
+            e.preventDefault();
+            activate();
+          }
         });
       });
+
+      // add to cart (localStorage)
+      const qtyInput = $("qty");
+      const plus = $("qtyPlus");
+      const minus = $("qtyMinus");
+
+      const clampQty = ()=>{
+        let v = Number(qtyInput.value);
+        if(!Number.isFinite(v) || v < 1) v = 1;
+        qtyInput.value = String(v);
+        return v;
+      };
+
+      plus.onclick = ()=>{ qtyInput.value = String(clampQty()+1); };
+      minus.onclick = ()=>{ qtyInput.value = String(Math.max(1, clampQty()-1)); };
+      qtyInput.addEventListener("change", clampQty);
+
+      $("addCart").onclick = ()=>{
+        const qty = clampQty();
+        const cart = JSON.parse(localStorage.getItem("cart_ic") || "[]");
+
+        const idx = cart.findIndex(x => x.sku === p.sku);
+        if(idx >= 0){
+          cart[idx].qty = (Number(cart[idx].qty)||0) + qty;
+        }else{
+          cart.push({
+            sku: p.sku,
+            title: p.title,
+            price: p.price || null,
+            priceLabel: p.priceLabel || "—",
+            microBadge: p.microBadge || "PRODOTTO",
+            catLine: p.catLine || "",
+            brand: p.brand || "",
+            qty
+          });
+        }
+
+        localStorage.setItem("cart_ic", JSON.stringify(cart));
+        toast(`Aggiunto al carrello: ${qty} × ${p.title}`);
+      };
     }
 
-    const id = qs("id");
-    const p = PRODUCTS.find(x => x.id === id) || PRODUCTS[0];
-    renderProduct(p);
+    async function boot(){
+      const sku = qs("sku") || qs("id") || ""; // compatibile con vecchio ?id=
+      const data = await fetchCatalogJson();
+
+      // ricostruzione prodotti come in index
+      let currentCategory = "Senza categoria";
+      const out = [];
+
+      for(const row of data){
+        const marker = String(row[""] ?? "").trim();
+
+        if(marker.toLowerCase().startsWith("categoria")){
+          const parts = marker.split(":");
+          const found = norm(parts.length > 1 ? parts.slice(1).join(":") : "");
+          if(found) currentCategory = found;
+          continue;
+        }
+
+        const code = norm(row["Cod."]);
+        if(!code) continue;
+
+        const title = norm(row["Descrizione"]) || "(Senza nome)";
+        const brand = norm(row["Produttore"]);
+        const catRow = norm(row["Categoria"]);
+        const category = norm(catRow || currentCategory || "Senza categoria");
+
+        const parts = splitParts(category);
+        const macro = parts[0] || "Senza categoria";
+        const micro = (parts.length ? parts[parts.length - 1] : macro) || "PRODOTTO";
+        const catLine = parts.join(" » ");
+
+        const priceNum = parsePrice(row["Listino 1 (ivato)"]);
+
+        out.push({
+          sku: code,
+          title,
+          brand,
+          category,
+          catLine,
+          microBadge: micro,
+          price: priceNum,
+          priceLabel: euro(priceNum),
+          desc: "" // se un giorno avrai una colonna descrizione, mettila qui
+        });
+      }
+
+      // trova per sku
+      let p = out.find(x => x.sku === sku);
+
+      // fallback: se manca, prendi primo
+      if(!p){
+        p = out[0] || { sku:"—", title:"Prodotto non trovato", priceLabel:"—", microBadge:"PRODOTTO" };
+        toast("Prodotto non trovato, mostro un esempio.");
+      }
+
+      renderProduct(p);
+    }
+
+    boot().catch(err=>{
+      console.error(err);
+      $("crumbPill").textContent = "Errore";
+      $("title").textContent = "Errore caricamento prodotto";
+      $("desc").textContent = "Non riesco a caricare il catalogo. Apri la console (F12) per vedere il dettaglio.";
+      $("price").textContent = "—";
+      setHero(PLACEHOLDER, "Errore");
+    });
   </script>
 </body>
 </html>
