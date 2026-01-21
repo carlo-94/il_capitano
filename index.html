@@ -122,7 +122,6 @@
     width:151px;
     height:auto;
     display:block;
-    filter:none;
   }
 
   .headerTitle{
@@ -166,9 +165,10 @@
     left:0; right:0;
     top:6px;
     height:2px;
-    background: repeating-linear-gradient(90deg,
-      rgba(70,52,30,.55) 0 6px,
-      rgba(70,52,30,.35) 6px 10px);
+    background:
+      repeating-linear-gradient(90deg,
+        rgba(70,52,30,.55) 0 6px,
+        rgba(70,52,30,.35) 6px 10px);
     border-radius:999px;
     opacity:.65;
   }
@@ -294,7 +294,7 @@
     padding:6px 10px;
     border-radius:999px;
     border:1px solid transparent;
-    font-size:24px;
+    font-size: 22px;
   }
   .links a:hover{
     border-color: rgba(0,0,0,.10);
@@ -315,7 +315,7 @@
     white-space:nowrap;
   }
   .searchTop input{
-    width:280px;
+    width:320px;
     padding:9px 12px;
     border-radius:999px;
     border:1px solid rgba(0,0,0,.16);
@@ -328,39 +328,51 @@
     box-shadow: 0 0 0 4px rgba(14,126,160,.12);
   }
 
-  /* categorie */
+  /* =========================================================
+     CATBAR = MACRO CATEGORIE (CHIPS + SCROLL)
+  ========================================================= */
   .catbar{
     background:#2b2b2b;
     color:#fff;
     border-bottom:1px solid rgba(0,0,0,.25);
   }
   .catbar .wrap{
-    padding:14px 18px;
+    padding:12px 18px;
     display:flex;
-    gap:14px;
-    flex-wrap:wrap;
-    justify-content:center;
+    gap:10px;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    -webkit-overflow-scrolling: touch;
+    justify-content:flex-start;
     align-items:center;
+    scrollbar-width: thin;
   }
   .catbar a{
+    flex:0 0 auto;
     color:rgba(255,255,255,.92);
     font-weight:950;
-    padding:8px 10px;
+    padding:10px 14px;
     border-radius:999px;
     border:1px solid transparent;
-    font-size:24px;
+    font-size:16px;
+    white-space:nowrap;
+    max-width:320px;
+    overflow:hidden;
+    text-overflow:ellipsis;
   }
   .catbar a:hover{
     border-color: rgba(255,255,255,.18);
     background: rgba(255,255,255,.06);
   }
+  .catbar a.active{
+    border-color: rgba(255,255,255,.28);
+    background: rgba(255,255,255,.10);
+  }
 
   /* =========================================================
      CATALOGO
   ========================================================= */
-  .catalog{
-    padding:26px 0 44px;
-  }
+  .catalog{ padding:26px 0 44px; }
   .pageTitle{
     text-align:center;
     font-size:40px;
@@ -401,7 +413,6 @@
     box-shadow: 0 0 0 4px rgba(14,126,160,.12);
   }
 
-  /* cards */
   .grid{
     max-width: 1080px;
     margin:0 auto;
@@ -522,7 +533,6 @@
     background: rgba(242,231,201,.55);
   }
 
-  /* empty state */
   .emptyState{
     grid-column: 1 / -1;
     min-height: 45vh;
@@ -540,10 +550,7 @@
     font-weight:1000;
     letter-spacing:-.01em;
   }
-  .emptyState p{
-    margin:0;
-    font-weight:900;
-  }
+  .emptyState p{margin:0; font-weight:900;}
 
   footer{
     border-top:1px solid rgba(0,0,0,.12);
@@ -559,7 +566,6 @@
     flex-wrap:wrap;
   }
 
-  /* responsive */
   @media (max-width: 980px){
     .headerRow{grid-template-columns: 1fr; gap:14px}
     .assist{justify-self:start; width:240px}
@@ -573,6 +579,7 @@
   @media (max-width: 560px){
     .grid{grid-template-columns:1fr}
     .pageTitle{font-size:32px}
+    .links a{font-size:18px}
   }
 </style>
 </head>
@@ -580,17 +587,14 @@
 <body id="home">
   <div class="page">
 
-    <!-- HEADER -->
     <header class="headerHero">
       <div class="wrap">
         <div class="headerRow">
 
-          <!-- LOGO SINISTRA -->
           <div class="headerLogo">
             <img src="assets/img/logo/logo-transparent.svg" alt="Il Capitano (logo ancora)">
           </div>
 
-          <!-- CENTRO -->
           <div class="headerTitle">
             <h1 class="brandName">Il Capitano</h1>
             <p class="brandSub">Pesca • Nautica • Accessori</p>
@@ -605,7 +609,6 @@
             <span class="stamp"><span class="stampDot" aria-hidden="true"></span>Negozio storico • Salerno</span>
           </div>
 
-          <!-- DESTRA -->
           <aside class="assist" aria-label="Ordini e assistenza">
             <strong>Ordini e<br>Assistenza</strong>
             <div class="sub">Telefono</div>
@@ -620,7 +623,6 @@
       </div>
     </header>
 
-    <!-- mini nav -->
     <div class="mininav">
       <div class="wrap">
         <nav class="links" aria-label="Navigazione">
@@ -637,14 +639,13 @@
       </div>
     </div>
 
-    <!-- category bar (dinamica) -->
-    <div class="catbar" role="navigation" aria-label="Categorie">
-      <div class="wrap">
-        <a href="#" data-cat="tutti">Tutti</a>
+    <!-- MACRO CATEGORIE -->
+    <div class="catbar" role="navigation" aria-label="Macro categorie">
+      <div class="wrap" id="macroBar">
+        <!-- popolata via JS -->
       </div>
     </div>
 
-    <!-- CONTENT -->
     <main class="page__content" id="catalogo">
       <div class="wrap catalog">
         <h2 class="pageTitle">Vetrina Prodotti</h2>
@@ -662,9 +663,9 @@
             </div>
 
             <div style="display:flex; align-items:center; gap:10px;">
-              <span>Categoria</span>
+              <span>Sotto-categoria</span>
               <select id="catSelect">
-                <option value="tutti">Tutte</option>
+                <option value="tutte">Tutte</option>
               </select>
             </div>
           </div>
@@ -676,7 +677,7 @@
 
     <footer id="contatti">
       <div class="wrap">
-        <div><strong></strong> Via Roma 306, Salerno</div>
+        <div>Via Roma 306, Salerno</div>
         <div>© <span id="y"></span> Il Capitano – Pesca Nautica</div>
       </div>
     </footer>
@@ -688,7 +689,7 @@
   const PLACEHOLDER = "assets/img/prodotti/placeholder.jpg";
 
   let ALL = [];
-  let state = { q:"", cat:"tutti", sort:"rel" };
+  let state = { q:"", macro:"tutti", sub:"tutte", sort:"rel" };
 
   const grid = document.getElementById("grid");
   const search = document.getElementById("search");
@@ -696,7 +697,7 @@
   const countPill = document.getElementById("countPill");
   const sort = document.getElementById("sort");
   const catSelect = document.getElementById("catSelect");
-  const catbarWrap = document.querySelector(".catbar .wrap");
+  const macroBar = document.getElementById("macroBar");
 
   document.getElementById("y").textContent = new Date().getFullYear();
 
@@ -726,48 +727,56 @@
       .replace(/-+/g, "-");
   }
 
-  function pickBadge(category){
-    const parts = String(category ?? "").split(/»|>/).map(x=>x.trim()).filter(Boolean);
+  function normalizeSpaces(s){
+    return String(s ?? "").replace(/\s+/g, " ").trim();
+  }
+
+  function splitCategory(full){
+    // "ABBIGLIAMENTO » CAPPELLINI" => macro="ABBIGLIAMENTO", rest="CAPPELLINI"
+    const parts = String(full ?? "").split("»").map(x=>normalizeSpaces(x));
+    const macro = parts[0] || "Senza categoria";
+    const rest = parts.slice(1).join(" » ").trim(); // può essere ""
+    return { macro, rest, parts };
+  }
+
+  function pickBadgeFromFullCategory(fullCategory){
+    const parts = String(fullCategory ?? "").split(/»|>/).map(x=>x.trim()).filter(Boolean);
     const last = parts.length ? parts[parts.length-1] : "PRODOTTO";
     return last.toUpperCase().slice(0, 18);
   }
 
-  function buildCategories(list){
-    const map = new Map();
-    for (const p of list){
-      const c = p.category || "Senza categoria";
-      map.set(c, (map.get(c) || 0) + 1);
+  function parsePrice(v){
+    if (v === null || v === undefined) return NaN;
+    if (typeof v === "number") return v;
+
+    let s = String(v).trim();
+    if (!s) return NaN;
+
+    s = s.replace(/\s/g, "").replace("€", "");
+
+    // IT: "1.234,56" o "10,00"
+    if (s.includes(",")){
+      s = s.replace(/\./g, "");
+      s = s.replace(",", ".");
+    } else {
+      // EN: "1234.56" o "10.00" (NON togliere i punti)
+      s = s.replace(/,/g, "");
     }
-    return [...map.entries()].sort((a,b)=>b[1]-a[1]).map(([c])=>c);
-  }
 
-  function renderCategoryUI(categories){
-    catSelect.innerHTML =
-      `<option value="tutti">Tutte</option>` +
-      categories.map(c => `<option value="${esc(slugify(c))}">${esc(c)}</option>`).join("");
-
-    const top = categories.slice(0, 8);
-    catbarWrap.innerHTML =
-      `<a href="#" data-cat="tutti">Tutti</a>` +
-      top.map(c => `<a href="#" data-cat="${esc(slugify(c))}">${esc(c)}</a>`).join("");
-
-    catbarWrap.querySelectorAll("a").forEach(a=>{
-      a.addEventListener("click", (e)=>{
-        e.preventDefault();
-        const cat = a.getAttribute("data-cat") || "tutti";
-        state.cat = cat;
-        catSelect.value = cat;
-        render();
-      });
-    });
+    const num = Number(s);
+    return Number.isFinite(num) ? num : NaN;
   }
 
   function matches(p){
     const q = state.q.trim().toLowerCase();
-    const catOk = (state.cat === "tutti") || (p.catSlug === state.cat);
-    if(!catOk) return false;
-    if(!q) return true;
 
+    const macroOk = (state.macro === "tutti") || (p.macroSlug === state.macro);
+    if(!macroOk) return false;
+
+    const subOk = (state.sub === "tutte") || (p.catSlug === state.sub);
+    if(!subOk) return false;
+
+    if(!q) return true;
     const hay = (p.title + " " + p.brand + " " + p.sku + " " + p.category).toLowerCase();
     return hay.includes(q);
   }
@@ -812,7 +821,7 @@
         <div class="emptyState">
           <div>
             <h3>Nessun prodotto trovato</h3>
-            <p>Prova a cambiare ricerca o categoria.</p>
+            <p>Prova a cambiare ricerca o filtri.</p>
           </div>
         </div>`;
       return;
@@ -833,6 +842,63 @@
     });
   }
 
+  function buildMacroIndex(){
+    const map = new Map(); // macro -> count
+    for(const p of ALL){
+      map.set(p.macro, (map.get(p.macro) || 0) + 1);
+    }
+    return [...map.entries()].sort((a,b)=>b[1]-a[1]).map(([macro])=>macro);
+  }
+
+  function buildSubcategoriesForMacro(macroSlug){
+    const map = new Map(); // full category -> count
+    for(const p of ALL){
+      if(macroSlug !== "tutti" && p.macroSlug !== macroSlug) continue;
+      map.set(p.category, (map.get(p.category) || 0) + 1);
+    }
+    return [...map.entries()].sort((a,b)=>b[1]-a[1]).map(([cat])=>cat);
+  }
+
+  function renderMacroBar(macros){
+    // includo "Tutti" sempre
+    macroBar.innerHTML =
+      `<a href="#" data-macro="tutti" class="${state.macro==="tutti" ? "active":""}">Tutti</a>` +
+      macros.map(m => `
+        <a href="#" data-macro="${esc(slugify(m))}" class="${state.macro===slugify(m) ? "active":""}" title="${esc(m)}">
+          ${esc(m)}
+        </a>
+      `).join("");
+
+    macroBar.querySelectorAll("a").forEach(a=>{
+      a.addEventListener("click", (e)=>{
+        e.preventDefault();
+        const m = a.getAttribute("data-macro") || "tutti";
+        state.macro = m;
+
+        // quando cambi macro: reset sotto-categoria
+        state.sub = "tutte";
+        catSelect.value = "tutte";
+
+        // active
+        macroBar.querySelectorAll("a").forEach(x=>x.classList.remove("active"));
+        a.classList.add("active");
+
+        // aggiorna dropdown sub
+        renderSubDropdown();
+
+        render();
+      });
+    });
+  }
+
+  function renderSubDropdown(){
+    const cats = buildSubcategoriesForMacro(state.macro);
+
+    catSelect.innerHTML =
+      `<option value="tutte">Tutte</option>` +
+      cats.map(c => `<option value="${esc(slugify(c))}">${esc(c)}</option>`).join("");
+  }
+
   async function boot(){
     countPill.textContent = "Carico...";
     metaLeft.textContent = "Caricamento catalogo...";
@@ -841,57 +907,32 @@
     if(!res.ok) throw new Error("Impossibile caricare products.json");
     const data = await res.json();
 
-    function parsePrice(v){
-  if (v === null || v === undefined) return NaN;
-  if (typeof v === "number") return v;
-
-  let s = String(v).trim();
-  if (!s) return NaN;
-
-  // rimuovi spazi e simbolo €
-  s = s.replace(/\s/g, "").replace("€", "");
-
-  // Caso A: formato IT "1.234,56" oppure "10,00"
-  if (s.includes(",")){
-    s = s.replace(/\./g, "");   // toglie separatori migliaia
-    s = s.replace(",", ".");    // virgola -> punto decimale
-  } else {
-    // Caso B: formato EN "1234.56" oppure "10.00"
-    // qui NON togliamo i punti, perché sono decimali
-    // (se mai ci fossero migliaia con virgola: "1,234.56")
-    s = s.replace(/,/g, "");
-  }
-
-  const num = Number(s);
-  return Number.isFinite(num) ? num : NaN;
-}
-
-
-    // --- parser del TUO export ---
+    // Parser export Easyfatt
     let currentCategory = "Senza categoria";
     const out = [];
 
-    for (const row of data){
+    for(const row of data){
       const marker = String(row[""] ?? "").trim();
 
-      // righe "Categoria : ...." stanno dentro la chiave vuota ""
-      if (marker.toLowerCase().startsWith("categoria")){
+      // Riga separatore: "Categoria : ..."
+      if(marker.toLowerCase().startsWith("categoria")){
         const parts = marker.split(":");
-        const found = (parts.length > 1 ? parts.slice(1).join(":") : "")
-          .trim()
-          .replace(/\s+/g, " ");
-        if (found) currentCategory = found;
+        const found = normalizeSpaces(parts.length > 1 ? parts.slice(1).join(":") : "");
+        if(found) currentCategory = found;
         continue;
       }
 
       const sku = String(row["Cod."] ?? "").trim();
-      if (!sku) continue;
+      if(!sku) continue;
 
-      const title = String(row["Descrizione"] ?? "").trim() || "(Senza nome)";
-      const brand = String(row["Produttore"] ?? "").trim();
+      const title = normalizeSpaces(row["Descrizione"]) || "(Senza nome)";
+      const brand = normalizeSpaces(row["Produttore"]);
 
-      const catRow = String(row["Categoria"] ?? "").trim();
-      const category = (catRow || currentCategory || "Senza categoria").replace(/\s+/g, " ");
+      const catRow = normalizeSpaces(row["Categoria"]);
+      const category = normalizeSpaces(catRow || currentCategory || "Senza categoria");
+
+      const { macro } = splitCategory(category);
+      const macroSlug = slugify(macro);
 
       const priceNum = parsePrice(row["Listino 1 (ivato)"]);
 
@@ -901,7 +942,9 @@
         brand,
         category,
         catSlug: slugify(category),
-        badge: pickBadge(category),
+        macro,
+        macroSlug,
+        badge: pickBadgeFromFullCategory(category),
         price: priceNum,
         priceLabel: euro(priceNum),
         cover: PLACEHOLDER
@@ -910,11 +953,16 @@
 
     ALL = out;
 
-    const categories = buildCategories(ALL);
-    renderCategoryUI(categories);
+    // Macro bar (ordina per frequenza)
+    const macros = buildMacroIndex().slice(0, 12); // massimo 12 macro per non esagerare
+    renderMacroBar(macros);
 
+    // Sub dropdown iniziale
+    renderSubDropdown();
+
+    // eventi
     catSelect.addEventListener("change", ()=>{
-      state.cat = catSelect.value;
+      state.sub = catSelect.value;
       render();
     });
 
@@ -932,6 +980,8 @@
       }, 120);
     });
 
+    // mostra totale prodotti (tutti)
+    countPill.textContent = `${ALL.length} prodotti`;
     render();
   }
 
@@ -948,12 +998,5 @@
       </div>`;
   });
 </script>
-
-
 </body>
 </html>
-
-
-
-
-
