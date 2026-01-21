@@ -1,1 +1,1718 @@
- fd
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Il Capitano • Pesca Nautica</title>
+  <meta name="description" content="Dal 1938 accessori nautici e prodotti per la pesca sportiva e professionale. Vetrina prodotti con scheda stile Amazon e reindirizzo eBay." />
+
+  <style>
+    :root{
+      --ink:#141414;
+      --muted:#4c5a60;
+
+      --sea:#0b5f76;
+      --sea2:#0e7ea0;
+      --foam:#eef6f7;
+      --sand:#f2e7c9;
+
+      --paper:#fbfaf6;
+      --paper2:#f6f3ea;
+
+      --line:rgba(0,0,0,.14);
+      --shadow:0 14px 30px rgba(0,0,0,.10);
+      --shadow2:0 10px 26px rgba(0,0,0,.08);
+
+      --r:16px;
+      --max:1200px;
+    }
+
+    *{box-sizing:border-box}
+    html, body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 460px at 50% -220px, rgba(11,95,118,.10), transparent 60%),
+        linear-gradient(180deg, var(--paper2) 0%, #fff 75%);
+    }
+    a{color:inherit; text-decoration:none}
+    button, input, select{font:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:0 18px;}
+    .sr{position:absolute; left:-9999px}
+
+    /* ================= HEADER ================= */
+    .headerHero{
+      position:relative;
+      padding:26px 0 16px;
+      border-bottom:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(242,231,201,.48), rgba(255,255,255,.92));
+      overflow:hidden;
+    }
+    .headerHero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(0deg, rgba(0,0,0,.018) 0px, rgba(0,0,0,.018) 1px, rgba(255,255,255,0) 2px, rgba(255,255,255,0) 6px),
+        radial-gradient(900px 360px at 20% 10%, rgba(11,95,118,.08), transparent 60%),
+        radial-gradient(700px 300px at 90% 0%, rgba(242,231,201,.24), transparent 60%);
+      opacity:.55;
+      mix-blend-mode:multiply;
+    }
+    .headerRow{
+      position:relative;
+      display:grid;
+      grid-template-columns: 190px 1fr 270px;
+      gap:22px;
+      align-items:center;
+    }
+    .headerLogo{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      min-height:140px;
+    }
+    .headerLogo::before{
+      content:"";
+      position:absolute;
+      inset:14px 18px;
+      border-radius:14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.80));
+      border:1px solid rgba(0,0,0,.14);
+      box-shadow: 0 12px 22px rgba(0,0,0,.08);
+      transform: rotate(-1.4deg);
+      height:176px;
+    }
+    .headerLogo::after{
+      content:"";
+      position:absolute;
+      width:62px;
+      height:18px;
+      top:6px;
+      left:50%;
+      transform:translateX(-50%) rotate(-6deg);
+      border-radius:6px;
+      background: rgba(242,231,201,.72);
+      border:1px solid rgba(0,0,0,.10);
+      box-shadow:0 8px 14px rgba(0,0,0,.07);
+      opacity:.9;
+    }
+    .headerLogo img{
+      position:relative;
+      width:151px;
+      height:auto;
+      display:block;
+    }
+    .headerTitle{min-width:0; display:flex; flex-direction:column; gap:6px; padding:6px 0;}
+    .brandName{margin:0; font-size:34px; font-weight:1000; letter-spacing:.02em;}
+    .brandSub{margin:0; font-size:13px; font-weight:950; letter-spacing:.14em; text-transform:uppercase; color:rgba(11,95,118,.92);}
+    .brandDesc{margin:2px 0 0; color:rgba(20,20,20,.72); font-weight:850; line-height:1.35; font-size:14px;}
+
+    .rope{position:relative; margin-top:8px; height:14px; width:min(680px, 100%);}
+    .rope::before{
+      content:"";
+      position:absolute;
+      left:0; right:0; top:6px;
+      height:2px;
+      background: repeating-linear-gradient(90deg, rgba(70,52,30,.55) 0 6px, rgba(70,52,30,.35) 6px 10px);
+      border-radius:999px;
+      opacity:.65;
+    }
+    .rope::after{
+      content:"";
+      position:absolute;
+      left:0; top:2px;
+      width:22px; height:10px;
+      border:2px solid rgba(70,52,30,.45);
+      border-left:none;
+      border-radius: 0 999px 999px 0;
+      opacity:.55;
+    }
+    .stamp{
+      margin-top:8px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      width:max-content;
+      padding:7px 10px;
+      border-radius:12px;
+      border:1px dashed rgba(11,95,118,.35);
+      background: rgba(238,246,247,.60);
+      color: rgba(11,95,118,.95);
+      font-weight:1000;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      font-size:11px;
+    }
+    .stampDot{
+      width:8px; height:8px;
+      border-radius:999px;
+      background: rgba(11,95,118,.85);
+      box-shadow:0 0 0 3px rgba(11,95,118,.14);
+    }
+    .assist{
+      justify-self:end;
+      width:250px;
+      aspect-ratio:1/1;
+      border-radius:999px;
+      border:2px solid rgba(11,95,118,.22);
+      box-shadow: var(--shadow);
+      background:
+        radial-gradient(220px 220px at 30% 25%, rgba(242,231,201,.72), transparent 60%),
+        radial-gradient(240px 240px at 70% 70%, rgba(14,126,160,.16), transparent 62%),
+        linear-gradient(180deg, rgba(255,255,255,.92), rgba(238,246,247,.86));
+      padding:18px 18px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      gap:8px;
+      position:relative;
+    }
+    .assist::before{content:""; position:absolute; inset:10px; border-radius:999px; border:1px dashed rgba(11,95,118,.22);}
+    .assist strong{display:block; text-transform:uppercase; letter-spacing:.12em; font-size:15px;}
+    .assist .sub{color:rgba(20,20,20,.65); font-weight:950; letter-spacing:.12em; text-transform:uppercase; font-size:14px;}
+    .assist .phone{font-weight:1100; letter-spacing:.10em; font-size:18px; color:rgba(11,95,118,.98); white-space:nowrap;}
+    .assist .mini{margin-top:8px; padding-top:10px; width:100%; border-top:1px solid rgba(11,95,118,.18); font-size:12px; font-weight:900; line-height:1.3; color:rgba(20,20,20,.72);}
+
+    /* ================= MINI NAV ================= */
+    .mininav{
+      border-top:1px solid var(--line);
+      border-bottom:1px solid var(--line);
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(6px);
+    }
+    .mininav .wrap{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 18px;
+    }
+    .links{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      font-weight:950;
+      font-size:18px;
+      color:rgba(20,20,20,.80);
+      align-items:center;
+    }
+    .links a{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid transparent;
+    }
+    .links a:hover{border-color: rgba(0,0,0,.10); background: rgba(242,231,201,.35);}
+
+    .searchTop{display:flex; align-items:center; gap:10px;}
+    .pill{
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(238,246,247,.70);
+      font-weight:950;
+      color: rgba(11,95,118,.92);
+      white-space:nowrap;
+    }
+    .searchTop input{
+      width:360px;
+      padding:9px 12px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.16);
+      outline:none;
+      background:#fff;
+      font-weight:800;
+    }
+    .searchTop input:focus{border-color: rgba(14,126,160,.45); box-shadow: 0 0 0 4px rgba(14,126,160,.12);}
+
+    /* ================= SHOP LAYOUT ================= */
+    .shop{padding:18px 0 44px;}
+    .layout{
+      display:grid;
+      grid-template-columns: 300px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    /* Sidebar */
+    .side{position:sticky; top:12px; align-self:start;}
+    .sideCard{
+      border:1px solid rgba(0,0,0,.14);
+      border-radius: var(--r);
+      background:#fff;
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .sideHead{
+      padding:12px 12px;
+      border-bottom:1px solid rgba(0,0,0,.08);
+      background: linear-gradient(180deg, rgba(242,231,201,.38), rgba(255,255,255,.95));
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .sideHead b{
+      font-size:14px;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      color:rgba(20,20,20,.82);
+    }
+    .resetBtn{
+      font-size:12px;
+      font-weight:900;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.10);
+      background: rgba(242,231,201,.45);
+      cursor:pointer;
+    }
+    .tree{
+      padding:10px 10px 12px;
+      max-height: calc(100vh - 160px);
+      overflow:auto;
+    }
+    .treeItem{
+      padding:6px 6px;
+      border-radius:12px;
+      border:1px solid transparent;
+    }
+    .treeItem:hover{
+      background: rgba(11,95,118,.05);
+      border-color: rgba(11,95,118,.10);
+    }
+    .treeItem.active{
+      background: rgba(14,126,160,.10);
+      border-color: rgba(14,126,160,.22);
+    }
+    .treeRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .treeLeft{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      min-width:0;
+      flex:1;
+    }
+    .tri{
+      width:22px; height:22px;
+      border:0;
+      background: transparent;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      flex:0 0 auto;
+      color:rgba(20,20,20,.70);
+      font-weight:1000;
+    }
+    .triBox{
+      width:18px; height:18px;
+      border-radius:6px;
+      border:1px solid rgba(0,0,0,.10);
+      background:#fff;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      line-height:1;
+    }
+    .macroBtn{
+      border:0;
+      background: transparent;
+      padding:0;
+      cursor:pointer;
+      text-align:left;
+      font-weight:1000;
+      color:rgba(20,20,20,.86);
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      flex:1;
+    }
+    .cnt{
+      font-size:12px;
+      font-weight:900;
+      color:rgba(20,20,20,.55);
+      flex:0 0 auto;
+    }
+    .children{
+      display:none;
+      margin:6px 0 0 28px;
+      padding-left:10px;
+      border-left:1px dashed rgba(0,0,0,.18);
+      gap:6px;
+    }
+    .treeItem.open .children{display:grid}
+    .subBtn{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid transparent;
+      background: rgba(255,255,255,.92);
+      cursor:pointer;
+      font-weight:950;
+      color:rgba(20,20,20,.82);
+    }
+    .subBtn:hover{
+      border-color: rgba(11,95,118,.14);
+      background: rgba(11,95,118,.06);
+    }
+    .subBtn.active{
+      border-color: rgba(14,126,160,.30);
+      background: rgba(14,126,160,.12);
+    }
+    .subBtn span{
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      min-width:0;
+    }
+    .subBtn small{
+      font-size:12px;
+      font-weight:900;
+      color:rgba(20,20,20,.55);
+      flex:0 0 auto;
+    }
+
+    /* Main */
+    .mainCard{
+      border:1px solid rgba(0,0,0,.14);
+      border-radius: var(--r);
+      background:#fff;
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .mainHead{
+      padding:12px 14px;
+      border-bottom:1px solid rgba(0,0,0,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(238,246,247,.55));
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .crumb{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:rgba(20,20,20,.70);
+      font-weight:900;
+    }
+    .crumb b{color:rgba(20,20,20,.92)}
+    .mainInner{padding:14px 14px 18px;}
+
+    .pageTitle{
+      margin:0 0 10px;
+      font-size:30px;
+      font-weight:1000;
+      letter-spacing:-.02em;
+    }
+
+    /* ===== Top bar stile shop ===== */
+    .barTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 0 12px;
+      border-top:1px solid rgba(0,0,0,.08);
+      border-bottom:1px solid rgba(0,0,0,.08);
+      margin-bottom:14px;
+      flex-wrap:wrap;
+    }
+    .barLeft{display:flex; gap:6px; align-items:center;}
+    .vmini{
+      width:34px; height:28px;
+      border-radius:6px;
+      border:1px solid rgba(0,0,0,.14);
+      background:#fff;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:1000;
+      color:rgba(20,20,20,.70);
+    }
+    .vmini.active{
+      border-color: rgba(14,126,160,.40);
+      box-shadow: 0 0 0 4px rgba(14,126,160,.10);
+      color: rgba(11,95,118,.95);
+    }
+
+    .barRight{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .barText{
+      font-weight:900;
+      color:rgba(20,20,20,.72);
+      white-space:nowrap;
+    }
+    .barSelects{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+
+    select{
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid rgba(0,0,0,.16);
+      outline:none;
+      background:#fff;
+      font-weight:900;
+      color:rgba(20,20,20,.86);
+    }
+    select:focus{border-color: rgba(14,126,160,.45); box-shadow: 0 0 0 4px rgba(14,126,160,.12);}
+
+    /* ===== GRID ===== */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:16px;
+    }
+
+    /* ===== CARD (foto 2) ===== */
+    .card{
+      border:1px solid rgba(0,0,0,.14);
+      border-radius: 14px;
+      background:#fff;
+      box-shadow: 0 12px 26px rgba(0,0,0,.08);
+      overflow:hidden;
+      cursor:pointer;
+      transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      border-color: rgba(11,95,118,.22);
+      box-shadow: 0 18px 40px rgba(0,0,0,.10);
+    }
+
+    .thumb{
+      height:170px;
+      position:relative;
+      padding:14px;
+      background:
+        radial-gradient(520px 240px at 15% 15%, rgba(14,126,160,.14), transparent 62%),
+        radial-gradient(520px 240px at 80% 50%, rgba(242,231,201,.22), transparent 60%),
+        linear-gradient(180deg, rgba(238,246,247,.55), rgba(255,255,255,.98));
+    }
+
+    .badge{
+      position:absolute;
+      left:14px;
+      top:12px;
+      padding:7px 10px;
+      border-radius:999px;
+      background: rgba(11,95,118,.92);
+      color:#fff;
+      font-weight:1000;
+      font-size:11px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      border:1px solid rgba(255,255,255,.18);
+      z-index:2;
+    }
+
+    .photoFrame{
+      width:100%;
+      height:100%;
+      border-radius:12px;
+      background: linear-gradient(180deg, #fbfaf6, #f2e7c9);
+      border:1px solid rgba(0,0,0,.10);
+      box-shadow: 0 10px 18px rgba(0,0,0,.10);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:12px;
+    }
+    .photoFrame img{
+      max-width:100%;
+      max-height:100%;
+      object-fit:contain;
+      display:block;
+      mix-blend-mode:multiply;
+      filter: contrast(1.06) saturate(1.02);
+    }
+
+    .content{padding:12px 12px 14px;}
+    .title{
+      margin:0;
+      font-size:14px;
+      font-weight:1000;
+      line-height:1.25;
+      min-height:36px;
+      text-transform:uppercase;
+      letter-spacing:.02em;
+    }
+
+    .metaLine{
+      margin:8px 0 0;
+      font-size:12px;
+      font-weight:950;
+      color:rgba(20,20,20,.55);
+      text-transform:uppercase;
+      letter-spacing:.10em;
+      min-height:16px;
+    }
+
+    .bottomRow{
+      margin-top:10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .price{
+      font-size:15px;
+      font-weight:1100;
+      color: rgba(11,95,118,.92); /* NON rosso */
+      white-space:nowrap;
+    }
+    .openBtn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.14);
+      background: rgba(242,231,201,.40);
+      font-weight:1000;
+      white-space:nowrap;
+      user-select:none;
+      transition: transform .14s ease, box-shadow .14s ease, background .14s ease;
+    }
+    .card:hover .openBtn{
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.10);
+      background: rgba(242,231,201,.55);
+    }
+
+    .grid.list{grid-template-columns:1fr;}
+    .grid.list .card{display:grid; grid-template-columns: 240px 1fr;}
+    .grid.list .thumb{height:auto; min-height:170px;}
+    .grid.list .content{padding:14px;}
+
+    .emptyState{
+      min-height: 45vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:18px 10px;
+      color: rgba(20,20,20,.70);
+      font-weight:950;
+    }
+
+    /* ===== Pagination numerica ===== */
+    .pager{
+      margin-top:14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border-top:1px solid rgba(0,0,0,.08);
+      padding-top:12px;
+      color:rgba(20,20,20,.72);
+      font-weight:900;
+      flex-wrap:wrap;
+    }
+    .pgBtns{display:flex; gap:6px; align-items:center; flex-wrap:wrap;}
+    .pgBtn{
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.14);
+      background:#fff;
+      cursor:pointer;
+      font-weight:1000;
+      min-width:44px;
+      text-align:center;
+    }
+    .pgBtn:disabled{opacity:.45; cursor:not-allowed;}
+    .pgBtn.num{
+      min-width:40px;
+      padding:8px 10px;
+    }
+    .pgBtn.num.active{
+      border-color: rgba(14,126,160,.40);
+      box-shadow: 0 0 0 4px rgba(14,126,160,.10);
+      color: rgba(11,95,118,.95);
+      background: rgba(14,126,160,.06);
+    }
+    .dots{padding:0 6px; opacity:.55; font-weight:1000;}
+
+    footer{
+      border-top:1px solid rgba(0,0,0,.12);
+      padding:18px 0 26px;
+      color:rgba(20,20,20,.72);
+      font-weight:900;
+    }
+    footer .wrap{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;}
+
+    /* ============ MEGA MENU (Catalogo) ============ */
+.megaWrap{ position:relative; display:inline-flex; align-items:center; }
+.megaBtn{
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid transparent;
+  background:transparent;
+  cursor:pointer;
+  font-weight:950;
+  font-size:18px;
+  color:rgba(20,20,20,.80);
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+.megaBtn:hover{
+  border-color: rgba(0,0,0,.10);
+  background: rgba(242,231,201,.35);
+}
+.megaBtn .chev{ opacity:.7; font-weight:1100; }
+
+.megaPanel{
+  position:absolute;
+  left:0;
+  top:calc(100% + 10px);
+  width:min(980px, calc(100vw - 36px));
+  background: rgba(255,255,255,.98);
+  border:1px solid rgba(0,0,0,.14);
+  border-radius:16px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.14);
+  overflow:hidden;
+  display:none;
+  z-index:999;
+}
+.megaPanel.open{ display:block; }
+
+.megaInner{
+  background:
+    radial-gradient(900px 320px at 10% 0%, rgba(14,126,160,.10), transparent 60%),
+    radial-gradient(800px 320px at 90% 0%, rgba(242,231,201,.34), transparent 60%),
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(238,246,247,.45));
+}
+
+.megaTopRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 14px;
+  border-bottom:1px solid rgba(0,0,0,.08);
+}
+.megaTitle{
+  font-weight:1000;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  font-size:12px;
+  color:rgba(20,20,20,.75);
+}
+.megaClose{
+  border:1px solid rgba(0,0,0,.12);
+  background:#fff;
+  border-radius:10px;
+  padding:6px 10px;
+  cursor:pointer;
+  font-weight:1000;
+}
+
+.megaGrid{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap:0;
+  padding:12px 10px 8px;
+}
+.megaCol{
+  padding:10px 10px 12px;
+  border-right:1px solid rgba(0,0,0,.06);
+}
+.megaCol:last-child{ border-right:none; }
+
+.megaGroup{ margin-bottom:14px; }
+.megaGroupTitle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  font-weight:1100;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  font-size:12px;
+  color: rgba(11,95,118,.95);
+  margin:0 0 8px;
+}
+.megaGroupTitle button{
+  border:0;
+  background:transparent;
+  padding:0;
+  cursor:pointer;
+  font:inherit;
+  color:inherit;
+  text-align:left;
+}
+.megaGroupTitle .mcount{
+  font-size:12px;
+  color:rgba(20,20,20,.55);
+  font-weight:900;
+}
+
+.megaList{ display:grid; gap:6px; }
+.megaItem{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid transparent;
+  cursor:pointer;
+  background: rgba(255,255,255,.82);
+}
+.megaItem:hover{
+  border-color: rgba(11,95,118,.14);
+  background: rgba(11,95,118,.06);
+}
+.megaItem .label{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-weight:950;
+  color:rgba(20,20,20,.82);
+}
+.megaItem small{
+  flex:0 0 auto;
+  font-size:12px;
+  font-weight:900;
+  color:rgba(20,20,20,.55);
+}
+
+.megaFooter{
+  display:flex;
+  justify-content:flex-end;
+  padding:10px 12px 12px;
+  border-top:1px solid rgba(0,0,0,.08);
+}
+.megaAll{
+  padding:9px 12px;
+  border-radius:999px;
+  border:1px solid rgba(0,0,0,.14);
+  background: rgba(242,231,201,.40);
+  font-weight:1000;
+  cursor:pointer;
+}
+
+/* Responsive mega menu */
+@media (max-width: 980px){
+  .megaPanel{
+    position:fixed;
+    left:18px;
+    right:18px;
+    top:86px;
+    width:auto;
+    max-height: calc(100vh - 120px);
+    overflow:auto;
+  }
+  .megaGrid{ grid-template-columns: 1fr; }
+  .megaCol{ border-right:none; border-bottom:1px solid rgba(0,0,0,.06); }
+  .megaCol:last-child{ border-bottom:none; }
+}
+
+
+    @media (max-width: 1100px){
+      .grid{grid-template-columns: repeat(2, minmax(0,1fr))}
+      .searchTop input{width:min(460px, 46vw)}
+    }
+    @media (max-width: 980px){
+      .headerRow{grid-template-columns: 1fr; gap:14px}
+      .assist{justify-self:start; width:240px}
+      .mininav .wrap{gap:12px; flex-direction:column; align-items:flex-start}
+      .searchTop input{width:min(520px, 86vw)}
+      .layout{grid-template-columns: 1fr}
+      .side{position:relative; top:0}
+      .tree{max-height:none}
+    }
+    @media (max-width: 560px){
+      .grid{grid-template-columns: 1fr}
+      .pageTitle{font-size:26px}
+      .links{font-size:16px}
+    }
+  </style>
+</head>
+
+<body>
+  <header class="headerHero" id="home">
+    <div class="wrap">
+      <div class="headerRow">
+        <div class="headerLogo">
+          <img src="assets/img/logo/logo-transparent.svg" alt="Il Capitano (logo ancora)">
+        </div>
+
+        <div class="headerTitle">
+          <h1 class="brandName">Il Capitano</h1>
+          <p class="brandSub">Pesca • Nautica • Accessori</p>
+          <p class="brandDesc">
+            Dal <b>1938</b> ci occupiamo della vendita di accessori nautici e prodotti per la pesca sportiva e professionale.
+          </p>
+          <div class="rope" aria-hidden="true"></div>
+          <span class="stamp"><span class="stampDot" aria-hidden="true"></span>Negozio storico • Salerno</span>
+        </div>
+
+        <aside class="assist" aria-label="Ordini e assistenza">
+          <strong>Ordini e<br>Assistenza</strong>
+          <div class="sub">Telefono</div>
+          <div class="phone">089 227779</div>
+          <div class="mini">
+            pesca.nautica@yahoo.it<br>
+            Via Roma 306, Salerno
+          </div>
+        </aside>
+      </div>
+    </div>
+  </header>
+
+  <div class="mininav">
+    <div class="wrap">
+     <nav class="links" aria-label="Navigazione">
+  <a href="#home">Home</a>
+
+  <!-- CATALOGO MEGA MENU -->
+  <div class="megaWrap" id="megaWrap">
+    <button class="megaBtn" id="megaBtn" type="button" aria-haspopup="true" aria-expanded="false">
+      Catalogo <span class="chev">▾</span>
+    </button>
+
+    <div class="megaPanel" id="megaPanel" role="menu" aria-label="Catalogo">
+      <div class="megaInner">
+        <div class="megaTopRow">
+          <div class="megaTitle">Categorie</div>
+          <button class="megaClose" id="megaClose" type="button" aria-label="Chiudi catalogo">✕</button>
+        </div>
+
+        <!-- qui dentro renderizziamo dal JSON -->
+        <div class="megaGrid" id="megaGrid"></div>
+
+        <div class="megaFooter">
+          <button class="megaAll" id="megaAll" type="button">Vedi tutto</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="#contatti">Contatti</a>
+</nav>
+
+
+      <div class="searchTop" aria-label="Cerca nel catalogo">
+        <span class="pill" id="countPill">Carico...</span>
+        <label class="sr" for="search">Cerca</label>
+        <input id="search" type="search" placeholder="Cerca (es. canna, amo, mulinello)..." autocomplete="off">
+      </div>
+    </div>
+  </div>
+
+  <main class="shop" id="catalogo">
+    <div class="wrap">
+      <div class="layout">
+
+        <aside class="side" aria-label="Categorie">
+          <div class="sideCard">
+            <div class="sideHead">
+              <b>Home</b>
+              <button class="resetBtn" id="resetAll" type="button">Tutti</button>
+            </div>
+            <div class="tree" id="tree"></div>
+          </div>
+        </aside>
+
+        <section class="mainCard" aria-label="Catalogo prodotti">
+          <div class="mainHead">
+            <div class="crumb">
+              <span>Home</span>
+              <span style="opacity:.45">/</span>
+              <b id="crumbLabel">Home</b>
+            </div>
+            <div id="metaHead" style="color:rgba(20,20,20,.70); font-weight:900;">Caricamento…</div>
+          </div>
+
+          <div class="mainInner">
+            <h2 class="pageTitle" id="titleLabel">Home</h2>
+
+            <div class="barTop" aria-label="Barra catalogo">
+              <div class="barLeft">
+                <button class="vmini active" id="btnGrid" type="button" aria-label="Vista griglia">▦</button>
+                <button class="vmini" id="btnList" type="button" aria-label="Vista lista">≡</button>
+              </div>
+
+              <div class="barRight">
+                <div class="barText" id="metaTop">Mostro 0-0 di 0 prodotto(i)</div>
+
+                <div class="barSelects">
+                  <select id="sort" aria-label="Ordinamento">
+                    <option value="rel">Seleziona</option>
+                    <option value="az">Nome (A-Z)</option>
+                    <option value="priceUp">Prezzo (crescente)</option>
+                    <option value="priceDown">Prezzo (decrescente)</option>
+                  </select>
+
+                  <select id="perPage" aria-label="Prodotti per pagina">
+                    <option value="12">12</option>
+                    <option value="24">24</option>
+                    <option value="48">48</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <section class="grid" id="grid" aria-live="polite"></section>
+
+            <div class="pager" aria-label="Paginazione">
+              <div id="metaBottom">—</div>
+              <div class="pgBtns" id="pgBtns"></div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <footer id="contatti">
+    <div class="wrap">
+      <div>Via Roma 306, Salerno • Tel. 089 227779 • pesca.nautica@yahoo.it</div>
+      <div>© <span id="y"></span> Il Capitano – Pesca Nautica</div>
+    </div>
+  </footer>
+
+  <script>
+    const PLACEHOLDER = "assets/img/prodotti/placeholder.jpg";
+
+    // fallback percorsi (evita errori se cambia cartella su GitHub Pages)
+    const DATA_URL_CANDIDATES = [
+      "./data/products.json",
+      "data/products.json",
+      "/data/products.json",
+      "./assets/data/products.json",
+      "/assets/data/products.json"
+    ];
+
+    let ALL = [];
+    let model = [];
+
+    let state = {
+      q: "",
+      macro: "tutti",
+      sub: "tutti",
+      macroLabel: "Tutti",
+      subLabel: "",
+      view: "grid",
+      sort: "rel",
+      perPage: 12,
+      page: 1,
+      openMacros: new Set()
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    const tree = $("tree");
+    const grid = $("grid");
+    const search = $("search");
+    const countPill = $("countPill");
+
+    const metaHead = $("metaHead");
+    const metaTop = $("metaTop");
+    const metaBottom = $("metaBottom");
+
+    const crumbLabel = $("crumbLabel");
+    const titleLabel = $("titleLabel");
+
+    const sort = $("sort");
+    const perPage = $("perPage");
+
+    const btnGrid = $("btnGrid");
+    const btnList = $("btnList");
+
+    const pgBtns = $("pgBtns");
+    const resetAll = $("resetAll");
+
+    // Mega menu refs
+const megaWrap  = $("megaWrap");
+const megaBtn   = $("megaBtn");
+const megaPanel = $("megaPanel");
+const megaGrid  = $("megaGrid");
+const megaClose = $("megaClose");
+const megaAll   = $("megaAll");
+
+
+    $("y").textContent = new Date().getFullYear();
+
+    function esc(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+    function norm(s){ return String(s ?? "").replace(/\s+/g," ").trim(); }
+    function euro(n){
+      const num = Number(n);
+      if(!Number.isFinite(num)) return "—";
+      return num.toLocaleString("it-IT", { style:"currency", currency:"EUR" });
+    }
+    function slugify(s){
+      return String(s ?? "")
+        .toLowerCase()
+        .trim()
+        .replaceAll("»", ">")
+        .replaceAll("&", "e")
+        .replace(/[^a-z0-9\s>-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-");
+    }
+    function splitParts(full){
+      return String(full ?? "")
+        .split("»")
+        .map(x=>norm(x))
+        .filter(Boolean);
+    }
+    function parsePrice(v){
+      if (v === null || v === undefined) return NaN;
+      if (typeof v === "number") return v;
+      let s = String(v).trim();
+      if(!s) return NaN;
+      s = s.replace(/\s/g,"").replace("€","");
+      if (s.includes(",")){
+        s = s.replace(/\./g,"");
+        s = s.replace(",",".");
+      } else {
+        s = s.replace(/,/g,"");
+      }
+      const num = Number(s);
+      return Number.isFinite(num) ? num : NaN;
+    }
+
+    async function fetchCatalogJson(){
+      const tries = DATA_URL_CANDIDATES.map(u => new URL(u, location.href).toString());
+      let lastErr = null;
+
+      for(const url of tries){
+        try{
+          const res = await fetch(url, { cache:"no-store" });
+          if(!res.ok) throw new Error(`HTTP ${res.status} su ${url}`);
+          const data = await res.json();
+          console.log("✅ Catalogo caricato da:", url);
+          return data;
+        }catch(e){
+          lastErr = e;
+          console.warn("Tentativo fallito:", e.message);
+        }
+      }
+      throw lastErr || new Error("Impossibile caricare products.json");
+    }
+
+    function currentLabel(){
+      if (state.macro === "tutti") return "Home";
+      if (state.sub === "tutti") return state.macroLabel || "Categoria";
+      return state.subLabel || state.macroLabel || "Categoria";
+    }
+
+    function matches(p){
+      const q = state.q.trim().toLowerCase();
+      const macroOk = (state.macro === "tutti") || (p.macroSlug === state.macro);
+      if(!macroOk) return false;
+
+      const subOk = (state.sub === "tutti") || (p.catSlug === state.sub);
+      if(!subOk) return false;
+
+      if(!q) return true;
+      const hay = (p.title + " " + (p.brand||"") + " " + p.sku + " " + p.category).toLowerCase();
+      return hay.includes(q);
+    }
+
+    function sortList(list){
+      if(state.sort === "az"){
+        return list.slice().sort((a,b)=>a.title.localeCompare(b.title, "it"));
+      }
+      if(state.sort === "priceUp"){
+        return list.slice().sort((a,b)=>(a.price||Infinity) - (b.price||Infinity));
+      }
+      if(state.sort === "priceDown"){
+        return list.slice().sort((a,b)=>(b.price||-Infinity) - (a.price||-Infinity));
+      }
+      return list;
+    }
+
+    function card(p){
+      const badge = p.microBadge ? String(p.microBadge).toUpperCase().slice(0,18) : "PRODOTTO";
+      const brandLine = (p.brand && p.brand.trim()) ? esc(p.brand) : "";
+      const meta = esc(p.catLine || p.category || "");
+
+      return `
+        <article class="card" role="link" tabindex="0" data-sku="${esc(p.sku)}" aria-label="Apri ${esc(p.title)}">
+          <div class="thumb">
+            <span class="badge">${esc(badge)}</span>
+            <div class="photoFrame">
+              <img src="${esc(p.cover)}" alt="${esc(p.title)}" onerror="this.src='${esc(PLACEHOLDER)}'">
+            </div>
+          </div>
+
+          <div class="content">
+            <h3 class="title">${esc(p.title)}</h3>
+
+            <div class="metaLine">${meta}</div>
+            ${brandLine ? `<div class="metaLine" style="min-height:0; margin-top:6px; letter-spacing:.12em;">${brandLine}</div>` : ``}
+
+            <div class="bottomRow">
+              <div class="price">${esc(p.priceLabel)}</div>
+              <span class="openBtn">Apri →</span>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function openProduct(sku){
+      window.location.href = `prodotto.html?sku=${encodeURIComponent(sku)}`;
+    }
+
+    function goPage(p){
+      state.page = p;
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function buildPager(pages){
+      const cur = state.page;
+
+      const btn = (label, page, opts={}) => {
+        const cls = ["pgBtn"];
+        if(opts.num) cls.push("num");
+        if(opts.active) cls.push("active");
+        const disabled = opts.disabled ? "disabled" : "";
+        const data = (page != null) ? `data-page="${page}"` : "";
+        return `<button class="${cls.join(" ")}" type="button" ${disabled} ${data}>${label}</button>`;
+      };
+
+      let html = "";
+      html += btn("←", cur-1, {disabled: cur<=1});
+
+      const addDots = ()=> html += `<span class="dots">…</span>`;
+      const pushNum = (p)=> html += btn(String(p), p, {num:true, active: p===cur});
+
+      if(pages <= 7){
+        for(let p=1;p<=pages;p++) pushNum(p);
+      } else {
+        pushNum(1);
+
+        const w = 2;
+        let start = Math.max(2, cur - w);
+        let end = Math.min(pages-1, cur + w);
+
+        if(start > 2) addDots();
+        for(let p=start; p<=end; p++) pushNum(p);
+        if(end < pages-1) addDots();
+
+        pushNum(pages);
+      }
+
+      html += btn("→", cur+1, {disabled: cur>=pages});
+
+      pgBtns.innerHTML = html;
+
+      pgBtns.querySelectorAll("button[data-page]").forEach(b=>{
+        b.addEventListener("click", ()=>{
+          const p = Number(b.getAttribute("data-page"));
+          if(Number.isFinite(p)) goPage(Math.max(1, Math.min(p, pages)));
+        });
+      });
+    }
+
+    function render(){
+      const label = currentLabel();
+      crumbLabel.textContent = label;
+      titleLabel.textContent = label;
+
+      let list = ALL.filter(matches);
+      list = sortList(list);
+
+      const total = list.length;
+      const per = state.perPage;
+      const pages = Math.max(1, Math.ceil(total / per));
+      state.page = Math.min(state.page, pages);
+
+      const startIdx = (state.page - 1) * per;
+      const endIdx = Math.min(total, startIdx + per);
+      const slice = list.slice(startIdx, endIdx);
+
+      const metaText = total
+        ? `Mostro ${startIdx + 1}-${endIdx} di ${total} prodotto(i)`
+        : `Mostro 0-0 di 0 prodotto(i)`;
+
+      metaHead.textContent = metaText;
+      metaTop.textContent = metaText;
+      metaBottom.textContent = metaText;
+      countPill.textContent = `${total} prodotti`;
+
+      grid.classList.toggle("list", state.view === "list");
+
+      if(total === 0){
+        grid.innerHTML = `
+          <div class="emptyState">
+            <div>
+              <h3 style="margin:0 0 8px; font-size:18px; font-weight:1000;">Nessun prodotto trovato</h3>
+              <div style="opacity:.8">Prova a cambiare ricerca o categoria.</div>
+            </div>
+          </div>
+        `;
+        pgBtns.innerHTML = "";
+        return;
+      }
+
+      grid.innerHTML = slice.map(card).join("");
+
+      grid.querySelectorAll(".card").forEach(el=>{
+        const sku = el.getAttribute("data-sku");
+        el.addEventListener("click", ()=> openProduct(sku));
+        el.addEventListener("keydown", (e)=>{
+          if(e.key === "Enter" || e.key === " "){
+            e.preventDefault();
+            openProduct(sku);
+          }
+        });
+      });
+
+      buildPager(pages);
+    }
+
+    function buildModel(){
+      const macroMap = new Map();
+
+      for(const p of ALL){
+        const macro = p.macro || "Senza categoria";
+        if(!macroMap.has(macro)) macroMap.set(macro, new Map());
+        const m = macroMap.get(macro);
+        m.set(p.category, (m.get(p.category) || 0) + 1);
+      }
+
+      const macros = [...macroMap.entries()].map(([macro, cats])=>{
+        let total = 0;
+        for(const c of cats.values()) total += c;
+
+        const catsSorted = [...cats.entries()].sort((a,b)=>b[1]-a[1]).map(([full, count])=>{
+          const parts = splitParts(full);
+          const short = parts.length ? parts[parts.length-1] : full;
+          return { full, short, slug: slugify(full), count };
+        });
+
+        return {
+          macro,
+          macroSlug: slugify(macro),
+          total,
+          cats: catsSorted
+        };
+      }).sort((a,b)=>b.total - a.total);
+
+      return macros;
+    }
+
+    function renderTree(){
+      let html = "";
+
+      html += `
+        <div class="treeItem ${state.macro === "tutti" ? "active" : ""}">
+          <div class="treeRow">
+            <div class="treeLeft">
+              <button class="tri" type="button" data-action="noop" aria-label="tri">
+                <span class="triBox">▶</span>
+              </button>
+              <button class="macroBtn" type="button" data-action="selectAll">Tutti</button>
+            </div>
+            <span class="cnt">${ALL.length}</span>
+          </div>
+        </div>
+      `;
+
+      for(const m of model){
+        const isOpen = state.openMacros.has(m.macroSlug);
+        const activeMacro = (state.macro === m.macroSlug && state.sub === "tutti");
+        const triChar = isOpen ? "▼" : "▶";
+
+        html += `
+          <div class="treeItem ${isOpen ? "open" : ""} ${activeMacro ? "active" : ""}" data-macro="${esc(m.macroSlug)}">
+            <div class="treeRow">
+              <div class="treeLeft">
+                <button class="tri" type="button" data-action="toggle" data-macro="${esc(m.macroSlug)}" aria-label="Apri/chiudi">
+                  <span class="triBox">${triChar}</span>
+                </button>
+                <button class="macroBtn" type="button"
+                        data-action="selectMacro"
+                        data-macro="${esc(m.macroSlug)}"
+                        data-macro-label="${esc(m.macro)}">${esc(m.macro)}</button>
+              </div>
+              <span class="cnt">${m.total}</span>
+            </div>
+
+            <div class="children">
+              ${m.cats.map(c=>{
+                const active = (state.macro === m.macroSlug && state.sub === c.slug) ? "active" : "";
+                return `
+                  <div class="subBtn ${active}"
+                       data-action="selectSub"
+                       data-macro="${esc(m.macroSlug)}"
+                       data-macro-label="${esc(m.macro)}"
+                       data-sub="${esc(c.slug)}"
+                       data-sub-label="${esc(c.short)}"
+                       title="${esc(c.full)}">
+                    <span>${esc(c.short)}</span>
+                    <small>${c.count}</small>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          </div>
+        `;
+      }
+
+      tree.innerHTML = html;
+    }
+
+    function setFilterAll(){
+      state.macro = "tutti";
+      state.sub = "tutti";
+      state.macroLabel = "Tutti";
+      state.subLabel = "";
+      state.page = 1;
+      renderTree();
+      render();
+    }
+
+    function setFilterMacro(macroSlug, label){
+      state.macro = macroSlug;
+      state.sub = "tutti";
+      state.macroLabel = label || "";
+      state.subLabel = "";
+      state.page = 1;
+      state.openMacros.add(macroSlug);
+      renderTree();
+      render();
+    }
+
+    function setFilterSub(macroSlug, macroLabel, subSlug, subLabel){
+      state.macro = macroSlug;
+      state.sub = subSlug;
+      state.macroLabel = macroLabel || "";
+      state.subLabel = subLabel || "";
+      state.page = 1;
+      state.openMacros.add(macroSlug);
+      renderTree();
+      render();
+    }
+
+    function toggleMacro(macroSlug){
+      if(state.openMacros.has(macroSlug)) state.openMacros.delete(macroSlug);
+      else state.openMacros.add(macroSlug);
+      renderTree();
+    }
+
+    function openMega(){
+  megaPanel.classList.add("open");
+  megaBtn.setAttribute("aria-expanded", "true");
+}
+function closeMega(){
+  megaPanel.classList.remove("open");
+  megaBtn.setAttribute("aria-expanded", "false");
+}
+function toggleMega(){
+  megaPanel.classList.contains("open") ? closeMega() : openMega();
+}
+
+// distribuisce i macro in 3 colonne bilanciate (per quantità prodotti)
+function splitIntoColumns(macros, cols=3){
+  const columns = Array.from({length: cols}, ()=>({items:[], weight:0}));
+  const sorted = macros.slice().sort((a,b)=>b.total - a.total);
+
+  for(const m of sorted){
+    columns.sort((a,b)=>a.weight - b.weight);
+    columns[0].items.push(m);
+    columns[0].weight += (m.total || 0);
+  }
+  return columns.map(c=>c.items);
+}
+
+function renderMegaMenu(){
+  if(!megaGrid) return;
+
+  const cols = splitIntoColumns(model, 3);
+
+  megaGrid.innerHTML = cols.map(col => `
+    <div class="megaCol">
+      ${col.map(m => `
+        <div class="megaGroup">
+          <div class="megaGroupTitle">
+            <button type="button"
+              data-mega="macro"
+              data-macro="${esc(m.macroSlug)}"
+              data-macro-label="${esc(m.macro)}"
+              title="${esc(m.macro)}">
+              ${esc(m.macro)}
+            </button>
+            <span class="mcount">${m.total}</span>
+          </div>
+
+          <div class="megaList">
+            ${m.cats.slice(0, 10).map(c => `
+              <div class="megaItem"
+                role="menuitem"
+                tabindex="0"
+                data-mega="sub"
+                data-macro="${esc(m.macroSlug)}"
+                data-macro-label="${esc(m.macro)}"
+                data-sub="${esc(c.slug)}"
+                data-sub-label="${esc(c.short)}"
+                title="${esc(c.full)}">
+                <span class="label">${esc(c.short)}</span>
+                <small>${c.count}</small>
+              </div>
+            `).join("")}
+
+            ${m.cats.length > 10 ? `
+              <div class="megaItem"
+                role="menuitem"
+                tabindex="0"
+                data-mega="macro"
+                data-macro="${esc(m.macroSlug)}"
+                data-macro-label="${esc(m.macro)}"
+                title="Vedi tutte le sottocategorie di ${esc(m.macro)}">
+                <span class="label">Vedi tutto →</span>
+                <small>${m.cats.length}</small>
+              </div>
+            ` : ``}
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `).join("");
+}
+
+function megaActivate(el){
+  const type = el.getAttribute("data-mega");
+  if(type === "macro"){
+    setFilterMacro(el.getAttribute("data-macro"), el.getAttribute("data-macro-label"));
+    closeMega();
+    document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
+    return;
+  }
+  if(type === "sub"){
+    setFilterSub(
+      el.getAttribute("data-macro"),
+      el.getAttribute("data-macro-label"),
+      el.getAttribute("data-sub"),
+      el.getAttribute("data-sub-label")
+    );
+    closeMega();
+    document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
+  }
+}
+
+
+    async function boot(){
+      countPill.textContent = "Carico...";
+      metaHead.textContent = "Caricamento catalogo…";
+      metaTop.textContent = "Caricamento…";
+
+      const data = await fetchCatalogJson();
+
+      let currentCategory = "Senza categoria";
+      const out = [];
+
+      for(const row of data){
+        const marker = String(row[""] ?? "").trim();
+
+        if(marker.toLowerCase().startsWith("categoria")){
+          const parts = marker.split(":");
+          const found = norm(parts.length > 1 ? parts.slice(1).join(":") : "");
+          if(found) currentCategory = found;
+          continue;
+        }
+
+        const sku = norm(row["Cod."]);
+        if(!sku) continue;
+
+        const title = norm(row["Descrizione"]) || "(Senza nome)";
+        const brand = norm(row["Produttore"]);
+        const catRow = norm(row["Categoria"]);
+        const category = norm(catRow || currentCategory || "Senza categoria");
+
+        const parts = splitParts(category);
+        const macro = parts[0] || "Senza categoria";
+        const micro = (parts.length ? parts[parts.length - 1] : macro) || "PRODOTTO";
+        const catLine = parts.join(" » ");
+
+        const priceNum = parsePrice(row["Listino 1 (ivato)"]);
+
+        out.push({
+          sku,
+          title,
+          brand,
+          category,
+          catLine,
+          microBadge: micro,
+          catSlug: slugify(category),
+          macro,
+          macroSlug: slugify(macro),
+          price: priceNum,
+          priceLabel: euro(priceNum),
+          cover: PLACEHOLDER
+        });
+      }
+
+      ALL = out;
+      model = buildModel();
+      renderMegaMenu();
+
+
+      state.openMacros = new Set(model.slice(0,2).map(x=>x.macroSlug));
+
+      renderTree();
+      render();
+
+      tree.addEventListener("click", (e)=>{
+        const el = e.target.closest("[data-action]");
+        if(!el) return;
+        const action = el.getAttribute("data-action");
+
+        if(action === "toggle"){
+          toggleMacro(el.getAttribute("data-macro"));
+          return;
+        }
+        if(action === "selectAll"){
+          setFilterAll();
+          return;
+        }
+        if(action === "selectMacro"){
+          setFilterMacro(el.getAttribute("data-macro"), el.getAttribute("data-macro-label"));
+          return;
+        }
+        if(action === "selectSub"){
+          setFilterSub(
+            el.getAttribute("data-macro"),
+            el.getAttribute("data-macro-label"),
+            el.getAttribute("data-sub"),
+            el.getAttribute("data-sub-label")
+          );
+        }
+      });
+
+      let t;
+      search.addEventListener("input", ()=>{
+        clearTimeout(t);
+        t = setTimeout(()=>{
+          state.q = search.value;
+          state.page = 1;
+          render();
+        }, 130);
+      });
+
+      sort.addEventListener("change", ()=>{
+        state.sort = sort.value;
+        state.page = 1;
+        render();
+      });
+
+      perPage.addEventListener("change", ()=>{
+        state.perPage = Number(perPage.value) || 12;
+        state.page = 1;
+        render();
+      });
+
+      btnGrid.addEventListener("click", ()=>{
+        state.view = "grid";
+        btnGrid.classList.add("active");
+        btnList.classList.remove("active");
+        render();
+      });
+
+      btnList.addEventListener("click", ()=>{
+        state.view = "list";
+        btnList.classList.add("active");
+        btnGrid.classList.remove("active");
+        render();
+      });
+
+      resetAll.addEventListener("click", setFilterAll);
+
+    // Toggle mega menu
+megaBtn?.addEventListener("click", toggleMega);
+megaClose?.addEventListener("click", closeMega);
+megaAll?.addEventListener("click", ()=>{
+  setFilterAll();
+  closeMega();
+  document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
+});
+
+// Click su voci mega menu
+megaPanel?.addEventListener("click", (e)=>{
+  const el = e.target.closest("[data-mega]");
+  if(!el) return;
+  megaActivate(el);
+});
+megaPanel?.addEventListener("keydown", (e)=>{
+  if(e.key === "Enter" || e.key === " "){
+    const el = e.target.closest("[data-mega]");
+    if(!el) return;
+    e.preventDefault();
+    megaActivate(el);
+  }
+});
+
+// Chiudi cliccando fuori / ESC
+document.addEventListener("click", (e)=>{
+  if(!megaPanel?.classList.contains("open")) return;
+  if(megaWrap?.contains(e.target)) return;
+  closeMega();
+});
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "Escape") closeMega();
+});
+
+
+    }
+
+    boot().catch(err=>{
+      console.error(err);
+      countPill.textContent = "Errore";
+      metaHead.textContent = "Errore: non riesco a caricare il catalogo.";
+      tree.innerHTML = `<div style="padding:12px; font-weight:950;">Errore caricamento categorie.</div>`;
+      grid.innerHTML = `
+        <div class="emptyState">
+          <div>
+            <h3 style="margin:0 0 8px; font-size:18px; font-weight:1000;">Errore caricamento</h3>
+            <div style="opacity:.8">Apri la console (F12) per vedere il dettaglio.</div>
+          </div>
+        </div>
+      `;
+      metaTop.textContent = "Errore";
+      metaBottom.textContent = "Errore";
+      pgBtns.innerHTML = "";
+    });
+  </script>
+</body>
+</html>
+
+
