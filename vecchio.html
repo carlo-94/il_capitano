@@ -663,6 +663,176 @@
     }
     footer .wrap{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;}
 
+    /* ============ MEGA MENU (Catalogo) ============ */
+.megaWrap{ position:relative; display:inline-flex; align-items:center; }
+.megaBtn{
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid transparent;
+  background:transparent;
+  cursor:pointer;
+  font-weight:950;
+  font-size:18px;
+  color:rgba(20,20,20,.80);
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+.megaBtn:hover{
+  border-color: rgba(0,0,0,.10);
+  background: rgba(242,231,201,.35);
+}
+.megaBtn .chev{ opacity:.7; font-weight:1100; }
+
+.megaPanel{
+  position:absolute;
+  left:0;
+  top:calc(100% + 10px);
+  width:min(980px, calc(100vw - 36px));
+  background: rgba(255,255,255,.98);
+  border:1px solid rgba(0,0,0,.14);
+  border-radius:16px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.14);
+  overflow:hidden;
+  display:none;
+  z-index:999;
+}
+.megaPanel.open{ display:block; }
+
+.megaInner{
+  background:
+    radial-gradient(900px 320px at 10% 0%, rgba(14,126,160,.10), transparent 60%),
+    radial-gradient(800px 320px at 90% 0%, rgba(242,231,201,.34), transparent 60%),
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(238,246,247,.45));
+}
+
+.megaTopRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 14px;
+  border-bottom:1px solid rgba(0,0,0,.08);
+}
+.megaTitle{
+  font-weight:1000;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  font-size:12px;
+  color:rgba(20,20,20,.75);
+}
+.megaClose{
+  border:1px solid rgba(0,0,0,.12);
+  background:#fff;
+  border-radius:10px;
+  padding:6px 10px;
+  cursor:pointer;
+  font-weight:1000;
+}
+
+.megaGrid{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap:0;
+  padding:12px 10px 8px;
+}
+.megaCol{
+  padding:10px 10px 12px;
+  border-right:1px solid rgba(0,0,0,.06);
+}
+.megaCol:last-child{ border-right:none; }
+
+.megaGroup{ margin-bottom:14px; }
+.megaGroupTitle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  font-weight:1100;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  font-size:12px;
+  color: rgba(11,95,118,.95);
+  margin:0 0 8px;
+}
+.megaGroupTitle button{
+  border:0;
+  background:transparent;
+  padding:0;
+  cursor:pointer;
+  font:inherit;
+  color:inherit;
+  text-align:left;
+}
+.megaGroupTitle .mcount{
+  font-size:12px;
+  color:rgba(20,20,20,.55);
+  font-weight:900;
+}
+
+.megaList{ display:grid; gap:6px; }
+.megaItem{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid transparent;
+  cursor:pointer;
+  background: rgba(255,255,255,.82);
+}
+.megaItem:hover{
+  border-color: rgba(11,95,118,.14);
+  background: rgba(11,95,118,.06);
+}
+.megaItem .label{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-weight:950;
+  color:rgba(20,20,20,.82);
+}
+.megaItem small{
+  flex:0 0 auto;
+  font-size:12px;
+  font-weight:900;
+  color:rgba(20,20,20,.55);
+}
+
+.megaFooter{
+  display:flex;
+  justify-content:flex-end;
+  padding:10px 12px 12px;
+  border-top:1px solid rgba(0,0,0,.08);
+}
+.megaAll{
+  padding:9px 12px;
+  border-radius:999px;
+  border:1px solid rgba(0,0,0,.14);
+  background: rgba(242,231,201,.40);
+  font-weight:1000;
+  cursor:pointer;
+}
+
+/* Responsive mega menu */
+@media (max-width: 980px){
+  .megaPanel{
+    position:fixed;
+    left:18px;
+    right:18px;
+    top:86px;
+    width:auto;
+    max-height: calc(100vh - 120px);
+    overflow:auto;
+  }
+  .megaGrid{ grid-template-columns: 1fr; }
+  .megaCol{ border-right:none; border-bottom:1px solid rgba(0,0,0,.06); }
+  .megaCol:last-child{ border-bottom:none; }
+}
+
+
     @media (max-width: 1100px){
       .grid{grid-template-columns: repeat(2, minmax(0,1fr))}
       .searchTop input{width:min(460px, 46vw)}
@@ -717,11 +887,35 @@
 
   <div class="mininav">
     <div class="wrap">
-      <nav class="links" aria-label="Navigazione">
-        <a href="#home">Home</a>
-        <a href="#catalogo">Catalogo</a>
-        <a href="#contatti">Contatti</a>
-      </nav>
+     <nav class="links" aria-label="Navigazione">
+  <a href="#home">Home</a>
+
+  <!-- CATALOGO MEGA MENU -->
+  <div class="megaWrap" id="megaWrap">
+    <button class="megaBtn" id="megaBtn" type="button" aria-haspopup="true" aria-expanded="false">
+      Catalogo <span class="chev">▾</span>
+    </button>
+
+    <div class="megaPanel" id="megaPanel" role="menu" aria-label="Catalogo">
+      <div class="megaInner">
+        <div class="megaTopRow">
+          <div class="megaTitle">Categorie</div>
+          <button class="megaClose" id="megaClose" type="button" aria-label="Chiudi catalogo">✕</button>
+        </div>
+
+        <!-- qui dentro renderizziamo dal JSON -->
+        <div class="megaGrid" id="megaGrid"></div>
+
+        <div class="megaFooter">
+          <button class="megaAll" id="megaAll" type="button">Vedi tutto</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="#contatti">Contatti</a>
+</nav>
+
 
       <div class="searchTop" aria-label="Cerca nel catalogo">
         <span class="pill" id="countPill">Carico...</span>
@@ -855,6 +1049,15 @@
 
     const pgBtns = $("pgBtns");
     const resetAll = $("resetAll");
+
+    // Mega menu refs
+const megaWrap  = $("megaWrap");
+const megaBtn   = $("megaBtn");
+const megaPanel = $("megaPanel");
+const megaGrid  = $("megaGrid");
+const megaClose = $("megaClose");
+const megaAll   = $("megaAll");
+
 
     $("y").textContent = new Date().getFullYear();
 
@@ -1227,6 +1430,107 @@
       renderTree();
     }
 
+    function openMega(){
+  megaPanel.classList.add("open");
+  megaBtn.setAttribute("aria-expanded", "true");
+}
+function closeMega(){
+  megaPanel.classList.remove("open");
+  megaBtn.setAttribute("aria-expanded", "false");
+}
+function toggleMega(){
+  megaPanel.classList.contains("open") ? closeMega() : openMega();
+}
+
+// distribuisce i macro in 3 colonne bilanciate (per quantità prodotti)
+function splitIntoColumns(macros, cols=3){
+  const columns = Array.from({length: cols}, ()=>({items:[], weight:0}));
+  const sorted = macros.slice().sort((a,b)=>b.total - a.total);
+
+  for(const m of sorted){
+    columns.sort((a,b)=>a.weight - b.weight);
+    columns[0].items.push(m);
+    columns[0].weight += (m.total || 0);
+  }
+  return columns.map(c=>c.items);
+}
+
+function renderMegaMenu(){
+  if(!megaGrid) return;
+
+  const cols = splitIntoColumns(model, 3);
+
+  megaGrid.innerHTML = cols.map(col => `
+    <div class="megaCol">
+      ${col.map(m => `
+        <div class="megaGroup">
+          <div class="megaGroupTitle">
+            <button type="button"
+              data-mega="macro"
+              data-macro="${esc(m.macroSlug)}"
+              data-macro-label="${esc(m.macro)}"
+              title="${esc(m.macro)}">
+              ${esc(m.macro)}
+            </button>
+            <span class="mcount">${m.total}</span>
+          </div>
+
+          <div class="megaList">
+            ${m.cats.slice(0, 10).map(c => `
+              <div class="megaItem"
+                role="menuitem"
+                tabindex="0"
+                data-mega="sub"
+                data-macro="${esc(m.macroSlug)}"
+                data-macro-label="${esc(m.macro)}"
+                data-sub="${esc(c.slug)}"
+                data-sub-label="${esc(c.short)}"
+                title="${esc(c.full)}">
+                <span class="label">${esc(c.short)}</span>
+                <small>${c.count}</small>
+              </div>
+            `).join("")}
+
+            ${m.cats.length > 10 ? `
+              <div class="megaItem"
+                role="menuitem"
+                tabindex="0"
+                data-mega="macro"
+                data-macro="${esc(m.macroSlug)}"
+                data-macro-label="${esc(m.macro)}"
+                title="Vedi tutte le sottocategorie di ${esc(m.macro)}">
+                <span class="label">Vedi tutto →</span>
+                <small>${m.cats.length}</small>
+              </div>
+            ` : ``}
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `).join("");
+}
+
+function megaActivate(el){
+  const type = el.getAttribute("data-mega");
+  if(type === "macro"){
+    setFilterMacro(el.getAttribute("data-macro"), el.getAttribute("data-macro-label"));
+    closeMega();
+    document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
+    return;
+  }
+  if(type === "sub"){
+    setFilterSub(
+      el.getAttribute("data-macro"),
+      el.getAttribute("data-macro-label"),
+      el.getAttribute("data-sub"),
+      el.getAttribute("data-sub-label")
+    );
+    closeMega();
+    document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
+  }
+}
+
+
     async function boot(){
       countPill.textContent = "Carico...";
       metaHead.textContent = "Caricamento catalogo…";
@@ -1280,6 +1584,8 @@
 
       ALL = out;
       model = buildModel();
+      renderMegaMenu();
+
 
       state.openMacros = new Set(model.slice(0,2).map(x=>x.macroSlug));
 
@@ -1350,6 +1656,42 @@
       });
 
       resetAll.addEventListener("click", setFilterAll);
+
+    // Toggle mega menu
+megaBtn?.addEventListener("click", toggleMega);
+megaClose?.addEventListener("click", closeMega);
+megaAll?.addEventListener("click", ()=>{
+  setFilterAll();
+  closeMega();
+  document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
+});
+
+// Click su voci mega menu
+megaPanel?.addEventListener("click", (e)=>{
+  const el = e.target.closest("[data-mega]");
+  if(!el) return;
+  megaActivate(el);
+});
+megaPanel?.addEventListener("keydown", (e)=>{
+  if(e.key === "Enter" || e.key === " "){
+    const el = e.target.closest("[data-mega]");
+    if(!el) return;
+    e.preventDefault();
+    megaActivate(el);
+  }
+});
+
+// Chiudi cliccando fuori / ESC
+document.addEventListener("click", (e)=>{
+  if(!megaPanel?.classList.contains("open")) return;
+  if(megaWrap?.contains(e.target)) return;
+  closeMega();
+});
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "Escape") closeMega();
+});
+
+
     }
 
     boot().catch(err=>{
@@ -1372,839 +1714,5 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!doctype html>
-<html lang="it">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Prodotto • Il Capitano</title>
-  <meta name="description" content="Scheda prodotto • Il Capitano Pesca Nautica." />
-
-  <style>
-    :root{
-      --ink:#141414;
-      --muted:#4c5a60;
-
-      --sea:#0b5f76;
-      --sea2:#0e7ea0;
-      --foam:#eef6f7;
-      --sand:#f2e7c9;
-
-      --paper:#fbfaf6;
-      --paper2:#f6f3ea;
-
-      --line:rgba(0,0,0,.14);
-      --shadow:0 14px 30px rgba(0,0,0,.10);
-      --shadow2:0 10px 26px rgba(0,0,0,.08);
-
-      --r:16px;
-      --max:1200px;
-    }
-
-    *{box-sizing:border-box}
-    html, body{height:100%}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--ink);
-      background:
-        radial-gradient(1200px 460px at 50% -220px, rgba(11,95,118,.10), transparent 60%),
-        linear-gradient(180deg, var(--paper2) 0%, #fff 75%);
-    }
-    a{color:inherit; text-decoration:none}
-    button, input{font:inherit}
-    .wrap{max-width:var(--max); margin:0 auto; padding:0 18px;}
-    .sr{position:absolute; left:-9999px}
-
-    /* ================= HEADER ================= */
-    .headerHero{
-      position:relative;
-      padding:20px 0 12px;
-      border-bottom:1px solid var(--line);
-      background: linear-gradient(180deg, rgba(242,231,201,.48), rgba(255,255,255,.92));
-      overflow:hidden;
-    }
-    .headerHero::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      background:
-        repeating-linear-gradient(0deg, rgba(0,0,0,.018) 0px, rgba(0,0,0,.018) 1px, rgba(255,255,255,0) 2px, rgba(255,255,255,0) 6px),
-        radial-gradient(900px 360px at 20% 10%, rgba(11,95,118,.08), transparent 60%),
-        radial-gradient(700px 300px at 90% 0%, rgba(242,231,201,.24), transparent 60%);
-      opacity:.55;
-      mix-blend-mode:multiply;
-    }
-    .headerRow{
-      position:relative;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-      flex-wrap:wrap;
-    }
-    .brandMini{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:0;
-    }
-    .brandCard{
-      position:relative;
-      width:64px;
-      height:64px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      border-radius:14px;
-      background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.84));
-      border:1px solid rgba(0,0,0,.14);
-      box-shadow: 0 10px 18px rgba(0,0,0,.08);
-      transform: rotate(-1deg);
-      flex:0 0 auto;
-    }
-    .brandCard::after{
-      content:"";
-      position:absolute;
-      width:40px;
-      height:14px;
-      top:-6px;
-      left:50%;
-      transform:translateX(-50%) rotate(-6deg);
-      border-radius:6px;
-      background: rgba(242,231,201,.72);
-      border:1px solid rgba(0,0,0,.10);
-      box-shadow:0 8px 14px rgba(0,0,0,.06);
-    }
-    .brandCard img{width:44px; height:auto; display:block;}
-    .brandText{display:flex; flex-direction:column; gap:2px; min-width:0;}
-    .brandText strong{
-      font-size:14px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      font-weight:1000;
-      color:rgba(11,95,118,.92);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      max-width: min(680px, 70vw);
-    }
-    .brandText span{
-      font-size:12px;
-      font-weight:850;
-      color:rgba(20,20,20,.70);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      max-width: min(680px, 80vw);
-    }
-
-    .back{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid rgba(0,0,0,.14);
-      background: rgba(238,246,247,.70);
-      font-weight:950;
-      box-shadow: 0 10px 18px rgba(0,0,0,.06);
-      transition: transform .14s ease, box-shadow .14s ease, background .14s ease;
-      flex:0 0 auto;
-      white-space:nowrap;
-    }
-    .back:hover{
-      transform: translateY(-1px);
-      box-shadow: 0 14px 26px rgba(0,0,0,.10);
-      background: rgba(238,246,247,.92);
-    }
-
-    /* ================= MAIN ================= */
-    .main{ padding:18px 0 44px; }
-
-    .panel{
-      border:1px solid rgba(0,0,0,.14);
-      border-radius: calc(var(--r) + 10px);
-      background:
-        radial-gradient(900px 340px at 18% 0%, rgba(11,95,118,.06), transparent 62%),
-        radial-gradient(700px 300px at 92% 0%, rgba(242,231,201,.22), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.92), rgba(251,250,246,.90));
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-
-    .crumbRow{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:12px 14px;
-      border-bottom:1px solid rgba(0,0,0,.10);
-      background: rgba(255,255,255,.78);
-      flex-wrap:wrap;
-    }
-    .crumbPill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 12px;
-      border-radius:999px;
-      border:1px solid rgba(0,0,0,.12);
-      background: rgba(238,246,247,.65);
-      font-weight:950;
-      color: rgba(11,95,118,.92);
-      white-space:nowrap;
-    }
-    .skuLine{
-      color:rgba(20,20,20,.60);
-      font-weight:900;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      font-size:12px;
-      white-space:nowrap;
-    }
-
-    .layout{
-      display:grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap:0;
-    }
-
-    /* ================= GALLERY ================= */
-    .gallery{
-      padding:16px;
-      border-right:1px solid rgba(0,0,0,.14);
-      background:
-        radial-gradient(520px 240px at 20% 10%, rgba(14,126,160,.10), transparent 62%),
-        radial-gradient(520px 240px at 80% 60%, rgba(242,231,201,.16), transparent 60%),
-        rgba(255,255,255,.60);
-    }
-    .galleryGrid{
-      display:grid;
-      grid-template-columns: 96px 1fr;
-      gap:14px;
-      align-items:start;
-    }
-
-    .thumbs{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      max-height: 540px;
-      overflow:auto;
-      padding-right:6px;
-    }
-    .thumbs::-webkit-scrollbar{width:8px}
-    .thumbs::-webkit-scrollbar-thumb{background: rgba(0,0,0,.14); border-radius:999px}
-
-    .thumb{
-      border:1px solid rgba(0,0,0,.14);
-      border-radius:14px;
-      background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(251,250,246,.90));
-      padding:8px;
-      cursor:pointer;
-      box-shadow: 0 10px 18px rgba(0,0,0,.06);
-      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
-      position:relative;
-      user-select:none;
-    }
-    .thumb.active{
-      border-color: rgba(11,95,118,.38);
-      box-shadow:0 0 0 4px rgba(11,95,118,.10), 0 14px 24px rgba(0,0,0,.10);
-    }
-    .thumb:hover{
-      transform: translateY(-1px);
-      box-shadow:0 14px 24px rgba(0,0,0,.10);
-    }
-    .thumb .frame{
-      width:100%;
-      height:64px;
-      border-radius:12px;
-      border:1px solid rgba(0,0,0,.10);
-      background: linear-gradient(180deg, #fbfaf6, #f2e7c9);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:10px;
-      overflow:hidden;
-    }
-    .thumb img{
-      width:100%;
-      height:100%;
-      object-fit:contain;
-      display:block;
-      mix-blend-mode:multiply;
-      filter: contrast(1.08) saturate(1.02);
-    }
-
-    .mainImg{
-      border:1px solid rgba(0,0,0,.14);
-      border-radius: 22px;
-      background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(251,250,246,.90));
-      padding:14px;
-      min-height:460px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      box-shadow: 0 14px 26px rgba(0,0,0,.08);
-    }
-    .mainFrame{
-      width:100%;
-      height:100%;
-      border-radius:18px;
-      border:1px solid rgba(0,0,0,.10);
-      background: linear-gradient(180deg, #fbfaf6, #f2e7c9);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:16px;
-      overflow:hidden;
-    }
-    .mainFrame img{
-      width:100%;
-      height:100%;
-      max-height:560px;
-      object-fit:contain;
-      display:block;
-      mix-blend-mode:multiply;
-      filter: drop-shadow(0 18px 26px rgba(0,0,0,.10)) contrast(1.06);
-    }
-
-    /* ================= DETAIL ================= */
-    .detail{
-      padding:18px 18px 20px;
-      background: rgba(255,255,255,.55);
-    }
-
-    .kicker{
-      display:inline-flex;
-      gap:10px;
-      align-items:center;
-      padding:8px 12px;
-      border-radius:999px;
-      border:1px solid rgba(0,0,0,.14);
-      background: rgba(238,246,247,.70);
-      font-weight:1000;
-      color: rgba(11,95,118,.92);
-      letter-spacing:.10em;
-      text-transform:uppercase;
-      font-size:11px;
-      position:relative;
-    }
-    .kicker::after{
-      content:"";
-      position:absolute;
-      inset:-6px;
-      border-radius:999px;
-      border:1px dashed rgba(11,95,118,.22);
-      opacity:.7;
-      pointer-events:none;
-    }
-
-    h1{
-      margin:12px 0 0;
-      font-size:32px;
-      letter-spacing:-.03em;
-      line-height:1.10;
-      font-weight:1000;
-    }
-
-    .price{
-      margin:14px 0 0;
-      font-weight:1100;
-      color: rgba(11,95,118,.98);
-      font-size:26px;
-      letter-spacing:.02em;
-    }
-
-    .rope{
-      margin:14px 0 0;
-      height:14px;
-      width:100%;
-      position:relative;
-    }
-    .rope::before{
-      content:"";
-      position:absolute;
-      left:0; right:0; top:6px;
-      height:2px;
-      background:
-        repeating-linear-gradient(90deg,
-          rgba(70,52,30,.55) 0 6px,
-          rgba(70,52,30,.35) 6px 10px);
-      border-radius:999px;
-      opacity:.60;
-    }
-
-    .actions{
-      margin-top:14px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-
-    .qtyBox{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid rgba(0,0,0,.14);
-      background: rgba(255,255,255,.70);
-      box-shadow: 0 10px 18px rgba(0,0,0,.06);
-    }
-    .qtyBtn{
-      width:38px;
-      height:38px;
-      border-radius:999px;
-      border:1px solid rgba(0,0,0,.14);
-      background:#fff;
-      cursor:pointer;
-      font-weight:1100;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-    }
-    .qtyInput{
-      width:56px;
-      height:38px;
-      border-radius:999px;
-      border:1px solid rgba(0,0,0,.14);
-      background:#fff;
-      text-align:center;
-      font-weight:1000;
-      outline:none;
-    }
-
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:12px 14px;
-      border-radius:999px;
-      border:1px solid rgba(0,0,0,.14);
-      background: rgba(238,246,247,.78);
-      font-weight:1000;
-      white-space:nowrap;
-      transition: transform .14s ease, box-shadow .14s ease, background .14s ease;
-      box-shadow: 0 10px 18px rgba(0,0,0,.06);
-      cursor:pointer;
-      user-select:none;
-    }
-    .btn:hover{
-      transform: translateY(-1px);
-      box-shadow: 0 14px 26px rgba(0,0,0,.10);
-      background: rgba(238,246,247,.95);
-    }
-    .btnPrimary{
-      border-color: rgba(11,95,118,.22);
-      background: rgba(242,231,201,.58);
-    }
-
-    .metaBox{
-      margin-top:16px;
-      border-top:1px solid rgba(0,0,0,.14);
-      padding-top:14px;
-      color:rgba(20,20,20,.72);
-      font-weight:850;
-      font-size:13px;
-      line-height:1.55;
-    }
-    .metaBox b{color:rgba(20,20,20,.86)}
-    .metaLine{
-      margin-top:8px;
-      padding:10px 12px;
-      border-radius:14px;
-      border:1px solid rgba(0,0,0,.12);
-      background: rgba(255,255,255,.75);
-      box-shadow: var(--shadow2);
-      font-weight:900;
-      color:rgba(20,20,20,.70);
-    }
-
-    /* empty */
-    .empty{
-      padding:22px 18px;
-      text-align:center;
-      display:none;
-    }
-    .empty h2{margin:0; font-size:22px; font-weight:1100;}
-    .empty p{margin:10px 0 0; color:rgba(20,20,20,.72); font-weight:900;}
-    .empty .btn{margin-top:14px}
-
-    /* toast */
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom:18px;
-      transform:translateX(-50%);
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid rgba(0,0,0,.14);
-      background: rgba(255,255,255,.92);
-      box-shadow: 0 18px 40px rgba(0,0,0,.18);
-      font-weight:1000;
-      z-index:9999;
-      opacity:0;
-      pointer-events:none;
-      transition: opacity .18s ease, transform .18s ease;
-    }
-    .toast.show{
-      opacity:1;
-      transform:translateX(-50%) translateY(-2px);
-    }
-
-    footer{
-      border-top:1px solid rgba(0,0,0,.12);
-      padding:18px 0 26px;
-      color:rgba(20,20,20,.72);
-      font-weight:900;
-      margin-top:28px;
-    }
-    footer .wrap{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-
-    @media (max-width: 980px){
-      .layout{grid-template-columns: 1fr;}
-      .gallery{border-right:none; border-bottom:1px solid rgba(0,0,0,.14);}
-      .galleryGrid{grid-template-columns: 1fr;}
-      .thumbs{flex-direction:row; max-height:none; overflow:auto; padding:0 0 6px;}
-      .thumb{min-width:96px}
-      .mainImg{min-height:320px}
-    }
-  </style>
-</head>
-
-<body>
-  <header class="headerHero">
-    <div class="wrap">
-      <div class="headerRow">
-        <div class="brandMini">
-          <div class="brandCard">
-            <img src="assets/img/logo/logo-transparent.svg" alt="Il Capitano">
-          </div>
-          <div class="brandText">
-            <strong>Il Capitano • Pesca Nautica</strong>
-            <span>Dal 1938 • Accessori nautici & pesca sportiva e professionale</span>
-          </div>
-        </div>
-
-        <a class="back" href="index.html">← Torna ai prodotti</a>
-      </div>
-    </div>
-  </header>
-
-  <main class="main">
-    <div class="wrap">
-
-      <section class="panel" id="panel">
-
-        <div class="crumbRow">
-          <div class="crumbPill" id="crumbPill">Prodotto</div>
-          <div class="skuLine" id="skuLine">SKU: —</div>
-        </div>
-
-        <div id="pLayout">
-          <div class="layout">
-
-            <!-- GALLERY -->
-            <div class="gallery">
-              <div class="galleryGrid">
-                <div class="thumbs" id="thumbs" aria-label="Galleria miniature"></div>
-
-                <div class="mainImg">
-                  <div class="mainFrame">
-                    <img id="heroImg" alt="Immagine prodotto">
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- DETTAGLIO -->
-            <div class="detail">
-              <!-- QUI: badge = categoria completa -->
-              <div class="kicker" id="badge">PRODOTTO</div>
-
-              <h1 id="title">Titolo prodotto</h1>
-
-              <div class="price" id="price">—</div>
-
-              <div class="rope" aria-hidden="true"></div>
-
-              <div class="actions">
-                <div class="qtyBox" aria-label="Quantità">
-                  <button class="qtyBtn" id="qtyMinus" type="button" aria-label="Diminuisci">−</button>
-                  <input class="qtyInput" id="qty" type="number" min="1" value="1" aria-label="Quantità">
-                  <button class="qtyBtn" id="qtyPlus" type="button" aria-label="Aumenta">+</button>
-                </div>
-
-                <button class="btn btnPrimary" id="addCart" type="button">Aggiungi al carrello</button>
-
-                <!-- RIMOSSO: Compra su eBay -->
-                <a class="btn" id="wa" href="#" target="_blank" rel="noopener noreferrer">WhatsApp assistenza</a>
-              </div>
-
-              <div class="metaBox">
-                <div><b>Produttore:</b> <span id="brandLabel">—</span></div>
-
-                <!-- RIMOSSO: "Categoria: ABBIGLIAMENTO » CAPPELLINI" -->
-                <div class="metaLine" id="metaLine">—</div>
-
-                <div style="margin-top:10px; opacity:.85;">
-                  Per dubbi, scrivici su WhatsApp.
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <div class="empty" id="empty">
-          <h2>Prodotto non trovato</h2>
-          <p>Controlla il link oppure torna al catalogo.</p>
-          <a class="btn btnPrimary" href="index.html">Torna al catalogo</a>
-        </div>
-
-      </section>
-    </div>
-  </main>
-
-  <footer id="contatti">
-    <div class="wrap">
-      <div>Via Roma 306, Salerno • pesca.nautica@yahoo.it</div>
-      <div>© <span id="y"></span> Il Capitano – Pesca Nautica</div>
-    </div>
-  </footer>
-
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-  <!-- JS condiviso -->
-  <script src="assets/js/catalogo.js"></script>
-
-  <script>
-    const PLACEHOLDER = "assets/img/prodotti/placeholder.jpg";
-
-    const WHATSAPP_NUMBER = "390000000000"; // senza + e senza spazi
-    const WHATSAPP_TEXT = "Ciao! Mi dai info su questo prodotto?";
-
-    const $ = (id) => document.getElementById(id);
-
-    const yEl = $("y");
-    if (yEl) yEl.textContent = new Date().getFullYear();
-
-    function qs(name){
-      return new URLSearchParams(location.search).get(name);
-    }
-
-    function toast(msg){
-      const t = $("toast");
-      if(!t) return;
-      t.textContent = msg;
-      t.classList.add("show");
-      clearTimeout(toast._t);
-      toast._t = setTimeout(()=>t.classList.remove("show"), 1600);
-    }
-
-    function setActiveThumb(idx){
-      document.querySelectorAll(".thumb").forEach((t,i)=>{
-        t.classList.toggle("active", i === idx);
-      });
-    }
-
-    function setHero(src, alt){
-      const heroImg = $("heroImg");
-      if(!heroImg) return;
-      heroImg.src = src || PLACEHOLDER;
-      heroImg.alt = alt || "Immagine prodotto";
-      heroImg.onerror = ()=>{ heroImg.src = PLACEHOLDER; };
-    }
-
-    function makeImagesForProduct(p){
-      // Per ora immagini placeholder (evitiamo 404).
-      return [PLACEHOLDER, PLACEHOLDER, PLACEHOLDER];
-    }
-
-    function addToCart(p, qty){
-      const cart = JSON.parse(localStorage.getItem("cart_ic") || "[]");
-      const idx = cart.findIndex(x => String(x.sku) === String(p.sku));
-
-      if(idx >= 0){
-        cart[idx].qty = (Number(cart[idx].qty)||0) + qty;
-      }else{
-        cart.push({
-          sku: p.sku,
-          title: p.title,
-          price: Number.isFinite(p.price) ? p.price : null,
-          priceLabel: p.priceLabel || "—",
-          microBadge: p.microBadge || "PRODOTTO",
-          catLine: p.catLine || "",
-          brand: p.brand || "",
-          qty
-        });
-      }
-      localStorage.setItem("cart_ic", JSON.stringify(cart));
-    }
-
-    function renderProduct(p){
-      const fullCat = String(p.catLine || p.category || "").trim();
-
-// badge (card) = categoria completa
-$("badge").textContent = fullCat ? `Categoria: ${fullCat}` : "—";
-
-// pill sopra = categoria completa (se vuoi come nello screenshot)
-$("crumbPill").textContent = fullCat ? `Categoria: ${fullCat}` : "—";
-
-// rettangolo = categoria completa
-$("metaLine").textContent = fullCat ? `Categoria: ${fullCat}` : "—";
-
-
-      $("crumbPill").textContent = fullCat || "Prodotto";
-      $("badge").textContent = fullCat || "PRODOTTO";
-
-      document.title = `${p.title || "Prodotto"} • Il Capitano`;
-
-      $("title").textContent = p.title || "(Senza nome)";
-      $("price").textContent = p.priceLabel || "—";
-      $("skuLine").textContent = `SKU: ${p.sku || "—"}`;
-
-      // Box meta: solo info utili, niente riga "Categoria: ... "
-      $("brandLabel").textContent = (p.brand && String(p.brand).trim()) ? p.brand : "—";
-
-      const metaParts = [];
-      if((p.brand || "").trim()) metaParts.push(`Produttore: ${p.brand}`);
-      $("metaLine").textContent = metaParts.join(" • ") || "—";
-
-      // WhatsApp
-      const msg = encodeURIComponent(`${WHATSAPP_TEXT}\n\nProdotto: ${p.title}\nCodice: ${p.sku}`);
-      $("wa").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
-
-      // immagini
-      const imgs = makeImagesForProduct(p);
-      setHero(imgs[0], p.title);
-
-      const thumbs = $("thumbs");
-      thumbs.innerHTML = imgs.map((src,i)=>`
-        <div class="thumb ${i===0 ? "active":""}" role="button" tabindex="0" data-i="${i}" aria-label="Foto ${i+1}">
-          <div class="frame">
-            <img src="${src}" alt="${(p.title || "Prodotto")} foto ${i+1}" onerror="this.src='${PLACEHOLDER}'">
-          </div>
-        </div>
-      `).join("");
-
-      thumbs.querySelectorAll(".thumb").forEach(el=>{
-        const activate = ()=>{
-          const i = Number(el.getAttribute("data-i"));
-          setHero(imgs[i], p.title);
-          setActiveThumb(i);
-        };
-        el.addEventListener("click", activate);
-        el.addEventListener("keydown", (e)=>{
-          if(e.key === "Enter" || e.key === " "){
-            e.preventDefault();
-            activate();
-          }
-        });
-      });
-
-      // quantità
-      const qtyInput = $("qty");
-      const plus = $("qtyPlus");
-      const minus = $("qtyMinus");
-
-      const clampQty = ()=>{
-        let v = Number(qtyInput.value);
-        if(!Number.isFinite(v) || v < 1) v = 1;
-        qtyInput.value = String(v);
-        return v;
-      };
-
-      plus.onclick = ()=>{ qtyInput.value = String(clampQty()+1); };
-      minus.onclick = ()=>{ qtyInput.value = String(Math.max(1, clampQty()-1)); };
-      qtyInput.addEventListener("change", clampQty);
-
-      $("addCart").onclick = ()=>{
-        const qty = clampQty();
-        addToCart(p, qty);
-        toast(`Aggiunto al carrello: ${qty} × ${p.title}`);
-      };
-    }
-
-    async function boot(){
-      const skuParam = (window.Catalogo && Catalogo.norm) ? Catalogo.norm(qs("sku") || qs("id") || "") : (qs("sku") || qs("id") || "");
-
-      const { ALL } = await Catalogo.loadCatalog({
-        dataUrlCandidates: ["./data/products.json","data/products.json"],
-        placeholderCover: PLACEHOLDER
-      });
-
-      // Fallback: cerca per sku/id/codice
-      const p = (()=>{
-        if (typeof Catalogo.findBySku === "function") return Catalogo.findBySku(ALL, skuParam);
-        const norm = (v)=> (Catalogo.norm ? Catalogo.norm(String(v||"")) : String(v||"").trim().toLowerCase());
-        return (ALL || []).find(x=>{
-          const sku = norm(x.sku ?? x.SKU ?? x.id ?? x.ID ?? x.codice ?? x.cod);
-          return sku === skuParam;
-        }) || null;
-      })();
-
-      if(!p){
-        $("pLayout").style.display = "none";
-        $("empty").style.display = "block";
-        $("crumbPill").textContent = "Prodotto non trovato";
-        setHero(PLACEHOLDER, "Prodotto non trovato");
-        return;
-      }
-
-      renderProduct(p);
-    }
-
-    boot().catch(err=>{
-      console.error(err);
-      $("crumbPill").textContent = "Errore";
-      $("title").textContent = "Errore caricamento prodotto";
-      $("price").textContent = "—";
-      setHero(PLACEHOLDER, "Errore");
-    });
-  </script>
-</body>
-</html>
-
-
 
 
