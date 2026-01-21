@@ -599,6 +599,7 @@
       font-weight:950;
     }
 
+    /* ===== Pagination numerica stile shop ===== */
     .pager{
       margin-top:14px;
       display:flex;
@@ -611,7 +612,7 @@
       font-weight:900;
       flex-wrap:wrap;
     }
-    .pgBtns{display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+    .pgBtns{display:flex; gap:6px; align-items:center; flex-wrap:wrap;}
     .pgBtn{
       padding:8px 12px;
       border-radius:999px;
@@ -619,8 +620,25 @@
       background:#fff;
       cursor:pointer;
       font-weight:1000;
+      min-width:44px;
+      text-align:center;
     }
     .pgBtn:disabled{opacity:.45; cursor:not-allowed;}
+    .pgBtn.num{
+      min-width:40px;
+      padding:8px 10px;
+    }
+    .pgBtn.num.active{
+      border-color: rgba(14,126,160,.40);
+      box-shadow: 0 0 0 4px rgba(14,126,160,.10);
+      color: rgba(11,95,118,.95);
+      background: rgba(14,126,160,.06);
+    }
+    .dots{
+      padding:0 6px;
+      opacity:.55;
+      font-weight:1000;
+    }
 
     footer{
       border-top:1px solid rgba(0,0,0,.12);
@@ -648,6 +666,7 @@
       .grid{grid-template-columns: 1fr}
       .pageTitle{font-size:26px}
       .links{font-size:16px}
+      .pgBtn{min-width:auto}
     }
   </style>
 </head>
@@ -731,7 +750,6 @@
           <div class="mainInner">
             <h2 class="pageTitle" id="titleLabel">Home</h2>
 
-            <!-- BARRA stile screenshot -->
             <div class="barTop" aria-label="Barra catalogo (stile shop)">
               <div class="barLeft">
                 <button class="vmini active" id="btnGrid" type="button" title="Griglia" aria-label="Vista griglia">▦</button>
@@ -762,10 +780,8 @@
 
             <div class="pager" aria-label="Paginazione">
               <div id="metaBottom">—</div>
-              <div class="pgBtns">
-                <button class="pgBtn" id="prev" type="button">←</button>
-                <span id="pageInfo" style="padding:0 6px;">—</span>
-                <button class="pgBtn" id="next" type="button">→</button>
+              <div class="pgBtns" id="pgBtns">
+                <!-- riempito via JS -->
               </div>
             </div>
 
@@ -788,7 +804,7 @@
     const PLACEHOLDER = "assets/img/prodotti/placeholder.jpg";
 
     let ALL = [];
-    let model = []; // macro -> {macro, macroSlug, total, cats:[{full, short, slug, count}]}
+    let model = [];
 
     let state = {
       q: "",
@@ -823,10 +839,7 @@
     const btnGrid = $("btnGrid");
     const btnList = $("btnList");
 
-    const prevBtn = $("prev");
-    const nextBtn = $("next");
-    const pageInfo = $("pageInfo");
-
+    const pgBtns = $("pgBtns");
     const resetAll = $("resetAll");
 
     $("y").textContent = new Date().getFullYear();
@@ -932,6 +945,67 @@
       window.location.href = `prodotto.html?sku=${encodeURIComponent(sku)}`;
     }
 
+    function goPage(p){
+      state.page = p;
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function buildPager(pages){
+      // mostra max 7 numeri + puntini
+      const cur = state.page;
+      const btn = (label, page, opts={}) => {
+        const cls = ["pgBtn"];
+        if(opts.num) cls.push("num");
+        if(opts.active) cls.push("active");
+        const disabled = opts.disabled ? "disabled" : "";
+        const data = (page != null) ? `data-page="${page}"` : "";
+        return `<button class="${cls.join(" ")}" type="button" ${disabled} ${data}>${label}</button>`;
+      };
+
+      let html = "";
+      html += btn("←", cur-1, {disabled: cur<=1});
+      const windowSize = 3;
+
+      const addDots = ()=> html += `<span class="dots">…</span>`;
+
+      const pushNum = (p)=> html += btn(String(p), p, {num:true, active: p===cur});
+
+      if(pages <= 7){
+        for(let p=1;p<=pages;p++) pushNum(p);
+      } else {
+        // always show 1
+        pushNum(1);
+
+        let start = Math.max(2, cur - windowSize);
+        let end = Math.min(pages-1, cur + windowSize);
+
+        if(start > 2) addDots();
+
+        for(let p=start; p<=end; p++) pushNum(p);
+
+        if(end < pages-1) addDots();
+
+        // always show last
+        pushNum(pages);
+      }
+
+      html += btn("→", cur+1, {disabled: cur>=pages});
+      pgBtns.innerHTML = html;
+
+      // click handler
+      pgBtns.querySelectorAll("button[data-page]").forEach(b=>{
+        b.addEventListener("click", ()=>{
+          const p = Number(b.getAttribute("data-page"));
+          if(Number.isFinite(p)) goPage(Math.max(1, Math.min(p, pages)));
+        });
+      });
+
+      // arrows
+      const left = pgBtns.querySelector("button:not([data-page])");
+      // sopra non serve: frecce hanno data-page pure (cur-1/cur+1) quindi già gestite
+    }
+
     function render(){
       const label = currentLabel();
       crumbLabel.textContent = label;
@@ -959,10 +1033,6 @@
 
       countPill.textContent = `${total} prodotti`;
 
-      pageInfo.textContent = `Pagina ${state.page} / ${pages}`;
-      prevBtn.disabled = (state.page <= 1);
-      nextBtn.disabled = (state.page >= pages);
-
       grid.classList.toggle("list", state.view === "list");
 
       if(total === 0){
@@ -974,6 +1044,7 @@
             </div>
           </div>
         `;
+        pgBtns.innerHTML = "";
         return;
       }
 
@@ -989,10 +1060,12 @@
           }
         });
       });
+
+      buildPager(pages);
     }
 
     function buildModel(){
-      const macroMap = new Map(); // macro => Map(fullCat => count)
+      const macroMap = new Map();
 
       for(const p of ALL){
         const macro = p.macro || "Senza categoria";
@@ -1130,7 +1203,6 @@
       if(!res.ok) throw new Error("Impossibile caricare products.json");
       const data = await res.json();
 
-      // Parser export Easyfatt
       let currentCategory = "Senza categoria";
       const out = [];
 
@@ -1172,11 +1244,9 @@
       }
 
       ALL = out;
-
-      // build sidebar model
       model = buildModel();
 
-      // UI: apri le prime 2 macro
+      // apri le prime 2 macro
       state.openMacros = new Set(model.slice(0,2).map(x=>x.macroSlug));
 
       renderTree();
@@ -1248,18 +1318,6 @@
         render();
       });
 
-      // paging
-      prevBtn.addEventListener("click", ()=>{
-        state.page = Math.max(1, state.page - 1);
-        render();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-      nextBtn.addEventListener("click", ()=>{
-        state.page = state.page + 1;
-        render();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-
       // reset
       resetAll.addEventListener("click", setFilterAll);
     }
@@ -1279,6 +1337,7 @@
       `;
       metaTop.textContent = "Errore";
       metaBottom.textContent = "Errore";
+      pgBtns.innerHTML = "";
     });
   </script>
 </body>
