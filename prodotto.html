@@ -691,9 +691,6 @@ $("crumbPill").textContent = fullCat ? `Categoria: ${fullCat}` : "—";
 $("metaLine").textContent = fullCat ? `Categoria: ${fullCat}` : "—";
 
 
-      // categoria completa per badge + pill
-      const fullCat = (p.catLine || p.category || "Prodotto").trim();
-
       $("crumbPill").textContent = fullCat || "Prodotto";
       $("badge").textContent = fullCat || "PRODOTTO";
 
@@ -804,5 +801,6 @@ $("metaLine").textContent = fullCat ? `Categoria: ${fullCat}` : "—";
   </script>
 </body>
 </html>
+
 
 
