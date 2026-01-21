@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Prodotto • Il Capitano</title>
-  <meta name="description" content="Scheda prodotto • Il Capitano Pesca Nautica. Acquisto su eBay." />
+  <meta name="description" content="Scheda prodotto • Il Capitano Pesca Nautica." />
 
   <style>
     :root{
@@ -42,7 +42,7 @@
     .wrap{max-width:var(--max); margin:0 auto; padding:0 18px;}
     .sr{position:absolute; left:-9999px}
 
-    /* ================= HEADER (stesso stile index) ================= */
+    /* ================= HEADER ================= */
     .headerHero{
       position:relative;
       padding:20px 0 12px;
@@ -147,9 +147,7 @@
     }
 
     /* ================= MAIN ================= */
-    .main{
-      padding:18px 0 44px;
-    }
+    .main{ padding:18px 0 44px; }
 
     .panel{
       border:1px solid rgba(0,0,0,.14);
@@ -336,14 +334,6 @@
       letter-spacing:-.03em;
       line-height:1.10;
       font-weight:1000;
-    }
-
-    .desc{
-      margin:10px 0 0;
-      color:rgba(20,20,20,.75);
-      line-height:1.6;
-      font-weight:800;
-      font-size:14px;
     }
 
     .price{
@@ -565,9 +555,11 @@
 
             <!-- DETTAGLIO -->
             <div class="detail">
+              <!-- QUI: badge = categoria completa -->
               <div class="kicker" id="badge">PRODOTTO</div>
+
               <h1 id="title">Titolo prodotto</h1>
-              <p class="desc" id="desc">Descrizione prodotto…</p>
+
               <div class="price" id="price">—</div>
 
               <div class="rope" aria-hidden="true"></div>
@@ -580,17 +572,20 @@
                 </div>
 
                 <button class="btn btnPrimary" id="addCart" type="button">Aggiungi al carrello</button>
-                <a class="btn" id="buy" href="#" target="_blank" rel="noopener noreferrer">Compra su eBay →</a>
+
+                <!-- RIMOSSO: Compra su eBay -->
                 <a class="btn" id="wa" href="#" target="_blank" rel="noopener noreferrer">WhatsApp assistenza</a>
               </div>
 
               <div class="metaBox">
                 <div><b>Categoria:</b> <span id="catLabel">—</span></div>
                 <div><b>Produttore:</b> <span id="brandLabel">—</span></div>
+
+                <!-- RIMOSSO: "Categoria: ABBIGLIAMENTO » CAPPELLINI" -->
                 <div class="metaLine" id="metaLine">—</div>
 
                 <div style="margin-top:10px; opacity:.85;">
-                  Per acquistare, clicca <b>“Compra su eBay”</b>. Per dubbi, scrivici su WhatsApp.
+                  Per dubbi, scrivici su WhatsApp.
                 </div>
               </div>
             </div>
@@ -617,7 +612,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <!-- JS condiviso (GIÀ nel tuo progetto: assets/js/catalogo.js) -->
+  <!-- JS condiviso -->
   <script src="assets/js/catalogo.js"></script>
 
   <script>
@@ -659,8 +654,7 @@
     }
 
     function makeImagesForProduct(p){
-      // Per ora non hai immagini per SKU: evitiamo 404.
-      // Se un giorno le aggiungi, puoi costruirle qui.
+      // Per ora immagini placeholder (evitiamo 404).
       return [PLACEHOLDER, PLACEHOLDER, PLACEHOLDER];
     }
 
@@ -686,34 +680,32 @@
     }
 
     function renderProduct(p){
-      $("crumbPill").textContent = p.catLine || "Prodotto";
+      // categoria completa per badge + pill
+      const fullCat = (p.catLine || p.category || "Prodotto").trim();
+
+      $("crumbPill").textContent = fullCat || "Prodotto";
+      $("badge").textContent = fullCat || "PRODOTTO";
+
       document.title = `${p.title || "Prodotto"} • Il Capitano`;
 
-      $("badge").textContent = p.microBadge || "PRODOTTO";
       $("title").textContent = p.title || "(Senza nome)";
-
-      const fallbackDesc = `Prodotto selezionato dal catalogo Il Capitano. Codice: ${p.sku || "—"}.`;
-      $("desc").textContent = fallbackDesc;
-
       $("price").textContent = p.priceLabel || "—";
       $("skuLine").textContent = `SKU: ${p.sku || "—"}`;
 
+      // Box meta: solo info utili, niente riga "Categoria: ... "
+      $("catLabel").textContent = fullCat || "—";
+      $("brandLabel").textContent = (p.brand && String(p.brand).trim()) ? p.brand : "—";
+
       const metaParts = [];
-      if(p.catLine) metaParts.push(`Categoria: ${p.catLine}`);
-      if(p.brand && p.brand.trim()) metaParts.push(`Produttore: ${p.brand}`);
+      if((p.brand || "").trim()) metaParts.push(`Produttore: ${p.brand}`);
       $("metaLine").textContent = metaParts.join(" • ") || "—";
 
-      $("catLabel").textContent = p.catLine || p.category || "—";
-      $("brandLabel").textContent = (p.brand && p.brand.trim()) ? p.brand : "—";
-
-      const q = encodeURIComponent(`${p.title || ""} ${p.sku || ""}`.trim());
-      $("buy").href = `https://www.ebay.it/sch/i.html?_nkw=${q}`;
-
+      // WhatsApp
       const msg = encodeURIComponent(`${WHATSAPP_TEXT}\n\nProdotto: ${p.title}\nCodice: ${p.sku}`);
       $("wa").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
 
+      // immagini
       const imgs = makeImagesForProduct(p);
-
       setHero(imgs[0], p.title);
 
       const thumbs = $("thumbs");
@@ -740,6 +732,7 @@
         });
       });
 
+      // quantità
       const qtyInput = $("qty");
       const plus = $("qtyPlus");
       const minus = $("qtyMinus");
@@ -762,77 +755,39 @@
       };
     }
 
-    
-  async function boot(){
-    // 1) Se catalogo.js non è caricato, te lo dico chiaramente
-    if(!window.Catalogo){
-      throw new Error("Catalogo.js non caricato: controlla <script src='assets/js/catalogo.js'> (404 o path errato).");
-    }
+    async function boot(){
+      const skuParam = (window.Catalogo && Catalogo.norm) ? Catalogo.norm(qs("sku") || qs("id") || "") : (qs("sku") || qs("id") || "");
 
-    const skuParam = Catalogo.norm(qs("sku") || qs("id") || "");
-
-    // 2) Provo più URL, inclusi quelli “sicuri” rispetto alla pagina corrente
-    const candidates = [
-      new URL("./data/products.json", location.href).toString(),
-      new URL("data/products.json", location.href).toString(),
-      new URL("./products.json", location.href).toString()
-    ];
-
-    let ALL;
-    try{
-      const res = await Catalogo.loadCatalog({
-        dataUrlCandidates: candidates,
+      const { ALL } = await Catalogo.loadCatalog({
+        dataUrlCandidates: ["./data/products.json","data/products.json"],
         placeholderCover: PLACEHOLDER
       });
-      ALL = res.ALL;
-    }catch(e){
-      console.error("Tentativi URL JSON:", candidates);
-      throw e;
+
+      // Fallback: cerca per sku/id/codice
+      const p = (()=>{
+        if (typeof Catalogo.findBySku === "function") return Catalogo.findBySku(ALL, skuParam);
+        const norm = (v)=> (Catalogo.norm ? Catalogo.norm(String(v||"")) : String(v||"").trim().toLowerCase());
+        return (ALL || []).find(x=>{
+          const sku = norm(x.sku ?? x.SKU ?? x.id ?? x.ID ?? x.codice ?? x.cod);
+          return sku === skuParam;
+        }) || null;
+      })();
+
+      if(!p){
+        $("pLayout").style.display = "none";
+        $("empty").style.display = "block";
+        $("crumbPill").textContent = "Prodotto non trovato";
+        setHero(PLACEHOLDER, "Prodotto non trovato");
+        return;
+      }
+
+      renderProduct(p);
     }
-
-    const p = (()=>{
-  // 1) se nel tuo catalogo.js esiste un nome diverso, lo uso
-  if (typeof Catalogo.findBySku === "function") return Catalogo.findBySku(ALL, skuParam);
-  if (typeof Catalogo.findBySKU === "function") return Catalogo.findBySKU(ALL, skuParam);
-  if (typeof Catalogo.findById === "function")  return Catalogo.findById(ALL, skuParam);
-
-  // 2) altrimenti cerco a mano dentro ALL
-  const norm = (v)=> (Catalogo.norm ? Catalogo.norm(String(v||"")) : String(v||"").trim().toLowerCase());
-
-  return (ALL || []).find(x=>{
-    const sku = norm(x.sku ?? x.SKU ?? x.id ?? x.ID ?? x.codice ?? x.cod);
-    return sku === skuParam;
-  });
-})();
-
-
-    if(!p){
-      $("pLayout").style.display = "none";
-      $("empty").style.display = "block";
-      $("crumbPill").textContent = "Prodotto non trovato";
-      setHero(PLACEHOLDER, "Prodotto non trovato");
-      return;
-    }
-
-    renderProduct(p);
-  }
-
-  boot().catch(err=>{
-    console.error(err);
-    $("crumbPill").textContent = "Errore";
-    $("title").textContent = "Errore caricamento prodotto";
-    $("desc").textContent = String(err?.message || err);
-    $("price").textContent = "—";
-    setHero(PLACEHOLDER, "Errore");
-  });
-
-
 
     boot().catch(err=>{
       console.error(err);
       $("crumbPill").textContent = "Errore";
       $("title").textContent = "Errore caricamento prodotto";
-      $("desc").textContent = "Non riesco a caricare il catalogo. Apri la console (F12) per vedere il dettaglio.";
       $("price").textContent = "—";
       setHero(PLACEHOLDER, "Errore");
     });
