@@ -25,8 +25,6 @@
 
       --r:16px;
       --max:1200px;
-
-      --priceRed:#d21717;
     }
 
     *{box-sizing:border-box}
@@ -44,7 +42,7 @@
     .wrap{max-width:var(--max); margin:0 auto; padding:0 18px;}
     .sr{position:absolute; left:-9999px}
 
-    /* ================= HEADER (come il tuo) ================= */
+    /* ================= HEADER ================= */
     .headerHero{
       position:relative;
       padding:26px 0 16px;
@@ -71,7 +69,6 @@
       gap:22px;
       align-items:center;
     }
-
     .headerLogo{
       display:flex;
       align-items:center;
@@ -110,7 +107,6 @@
       height:auto;
       display:block;
     }
-
     .headerTitle{min-width:0; display:flex; flex-direction:column; gap:6px; padding:6px 0;}
     .brandName{margin:0; font-size:34px; font-weight:1000; letter-spacing:.02em;}
     .brandSub{margin:0; font-size:13px; font-weight:950; letter-spacing:.14em; text-transform:uppercase; color:rgba(11,95,118,.92);}
@@ -136,7 +132,6 @@
       border-radius: 0 999px 999px 0;
       opacity:.55;
     }
-
     .stamp{
       margin-top:8px;
       display:inline-flex;
@@ -159,7 +154,6 @@
       background: rgba(11,95,118,.85);
       box-shadow:0 0 0 3px rgba(11,95,118,.14);
     }
-
     .assist{
       justify-self:end;
       width:250px;
@@ -186,7 +180,7 @@
     .assist .phone{font-weight:1100; letter-spacing:.10em; font-size:18px; color:rgba(11,95,118,.98); white-space:nowrap;}
     .assist .mini{margin-top:8px; padding-top:10px; width:100%; border-top:1px solid rgba(11,95,118,.18); font-size:12px; font-weight:900; line-height:1.3; color:rgba(20,20,20,.72);}
 
-    /* ================= MINI NAV (come in foto) ================= */
+    /* ================= MINI NAV ================= */
     .mininav{
       border-top:1px solid var(--line);
       border-bottom:1px solid var(--line);
@@ -237,7 +231,7 @@
     }
     .searchTop input:focus{border-color: rgba(14,126,160,.45); box-shadow: 0 0 0 4px rgba(14,126,160,.12);}
 
-    /* ================= SHOP ================= */
+    /* ================= SHOP LAYOUT ================= */
     .shop{padding:18px 0 44px;}
     .layout{
       display:grid;
@@ -246,7 +240,7 @@
       align-items:start;
     }
 
-    /* Sidebar: stile foto */
+    /* Sidebar */
     .side{position:sticky; top:12px; align-self:start;}
     .sideCard{
       border:1px solid rgba(0,0,0,.14);
@@ -279,13 +273,11 @@
       background: rgba(242,231,201,.45);
       cursor:pointer;
     }
-
     .tree{
       padding:10px 10px 12px;
       max-height: calc(100vh - 160px);
       overflow:auto;
     }
-
     .treeItem{
       padding:6px 6px;
       border-radius:12px;
@@ -299,7 +291,6 @@
       background: rgba(14,126,160,.10);
       border-color: rgba(14,126,160,.22);
     }
-
     .treeRow{
       display:flex;
       align-items:center;
@@ -313,8 +304,6 @@
       min-width:0;
       flex:1;
     }
-
-    /* triangolino come foto */
     .tri{
       width:22px; height:22px;
       border:0;
@@ -327,7 +316,6 @@
       color:rgba(20,20,20,.70);
       font-weight:1000;
     }
-    .tri:focus{outline: none}
     .triBox{
       width:18px; height:18px;
       border-radius:6px;
@@ -339,7 +327,6 @@
       font-size:12px;
       line-height:1;
     }
-
     .macroBtn{
       border:0;
       background: transparent;
@@ -353,14 +340,12 @@
       white-space:nowrap;
       flex:1;
     }
-
     .cnt{
       font-size:12px;
       font-weight:900;
       color:rgba(20,20,20,.55);
       flex:0 0 auto;
     }
-
     .children{
       display:none;
       margin:6px 0 0 28px;
@@ -369,7 +354,6 @@
       gap:6px;
     }
     .treeItem.open .children{display:grid}
-
     .subBtn{
       display:flex;
       align-items:center;
@@ -439,7 +423,8 @@
       letter-spacing:-.02em;
     }
 
-    .toolbar{
+    /* ===== Top bar stile shop ===== */
+    .barTop{
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -450,10 +435,10 @@
       margin-bottom:14px;
       flex-wrap:wrap;
     }
-    .viewBtns{display:flex; align-items:center; gap:8px;}
-    .vbtn{
-      width:36px; height:30px;
-      border-radius:10px;
+    .barLeft{display:flex; gap:6px; align-items:center;}
+    .vmini{
+      width:34px; height:28px;
+      border-radius:6px;
       border:1px solid rgba(0,0,0,.14);
       background:#fff;
       cursor:pointer;
@@ -461,23 +446,28 @@
       align-items:center;
       justify-content:center;
       font-weight:1000;
-      color:rgba(20,20,20,.65);
+      color:rgba(20,20,20,.70);
     }
-    .vbtn.active{
+    .vmini.active{
       border-color: rgba(14,126,160,.40);
       box-shadow: 0 0 0 4px rgba(14,126,160,.10);
       color: rgba(11,95,118,.95);
     }
-    .tools{
+
+    .barRight{
       display:flex;
       align-items:center;
-      gap:10px;
+      gap:12px;
       flex-wrap:wrap;
       justify-content:flex-end;
-      color:rgba(20,20,20,.72);
-      font-weight:900;
-      font-size:13px;
     }
+    .barText{
+      font-weight:900;
+      color:rgba(20,20,20,.72);
+      white-space:nowrap;
+    }
+    .barSelects{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+
     select{
       padding:8px 10px;
       border-radius:12px;
@@ -489,16 +479,19 @@
     }
     select:focus{border-color: rgba(14,126,160,.45); box-shadow: 0 0 0 4px rgba(14,126,160,.12);}
 
+    /* ===== GRID ===== */
     .grid{
       display:grid;
-      grid-template-columns: repeat(4, minmax(0,1fr));
+      grid-template-columns: repeat(3, minmax(0,1fr));
       gap:16px;
     }
 
+    /* ===== CARD (uguale foto 2) ===== */
     .card{
       border:1px solid rgba(0,0,0,.14);
-      border-radius: 12px;
+      border-radius: 14px;
       background:#fff;
+      box-shadow: 0 12px 26px rgba(0,0,0,.08);
       overflow:hidden;
       cursor:pointer;
       transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
@@ -508,42 +501,44 @@
       border-color: rgba(11,95,118,.22);
       box-shadow: 0 18px 40px rgba(0,0,0,.10);
     }
+
     .thumb{
-      height:190px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      height:170px;
+      position:relative;
+      padding:14px;
       background:
         radial-gradient(520px 240px at 15% 15%, rgba(14,126,160,.14), transparent 62%),
         radial-gradient(520px 240px at 80% 50%, rgba(242,231,201,.22), transparent 60%),
-        linear-gradient(180deg, rgba(238,246,247,.60), rgba(255,255,255,.98));
-      position:relative;
-      padding:12px;
+        linear-gradient(180deg, rgba(238,246,247,.55), rgba(255,255,255,.98));
     }
+
     .badge{
       position:absolute;
-      left:10px;
-      top:10px;
-      padding:6px 9px;
-      border-radius:6px;
-      background: rgba(120,120,120,.92);
+      left:14px;
+      top:12px;
+      padding:7px 10px;
+      border-radius:999px;
+      background: rgba(11,95,118,.92);
       color:#fff;
       font-weight:1000;
       font-size:11px;
-      letter-spacing:.06em;
+      letter-spacing:.10em;
       text-transform:uppercase;
+      border:1px solid rgba(255,255,255,.18);
+      z-index:2;
     }
+
     .photoFrame{
       width:100%;
       height:100%;
-      border-radius:10px;
-      background:#fff;
+      border-radius:12px;
+      background: linear-gradient(180deg, #fbfaf6, #f2e7c9);
       border:1px solid rgba(0,0,0,.10);
-      box-shadow: 0 10px 18px rgba(0,0,0,.08);
+      box-shadow: 0 10px 18px rgba(0,0,0,.10);
       display:flex;
       align-items:center;
       justify-content:center;
-      padding:10px;
+      padding:12px;
     }
     .photoFrame img{
       max-width:100%;
@@ -553,35 +548,63 @@
       mix-blend-mode:multiply;
       filter: contrast(1.06) saturate(1.02);
     }
-    .content{padding:10px 10px 12px;}
+
+    .content{padding:12px 12px 14px;}
     .title{
       margin:0;
-      font-size:13px;
+      font-size:14px;
       font-weight:1000;
       line-height:1.25;
-      min-height:34px;
+      min-height:36px;
       text-transform:uppercase;
       letter-spacing:.02em;
     }
-    .sub{
+
+    .metaLine{
       margin:8px 0 0;
-      font-size:11px;
+      font-size:12px;
       font-weight:950;
       color:rgba(20,20,20,.55);
       text-transform:uppercase;
       letter-spacing:.10em;
-      min-height:14px;
+      min-height:16px;
+    }
+
+    .bottomRow{
+      margin-top:10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
     }
     .price{
-      margin:8px 0 0;
       font-size:15px;
       font-weight:1100;
-      color: var(--priceRed);
+      color: rgba(11,95,118,.92); /* NON rosso */
+      white-space:nowrap;
+    }
+    .openBtn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.14);
+      background: rgba(242,231,201,.40);
+      font-weight:1000;
+      white-space:nowrap;
+      user-select:none;
+      transition: transform .14s ease, box-shadow .14s ease, background .14s ease;
+    }
+    .card:hover .openBtn{
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.10);
+      background: rgba(242,231,201,.55);
     }
 
     .grid.list{grid-template-columns:1fr;}
     .grid.list .card{display:grid; grid-template-columns: 240px 1fr;}
-    .grid.list .thumb{height:auto; min-height:190px;}
+    .grid.list .thumb{height:auto; min-height:170px;}
     .grid.list .content{padding:14px;}
 
     .emptyState{
@@ -595,6 +618,7 @@
       font-weight:950;
     }
 
+    /* ===== Pagination numerica ===== */
     .pager{
       margin-top:14px;
       display:flex;
@@ -607,7 +631,7 @@
       font-weight:900;
       flex-wrap:wrap;
     }
-    .pgBtns{display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+    .pgBtns{display:flex; gap:6px; align-items:center; flex-wrap:wrap;}
     .pgBtn{
       padding:8px 12px;
       border-radius:999px;
@@ -615,8 +639,25 @@
       background:#fff;
       cursor:pointer;
       font-weight:1000;
+      min-width:44px;
+      text-align:center;
     }
     .pgBtn:disabled{opacity:.45; cursor:not-allowed;}
+    .pgBtn.num{
+      min-width:40px;
+      padding:8px 10px;
+    }
+    .pgBtn.num.active{
+      border-color: rgba(14,126,160,.40);
+      box-shadow: 0 0 0 4px rgba(14,126,160,.10);
+      color: rgba(11,95,118,.95);
+      background: rgba(14,126,160,.06);
+    }
+    .dots{
+      padding:0 6px;
+      opacity:.55;
+      font-weight:1000;
+    }
 
     footer{
       border-top:1px solid rgba(0,0,0,.12);
@@ -627,7 +668,7 @@
     footer .wrap{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;}
 
     @media (max-width: 1100px){
-      .grid{grid-template-columns: repeat(3, minmax(0,1fr))}
+      .grid{grid-template-columns: repeat(2, minmax(0,1fr))}
       .searchTop input{width:min(460px, 46vw)}
     }
     @media (max-width: 980px){
@@ -638,7 +679,6 @@
       .layout{grid-template-columns: 1fr}
       .side{position:relative; top:0}
       .tree{max-height:none}
-      .grid{grid-template-columns: repeat(2, minmax(0,1fr))}
     }
     @media (max-width: 560px){
       .grid{grid-template-columns: 1fr}
@@ -649,7 +689,6 @@
 </head>
 
 <body>
-  <!-- HEADER (sempre uguale come vuoi tu) -->
   <header class="headerHero" id="home">
     <div class="wrap">
       <div class="headerRow">
@@ -680,7 +719,6 @@
     </div>
   </header>
 
-  <!-- MINI NAV -->
   <div class="mininav">
     <div class="wrap">
       <nav class="links" aria-label="Navigazione">
@@ -697,12 +735,10 @@
     </div>
   </div>
 
-  <!-- SHOP -->
   <main class="shop" id="catalogo">
     <div class="wrap">
       <div class="layout">
 
-        <!-- SIDEBAR -->
         <aside class="side" aria-label="Categorie">
           <div class="sideCard">
             <div class="sideHead">
@@ -713,7 +749,6 @@
           </div>
         </aside>
 
-        <!-- MAIN -->
         <section class="mainCard" aria-label="Catalogo prodotti">
           <div class="mainHead">
             <div class="crumb">
@@ -721,33 +756,35 @@
               <span style="opacity:.45">/</span>
               <b id="crumbLabel">Home</b>
             </div>
-            <div id="metaTop" style="color:rgba(20,20,20,.70); font-weight:900;">Caricamento…</div>
+            <div id="metaHead" style="color:rgba(20,20,20,.70); font-weight:900;">Caricamento…</div>
           </div>
 
           <div class="mainInner">
             <h2 class="pageTitle" id="titleLabel">Home</h2>
 
-            <div class="toolbar" aria-label="Strumenti catalogo">
-              <div class="viewBtns" aria-label="Vista">
-                <button class="vbtn active" id="btnGrid" type="button" title="Griglia">▦</button>
-                <button class="vbtn" id="btnList" type="button" title="Lista">≡</button>
+            <div class="barTop" aria-label="Barra catalogo">
+              <div class="barLeft">
+                <button class="vmini active" id="btnGrid" type="button" aria-label="Vista griglia">▦</button>
+                <button class="vmini" id="btnList" type="button" aria-label="Vista lista">≡</button>
               </div>
 
-              <div class="tools">
-                <span>Ordina per</span>
-                <select id="sort">
-                  <option value="rel">Rilevanza</option>
-                  <option value="az">Nome (A-Z)</option>
-                  <option value="priceUp">Prezzo (crescente)</option>
-                  <option value="priceDown">Prezzo (decrescente)</option>
-                </select>
+              <div class="barRight">
+                <div class="barText" id="metaTop">Mostro 0-0 di 0 prodotto(i)</div>
 
-                <span>Per pagina</span>
-                <select id="perPage">
-                  <option value="12">12</option>
-                  <option value="24">24</option>
-                  <option value="48">48</option>
-                </select>
+                <div class="barSelects">
+                  <select id="sort" aria-label="Seleziona ordinamento">
+                    <option value="rel">Seleziona</option>
+                    <option value="az">Nome (A-Z)</option>
+                    <option value="priceUp">Prezzo (crescente)</option>
+                    <option value="priceDown">Prezzo (decrescente)</option>
+                  </select>
+
+                  <select id="perPage" aria-label="Prodotti per pagina">
+                    <option value="12">12</option>
+                    <option value="24">24</option>
+                    <option value="48">48</option>
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -755,11 +792,7 @@
 
             <div class="pager" aria-label="Paginazione">
               <div id="metaBottom">—</div>
-              <div class="pgBtns">
-                <button class="pgBtn" id="prev" type="button">←</button>
-                <span id="pageInfo" style="padding:0 6px;">—</span>
-                <button class="pgBtn" id="next" type="button">→</button>
-              </div>
+              <div class="pgBtns" id="pgBtns"></div>
             </div>
 
           </div>
@@ -777,11 +810,19 @@
   </footer>
 
   <script>
-    const DATA_URL = "./data/products.json";
     const PLACEHOLDER = "assets/img/prodotti/placeholder.jpg";
 
+    // percorsi possibili per evitare errori su GitHub Pages / cartelle diverse
+    const DATA_URL_CANDIDATES = [
+      "./data/products.json",
+      "data/products.json",
+      "/data/products.json",
+      "./assets/data/products.json",
+      "/assets/data/products.json"
+    ];
+
     let ALL = [];
-    let model = []; // macro -> {macro, macroSlug, total, cats:[{full, short, slug, count}]}
+    let model = [];
 
     let state = {
       q: "",
@@ -793,7 +834,7 @@
       sort: "rel",
       perPage: 12,
       page: 1,
-      openMacros: new Set() // solo UI (aperti/chiusi)
+      openMacros: new Set()
     };
 
     const $ = (id) => document.getElementById(id);
@@ -802,17 +843,21 @@
     const grid = $("grid");
     const search = $("search");
     const countPill = $("countPill");
+
+    const metaHead = $("metaHead");
     const metaTop = $("metaTop");
     const metaBottom = $("metaBottom");
+
     const crumbLabel = $("crumbLabel");
     const titleLabel = $("titleLabel");
+
     const sort = $("sort");
     const perPage = $("perPage");
+
     const btnGrid = $("btnGrid");
     const btnList = $("btnList");
-    const prevBtn = $("prev");
-    const nextBtn = $("next");
-    const pageInfo = $("pageInfo");
+
+    const pgBtns = $("pgBtns");
     const resetAll = $("resetAll");
 
     $("y").textContent = new Date().getFullYear();
@@ -863,6 +908,25 @@
       return Number.isFinite(num) ? num : NaN;
     }
 
+    async function fetchCatalogJson(){
+      const tries = DATA_URL_CANDIDATES.map(u => new URL(u, location.href).toString());
+      let lastErr = null;
+
+      for(const url of tries){
+        try{
+          const res = await fetch(url, { cache:"no-store" });
+          if(!res.ok) throw new Error(`HTTP ${res.status} su ${url}`);
+          const data = await res.json();
+          console.log("✅ Catalogo caricato da:", url);
+          return data;
+        }catch(e){
+          lastErr = e;
+          console.warn("Tentativo fallito:", e.message);
+        }
+      }
+      throw lastErr || new Error("Impossibile caricare products.json");
+    }
+
     function currentLabel(){
       if (state.macro === "tutti") return "Home";
       if (state.sub === "tutti") return state.macroLabel || "Categoria";
@@ -871,6 +935,7 @@
 
     function matches(p){
       const q = state.q.trim().toLowerCase();
+
       const macroOk = (state.macro === "tutti") || (p.macroSlug === state.macro);
       if(!macroOk) return false;
 
@@ -878,7 +943,7 @@
       if(!subOk) return false;
 
       if(!q) return true;
-      const hay = (p.title + " " + p.brand + " " + p.sku + " " + p.category).toLowerCase();
+      const hay = (p.title + " " + (p.brand||"") + " " + p.sku + " " + p.category).toLowerCase();
       return hay.includes(q);
     }
 
@@ -896,18 +961,29 @@
     }
 
     function card(p){
+      const badge = p.microBadge ? String(p.microBadge).toUpperCase().slice(0,18) : "PRODOTTO";
+      const brandLine = (p.brand && p.brand.trim()) ? esc(p.brand) : "";
+      const meta = esc(p.catLine || p.category || "");
+
       return `
         <article class="card" role="link" tabindex="0" data-sku="${esc(p.sku)}" aria-label="Apri ${esc(p.title)}">
           <div class="thumb">
-            <span class="badge">Nuovo</span>
+            <span class="badge">${esc(badge)}</span>
             <div class="photoFrame">
               <img src="${esc(p.cover)}" alt="${esc(p.title)}" onerror="this.src='${esc(PLACEHOLDER)}'">
             </div>
           </div>
+
           <div class="content">
             <h3 class="title">${esc(p.title)}</h3>
-            <div class="sub">${esc(p.brand || p.macro || "")}</div>
-            <div class="price">${esc(p.priceLabel)}</div>
+
+            <div class="metaLine">${meta}</div>
+            ${brandLine ? `<div class="metaLine" style="min-height:0; margin-top:6px; letter-spacing:.12em;">${brandLine}</div>` : ``}
+
+            <div class="bottomRow">
+              <div class="price">${esc(p.priceLabel)}</div>
+              <span class="openBtn">Apri →</span>
+            </div>
           </div>
         </article>
       `;
@@ -915,6 +991,58 @@
 
     function openProduct(sku){
       window.location.href = `prodotto.html?sku=${encodeURIComponent(sku)}`;
+    }
+
+    function goPage(p){
+      state.page = p;
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function buildPager(pages){
+      const cur = state.page;
+
+      const btn = (label, page, opts={}) => {
+        const cls = ["pgBtn"];
+        if(opts.num) cls.push("num");
+        if(opts.active) cls.push("active");
+        const disabled = opts.disabled ? "disabled" : "";
+        const data = (page != null) ? `data-page="${page}"` : "";
+        return `<button class="${cls.join(" ")}" type="button" ${disabled} ${data}>${label}</button>`;
+      };
+
+      let html = "";
+      html += btn("←", cur-1, {disabled: cur<=1});
+
+      const addDots = ()=> html += `<span class="dots">…</span>`;
+      const pushNum = (p)=> html += btn(String(p), p, {num:true, active: p===cur});
+
+      if(pages <= 7){
+        for(let p=1;p<=pages;p++) pushNum(p);
+      } else {
+        pushNum(1);
+
+        const w = 2;
+        let start = Math.max(2, cur - w);
+        let end = Math.min(pages-1, cur + w);
+
+        if(start > 2) addDots();
+        for(let p=start; p<=end; p++) pushNum(p);
+        if(end < pages-1) addDots();
+
+        pushNum(pages);
+      }
+
+      html += btn("→", cur+1, {disabled: cur>=pages});
+
+      pgBtns.innerHTML = html;
+
+      pgBtns.querySelectorAll("button[data-page]").forEach(b=>{
+        b.addEventListener("click", ()=>{
+          const p = Number(b.getAttribute("data-page"));
+          if(Number.isFinite(p)) goPage(Math.max(1, Math.min(p, pages)));
+        });
+      });
     }
 
     function render(){
@@ -936,15 +1064,12 @@
 
       const metaText = total
         ? `Mostro ${startIdx + 1}-${endIdx} di ${total} prodotto(i)`
-        : `Mostro 0 di 0 prodotto(i)`;
+        : `Mostro 0-0 di 0 prodotto(i)`;
 
+      metaHead.textContent = metaText;
       metaTop.textContent = metaText;
       metaBottom.textContent = metaText;
       countPill.textContent = `${total} prodotti`;
-
-      pageInfo.textContent = `Pagina ${state.page} / ${pages}`;
-      prevBtn.disabled = (state.page <= 1);
-      nextBtn.disabled = (state.page >= pages);
 
       grid.classList.toggle("list", state.view === "list");
 
@@ -957,6 +1082,7 @@
             </div>
           </div>
         `;
+        pgBtns.innerHTML = "";
         return;
       }
 
@@ -972,10 +1098,12 @@
           }
         });
       });
+
+      buildPager(pages);
     }
 
     function buildModel(){
-      const macroMap = new Map(); // macro => Map(fullCat => count)
+      const macroMap = new Map();
 
       for(const p of ALL){
         const macro = p.macro || "Senza categoria";
@@ -1008,7 +1136,6 @@
     function renderTree(){
       let html = "";
 
-      // “Tutti”
       html += `
         <div class="treeItem ${state.macro === "tutti" ? "active" : ""}">
           <div class="treeRow">
@@ -1083,7 +1210,6 @@
       state.macroLabel = label || "";
       state.subLabel = "";
       state.page = 1;
-      // UI: apri
       state.openMacros.add(macroSlug);
       renderTree();
       render();
@@ -1095,7 +1221,6 @@
       state.macroLabel = macroLabel || "";
       state.subLabel = subLabel || "";
       state.page = 1;
-      // UI: apri
       state.openMacros.add(macroSlug);
       renderTree();
       render();
@@ -1109,13 +1234,11 @@
 
     async function boot(){
       countPill.textContent = "Carico...";
-      metaTop.textContent = "Caricamento catalogo…";
+      metaHead.textContent = "Caricamento catalogo…";
+      metaTop.textContent = "Caricamento…";
 
-      const res = await fetch(DATA_URL + "?t=" + Date.now(), { cache:"no-store" });
-      if(!res.ok) throw new Error("Impossibile caricare products.json");
-      const data = await res.json();
+      const data = await fetchCatalogJson();
 
-      // Parser export Easyfatt
       let currentCategory = "Senza categoria";
       const out = [];
 
@@ -1140,6 +1263,9 @@
         const parts = splitParts(category);
         const macro = parts[0] || "Senza categoria";
 
+        const micro = (parts.length ? parts[parts.length - 1] : macro) || "PRODOTTO";
+        const catLine = parts.join(" » ");
+
         const priceNum = parsePrice(row["Listino 1 (ivato)"]);
 
         out.push({
@@ -1147,6 +1273,8 @@
           title,
           brand,
           category,
+          catLine,
+          microBadge: micro,
           catSlug: slugify(category),
           macro,
           macroSlug: slugify(macro),
@@ -1157,22 +1285,16 @@
       }
 
       ALL = out;
-
-      // build sidebar model
       model = buildModel();
 
-      // UI: apri le prime 2 macro per comodità
       state.openMacros = new Set(model.slice(0,2).map(x=>x.macroSlug));
 
-      // render sidebar + main
       renderTree();
       render();
 
-      // sidebar events (delegation)
       tree.addEventListener("click", (e)=>{
         const el = e.target.closest("[data-action]");
         if(!el) return;
-
         const action = el.getAttribute("data-action");
 
         if(action === "toggle"){
@@ -1198,7 +1320,6 @@
         }
       });
 
-      // search
       let t;
       search.addEventListener("input", ()=>{
         clearTimeout(t);
@@ -1209,25 +1330,25 @@
         }, 130);
       });
 
-      // sort + per page
       sort.addEventListener("change", ()=>{
         state.sort = sort.value;
         state.page = 1;
         render();
       });
+
       perPage.addEventListener("change", ()=>{
         state.perPage = Number(perPage.value) || 12;
         state.page = 1;
         render();
       });
 
-      // view
       btnGrid.addEventListener("click", ()=>{
         state.view = "grid";
         btnGrid.classList.add("active");
         btnList.classList.remove("active");
         render();
       });
+
       btnList.addEventListener("click", ()=>{
         state.view = "list";
         btnList.classList.add("active");
@@ -1235,27 +1356,13 @@
         render();
       });
 
-      // paging
-      prevBtn.addEventListener("click", ()=>{
-        state.page = Math.max(1, state.page - 1);
-        render();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-      nextBtn.addEventListener("click", ()=>{
-        state.page = state.page + 1;
-        render();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-
-      // reset
       resetAll.addEventListener("click", setFilterAll);
-
     }
 
     boot().catch(err=>{
       console.error(err);
       countPill.textContent = "Errore";
-      metaTop.textContent = "Errore: non riesco a caricare il catalogo.";
+      metaHead.textContent = "Errore: non riesco a caricare il catalogo.";
       tree.innerHTML = `<div style="padding:12px; font-weight:950;">Errore caricamento categorie.</div>`;
       grid.innerHTML = `
         <div class="emptyState">
@@ -1265,6 +1372,9 @@
           </div>
         </div>
       `;
+      metaTop.textContent = "Errore";
+      metaBottom.textContent = "Errore";
+      pgBtns.innerHTML = "";
     });
   </script>
 </body>
