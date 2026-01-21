@@ -980,805 +980,714 @@
  
   <script>
 
+<script>
 /* =========================================================
-   IL CAPITANO — SCRIPT COMPLETO
-   - Carica products.json (Danea)
-   - Sidebar categorie + ricerca + sorting + paginazione
-   - Mega-menu overlay stile FOTO 2 (3 colonne, grigio, link con ›)
+   IL CAPITANO — INDEX SCRIPT (USA catalogo.js condiviso)
+   ---------------------------------------------------------
+   Requisito: catalogo.js deve esporre window.Catalogo con:
+     - loadCatalog({ dataUrlCandidates, placeholderCover }) -> { ALL }
+     - buildModel(ALL) -> MODEL (macro + sottocategorie + count)
+     - norm(string)
+     - slugify(string)
+
+   Questo script (index.html) si limita a:
+   - gestire lo stato UI (filtri, ricerca, sort, paginazione, vista)
+   - renderizzare sidebar categorie
+   - renderizzare griglia prodotti
+   - gestire mega-menu overlay (catalogo)
+
+   NOTE IMPORTANTI:
+   - La costruzione dei prodotti (parsing Danea, categorie, microBadge,
+     price parsing, cover placeholder) è responsabilità di catalogo.js.
+   - In index.html NON rifacciamo il parsing JSON: prendiamo ALL e MODEL
+     direttamente da Catalogo.loadCatalog() e Catalogo.buildModel().
+   - Se "Produttore" è vuoto, non mostriamo nulla (come richiesto).
+   - Il prezzo NON è rosso (già in CSS).
 ========================================================= */
 
-const PLACEHOLDER = "assets/img/prodotti/placeholder.jpg";
+(() => {
+  // ===== Config (solo index) =====
+  const PLACEHOLDER = "assets/img/prodotti/placeholder.jpg";
 
-const DATA_URL_CANDIDATES = [
-  "./data/products.json",
-  "data/products.json",
-  "/data/products.json",
-  "./assets/data/products.json",
-  "/assets/data/products.json"
-];
+  const DATA_URL_CANDIDATES = [
+    "./data/products.json",
+    "data/products.json",
+    "/data/products.json",
+    "./assets/data/products.json",
+    "/assets/data/products.json"
+  ];
 
-let ALL = [];
-let model = [];
-
-let state = {
-  q: "",
-  macro: "tutti",
-  sub: "tutti",
-  macroLabel: "Tutti",
-  subLabel: "",
-  view: "grid",
-  sort: "rel",
-  perPage: 12,
-  page: 1,
-  openMacros: new Set()
-};
-
-const $ = (id) => document.getElementById(id);
-
-// ===== refs pagina
-const tree = $("tree");
-const grid = $("grid");
-const search = $("search");
-const countPill = $("countPill");
-
-const metaHead = $("metaHead");
-const metaTop = $("metaTop");
-const metaBottom = $("metaBottom");
-
-const crumbLabel = $("crumbLabel");
-const titleLabel = $("titleLabel");
-
-const sort = $("sort");
-const perPage = $("perPage");
-
-const btnGrid = $("btnGrid");
-const btnList = $("btnList");
-
-const pgBtns = $("pgBtns");
-const resetAll = $("resetAll");
-
-// ===== overlay catalogo (ids nel tuo HTML)
-const megaBtn = $("megaBtn");
-const megaClose = $("megaClose");
-const megaAll = $("megaAll");
-
-const catOverlay = $("catOverlay");
-const catCount = $("catCount");
-const megaGrid = $("megaGrid");
-const catTree = $("catTree"); // c'è ma in stile foto 2 lo nascondiamo via CSS iniettato
-
-$("y").textContent = new Date().getFullYear();
-
-/* ---------------- helpers ---------------- */
-function esc(s){
-  return String(s ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-function norm(s){ return String(s ?? "").replace(/\s+/g," ").trim(); }
-function euro(n){
-  const num = Number(n);
-  if(!Number.isFinite(num)) return "—";
-  return num.toLocaleString("it-IT", { style:"currency", currency:"EUR" });
-}
-function slugify(s){
-  return String(s ?? "")
-    .toLowerCase()
-    .trim()
-    .replaceAll("»", ">")
-    .replaceAll("&", "e")
-    .replace(/[^a-z0-9\s>-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
-}
-function splitParts(full){
-  return String(full ?? "")
-    .split("»")
-    .map(x=>norm(x))
-    .filter(Boolean);
-}
-function parsePrice(v){
-  if (v === null || v === undefined) return NaN;
-  if (typeof v === "number") return v;
-  let s = String(v).trim();
-  if(!s) return NaN;
-  s = s.replace(/\s/g,"").replace("€","");
-  if (s.includes(",")){
-    s = s.replace(/\./g,"");
-    s = s.replace(",",".");
-  } else {
-    s = s.replace(/,/g,"");
-  }
-  const num = Number(s);
-  return Number.isFinite(num) ? num : NaN;
-}
-
-async function fetchCatalogJson(){
-  const tries = DATA_URL_CANDIDATES.map(u => new URL(u, location.href).toString());
-  let lastErr = null;
-
-  for(const url of tries){
-    try{
-      const res = await fetch(url, { cache:"no-store" });
-      if(!res.ok) throw new Error(`HTTP ${res.status} su ${url}`);
-      const data = await res.json();
-      console.log("✅ Catalogo caricato da:", url);
-      return data;
-    }catch(e){
-      lastErr = e;
-      console.warn("Tentativo fallito:", e.message);
-    }
-  }
-  throw lastErr || new Error("Impossibile caricare products.json");
-}
-
-/* ---------------- filtro prodotti ---------------- */
-function currentLabel(){
-  if (state.macro === "tutti") return "Home";
-  if (state.sub === "tutti") return state.macroLabel || "Categoria";
-  return state.subLabel || state.macroLabel || "Categoria";
-}
-
-function matches(p){
-  const q = state.q.trim().toLowerCase();
-
-  const macroOk = (state.macro === "tutti") || (p.macroSlug === state.macro);
-  if(!macroOk) return false;
-
-  const subOk = (state.sub === "tutti") || (p.catSlug === state.sub);
-  if(!subOk) return false;
-
-  if(!q) return true;
-  const hay = (p.title + " " + (p.brand||"") + " " + p.sku + " " + p.category).toLowerCase();
-  return hay.includes(q);
-}
-
-function sortList(list){
-  if(state.sort === "az"){
-    return list.slice().sort((a,b)=>a.title.localeCompare(b.title, "it"));
-  }
-  if(state.sort === "priceUp"){
-    return list.slice().sort((a,b)=>(a.price||Infinity) - (b.price||Infinity));
-  }
-  if(state.sort === "priceDown"){
-    return list.slice().sort((a,b)=>(b.price||-Infinity) - (a.price||-Infinity));
-  }
-  return list;
-}
-
-/* ---------------- card prodotto ---------------- */
-function card(p){
-  const badge = p.microBadge ? String(p.microBadge).toUpperCase().slice(0,22) : "SENZA CATEGORIA";
-  const brandLine = (p.brand && p.brand.trim()) ? esc(p.brand) : "";
-  const meta = esc(p.catLine || p.category || "");
-
-  return `
-    <article class="card" role="link" tabindex="0" data-sku="${esc(p.sku)}" aria-label="Apri ${esc(p.title)}">
-      <div class="thumb">
-        <span class="badge">${esc(badge)}</span>
-        <div class="photoFrame">
-          <img src="${esc(p.cover)}" alt="${esc(p.title)}" onerror="this.src='${esc(PLACEHOLDER)}'">
-        </div>
-      </div>
-
-      <div class="content">
-        <h3 class="title">${esc(p.title)}</h3>
-
-        <div class="metaLine">${meta}</div>
-        ${brandLine ? `<div class="metaLine" style="min-height:0; margin-top:6px; letter-spacing:.12em;">${brandLine}</div>` : ``}
-
-        <div class="bottomRow">
-          <div class="price">${esc(p.priceLabel)}</div>
-          <span class="openBtn">Apri →</span>
-        </div>
-      </div>
-    </article>
-  `;
-}
-
-function openProduct(sku){
-  window.location.href = `prodotto.html?sku=${encodeURIComponent(sku)}`;
-}
-
-/* ---------------- render griglia + paginazione ---------------- */
-function goPage(p){
-  state.page = p;
-  render();
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-function buildPager(pages){
-  const cur = state.page;
-
-  const btn = (label, page, opts={}) => {
-    const cls = ["pgBtn"];
-    if(opts.num) cls.push("num");
-    if(opts.active) cls.push("active");
-    const disabled = opts.disabled ? "disabled" : "";
-    const data = (page != null) ? `data-page="${page}"` : "";
-    return `<button class="${cls.join(" ")}" type="button" ${disabled} ${data}>${label}</button>`;
+  // ===== Stato UI =====
+  const state = {
+    q: "",
+    macro: "tutti",
+    sub: "tutti",
+    macroLabel: "Tutti",
+    subLabel: "",
+    view: "grid",
+    sort: "rel",
+    perPage: 12,
+    page: 1,
+    openMacros: new Set()
   };
 
-  let html = "";
-  html += btn("←", cur-1, {disabled: cur<=1});
+  // ===== Data (da catalogo.js) =====
+  let ALL = [];
+  let MODEL = [];
 
-  const addDots = ()=> html += `<span class="dots">…</span>`;
-  const pushNum = (p)=> html += btn(String(p), p, {num:true, active: p===cur});
+  // ===== Helpers DOM =====
+  const $ = (id) => document.getElementById(id);
 
-  if(pages <= 7){
-    for(let p=1;p<=pages;p++) pushNum(p);
-  } else {
-    pushNum(1);
+  const tree = $("tree");
+  const grid = $("grid");
+  const search = $("search");
+  const countPill = $("countPill");
 
-    const w = 2;
-    let start = Math.max(2, cur - w);
-    let end = Math.min(pages-1, cur + w);
+  const metaHead = $("metaHead");
+  const metaTop = $("metaTop");
+  const metaBottom = $("metaBottom");
 
-    if(start > 2) addDots();
-    for(let p=start; p<=end; p++) pushNum(p);
-    if(end < pages-1) addDots();
+  const crumbLabel = $("crumbLabel");
+  const titleLabel = $("titleLabel");
 
-    pushNum(pages);
+  const sort = $("sort");
+  const perPage = $("perPage");
+
+  const btnGrid = $("btnGrid");
+  const btnList = $("btnList");
+
+  const pgBtns = $("pgBtns");
+  const resetAll = $("resetAll");
+
+  // overlay
+  const megaBtn = $("megaBtn");
+  const megaClose = $("megaClose");
+  const megaAll = $("megaAll");
+
+  const catOverlay = $("catOverlay");
+  const catCount = $("catCount");
+  const megaGrid = $("megaGrid");
+
+  $("y").textContent = new Date().getFullYear();
+
+  // ===== Utils =====
+  function esc(s){
+    return String(s ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
   }
 
-  html += btn("→", cur+1, {disabled: cur>=pages});
+  function currentLabel(){
+    if (state.macro === "tutti") return "Home";
+    if (state.sub === "tutti") return state.macroLabel || "Categoria";
+    return state.subLabel || state.macroLabel || "Categoria";
+  }
 
-  pgBtns.innerHTML = html;
+  // regole filtro: usa gli slug già preparati in ALL da catalogo.js
+  function matches(p){
+    const q = state.q.trim().toLowerCase();
 
-  pgBtns.querySelectorAll("button[data-page]").forEach(b=>{
-    b.addEventListener("click", ()=>{
-      const p = Number(b.getAttribute("data-page"));
-      if(Number.isFinite(p)) goPage(Math.max(1, Math.min(p, pages)));
+    const macroOk = (state.macro === "tutti") || (p.macroSlug === state.macro);
+    if(!macroOk) return false;
+
+    const subOk = (state.sub === "tutti") || (p.catSlug === state.sub);
+    if(!subOk) return false;
+
+    if(!q) return true;
+
+    const hay = (
+      (p.title || "") + " " +
+      (p.brand || "") + " " +
+      (p.sku || "") + " " +
+      (p.category || "") + " " +
+      (p.catLine || "")
+    ).toLowerCase();
+
+    return hay.includes(q);
+  }
+
+  function sortList(list){
+    if(state.sort === "az"){
+      return list.slice().sort((a,b)=>(a.title||"").localeCompare((b.title||""), "it"));
+    }
+    if(state.sort === "priceUp"){
+      return list.slice().sort((a,b)=>((a.price ?? Infinity) - (b.price ?? Infinity)));
+    }
+    if(state.sort === "priceDown"){
+      return list.slice().sort((a,b)=>((b.price ?? -Infinity) - (a.price ?? -Infinity)));
+    }
+    return list;
+  }
+
+  // ===== Card =====
+  function card(p){
+    // badge: micro categoria (richiesta: “badge sopra a sinistra metti la microcategoria”)
+    const badge = p.microBadge ? String(p.microBadge).toUpperCase().slice(0,22) : "SENZA CATEGORIA";
+
+    // produttore: se manca, vuoto (richiesta)
+    const brandLine = (p.brand && String(p.brand).trim()) ? esc(p.brand) : "";
+
+    // linea categoria (es. Macro » Sub » Micro) se presente
+    const meta = esc(p.catLine || p.category || "");
+
+    // cover: usa quella già preparata da catalogo.js, fallback placeholder
+    const cover = esc(p.cover || PLACEHOLDER);
+
+    // prezzo: p.priceLabel (già formattato da catalogo.js), fallback —
+    const priceLabel = esc(p.priceLabel || "—");
+
+    return `
+      <article class="card" role="link" tabindex="0" data-sku="${esc(p.sku)}" aria-label="Apri ${esc(p.title)}">
+        <div class="thumb">
+          <span class="badge">${esc(badge)}</span>
+          <div class="photoFrame">
+            <img src="${cover}" alt="${esc(p.title)}" onerror="this.src='${esc(PLACEHOLDER)}'">
+          </div>
+        </div>
+
+        <div class="content">
+          <h3 class="title">${esc(p.title)}</h3>
+
+          <div class="metaLine">${meta}</div>
+          ${brandLine ? `<div class="metaLine" style="min-height:0; margin-top:6px; letter-spacing:.12em;">${brandLine}</div>` : ``}
+
+          <div class="bottomRow">
+            <div class="price">${priceLabel}</div>
+            <span class="openBtn">Apri →</span>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  function openProduct(sku){
+    window.location.href = `prodotto.html?sku=${encodeURIComponent(sku)}`;
+  }
+
+  // ===== Paginazione =====
+  function goPage(p){
+    state.page = p;
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function buildPager(pages){
+    const cur = state.page;
+
+    const btn = (label, page, opts={}) => {
+      const cls = ["pgBtn"];
+      if(opts.num) cls.push("num");
+      if(opts.active) cls.push("active");
+      const disabled = opts.disabled ? "disabled" : "";
+      const data = (page != null) ? `data-page="${page}"` : "";
+      return `<button class="${cls.join(" ")}" type="button" ${disabled} ${data}>${label}</button>`;
+    };
+
+    let html = "";
+    html += btn("←", cur-1, {disabled: cur<=1});
+
+    const addDots = ()=> html += `<span class="dots">…</span>`;
+    const pushNum = (p)=> html += btn(String(p), p, {num:true, active: p===cur});
+
+    if(pages <= 7){
+      for(let p=1;p<=pages;p++) pushNum(p);
+    } else {
+      pushNum(1);
+
+      const w = 2;
+      let start = Math.max(2, cur - w);
+      let end = Math.min(pages-1, cur + w);
+
+      if(start > 2) addDots();
+      for(let p=start; p<=end; p++) pushNum(p);
+      if(end < pages-1) addDots();
+
+      pushNum(pages);
+    }
+
+    html += btn("→", cur+1, {disabled: cur>=pages});
+
+    pgBtns.innerHTML = html;
+
+    pgBtns.querySelectorAll("button[data-page]").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const p = Number(b.getAttribute("data-page"));
+        if(Number.isFinite(p)) goPage(Math.max(1, Math.min(p, pages)));
+      });
     });
-  });
-}
+  }
 
-function render(){
-  const label = currentLabel();
-  crumbLabel.textContent = label;
-  titleLabel.textContent = label;
+  // ===== Render principale =====
+  function render(){
+    const label = currentLabel();
+    crumbLabel.textContent = label;
+    titleLabel.textContent = label;
 
-  let list = ALL.filter(matches);
-  list = sortList(list);
+    let list = ALL.filter(matches);
+    list = sortList(list);
 
-  const total = list.length;
-  const per = state.perPage;
-  const pages = Math.max(1, Math.ceil(total / per));
-  state.page = Math.min(state.page, pages);
+    const total = list.length;
+    const per = state.perPage;
+    const pages = Math.max(1, Math.ceil(total / per));
+    state.page = Math.min(state.page, pages);
 
-  const startIdx = (state.page - 1) * per;
-  const endIdx = Math.min(total, startIdx + per);
-  const slice = list.slice(startIdx, endIdx);
+    const startIdx = (state.page - 1) * per;
+    const endIdx = Math.min(total, startIdx + per);
+    const slice = list.slice(startIdx, endIdx);
 
-  const metaText = total
-    ? `Mostro ${startIdx + 1}-${endIdx} di ${total} prodotto(i)`
-    : `Mostro 0-0 di 0 prodotto(i)`;
+    const metaText = total
+      ? `Mostro ${startIdx + 1}-${endIdx} di ${total} prodotto(i)`
+      : `Mostro 0-0 di 0 prodotto(i)`;
 
-  metaHead.textContent = metaText;
-  metaTop.textContent = metaText;
-  metaBottom.textContent = metaText;
+    metaHead.textContent = metaText;
+    metaTop.textContent = metaText;
+    metaBottom.textContent = metaText;
 
-  // pill in alto sempre totale catalogo
-  countPill.textContent = `${ALL.length} prodotti`;
+    // pill alto: totale catalogo
+    countPill.textContent = `${ALL.length} prodotti`;
 
-  grid.classList.toggle("list", state.view === "list");
+    grid.classList.toggle("list", state.view === "list");
 
-  if(total === 0){
+    if(total === 0){
+      grid.innerHTML = `
+        <div class="emptyState">
+          <div>
+            <h3 style="margin:0 0 8px; font-size:18px; font-weight:1000;">Nessun prodotto trovato</h3>
+            <div style="opacity:.8">Prova a cambiare ricerca o categoria.</div>
+          </div>
+        </div>
+      `;
+      pgBtns.innerHTML = "";
+      return;
+    }
+
+    grid.innerHTML = slice.map(card).join("");
+
+    grid.querySelectorAll(".card").forEach(el=>{
+      const sku = el.getAttribute("data-sku");
+      el.addEventListener("click", ()=> openProduct(sku));
+      el.addEventListener("keydown", (e)=>{
+        if(e.key === "Enter" || e.key === " "){
+          e.preventDefault();
+          openProduct(sku);
+        }
+      });
+    });
+
+    buildPager(pages);
+  }
+
+  // ===== Sidebar categorie (usa MODEL da Catalogo.buildModel) =====
+  function renderTree(){
+    let html = "";
+
+    html += `
+      <div class="treeItem ${state.macro === "tutti" ? "active" : ""}">
+        <div class="treeRow">
+          <div class="treeLeft">
+            <button class="tri" type="button" data-action="noop" aria-label="tri">
+              <span class="triBox">▶</span>
+            </button>
+            <button class="macroBtn" type="button" data-action="selectAll">Tutti</button>
+          </div>
+          <span class="cnt">${ALL.length}</span>
+        </div>
+      </div>
+    `;
+
+    for(const m of MODEL){
+      const isOpen = state.openMacros.has(m.macroSlug);
+      const activeMacro = (state.macro === m.macroSlug && state.sub === "tutti");
+      const triChar = isOpen ? "▼" : "▶";
+
+      html += `
+        <div class="treeItem ${isOpen ? "open" : ""} ${activeMacro ? "active" : ""}" data-macro="${esc(m.macroSlug)}">
+          <div class="treeRow">
+            <div class="treeLeft">
+              <button class="tri" type="button" data-action="toggle" data-macro="${esc(m.macroSlug)}" aria-label="Apri/chiudi">
+                <span class="triBox">${triChar}</span>
+              </button>
+              <button class="macroBtn" type="button"
+                      data-action="selectMacro"
+                      data-macro="${esc(m.macroSlug)}"
+                      data-macro-label="${esc(m.macro)}">${esc(m.macro)}</button>
+            </div>
+            <span class="cnt">${m.total}</span>
+          </div>
+
+          <div class="children">
+            ${(m.cats || []).map(c=>{
+              const active = (state.macro === m.macroSlug && state.sub === c.slug) ? "active" : "";
+              return `
+                <div class="subBtn ${active}"
+                     data-action="selectSub"
+                     data-macro="${esc(m.macroSlug)}"
+                     data-macro-label="${esc(m.macro)}"
+                     data-sub="${esc(c.slug)}"
+                     data-sub-label="${esc(c.short)}"
+                     title="${esc(c.full)}">
+                  <span>${esc(c.short)}</span>
+                  <small>${c.count}</small>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    tree.innerHTML = html;
+  }
+
+  function setFilterAll(){
+    state.macro = "tutti";
+    state.sub = "tutti";
+    state.macroLabel = "Tutti";
+    state.subLabel = "";
+    state.page = 1;
+    renderTree();
+    render();
+  }
+
+  function setFilterMacro(macroSlug, label){
+    state.macro = macroSlug;
+    state.sub = "tutti";
+    state.macroLabel = label || "";
+    state.subLabel = "";
+    state.page = 1;
+    state.openMacros.add(macroSlug);
+    renderTree();
+    render();
+  }
+
+  function setFilterSub(macroSlug, macroLabel, subSlug, subLabel){
+    state.macro = macroSlug;
+    state.sub = subSlug;
+    state.macroLabel = macroLabel || "";
+    state.subLabel = subLabel || "";
+    state.page = 1;
+    state.openMacros.add(macroSlug);
+    renderTree();
+    render();
+  }
+
+  function toggleMacro(macroSlug){
+    if(state.openMacros.has(macroSlug)) state.openMacros.delete(macroSlug);
+    else state.openMacros.add(macroSlug);
+    renderTree();
+  }
+
+  // ===== Mega overlay (stile “foto 2” già gestito dal tuo CSS) =====
+  function injectMegaStylePhoto2(){
+    if(document.getElementById("megaStylePhoto2")) return;
+
+    const st = document.createElement("style");
+    st.id = "megaStylePhoto2";
+    st.textContent = `
+      .catOverlay.open{ overflow:hidden; }
+      .catPanel{
+        background:#f3f4f6 !important;
+        border-radius: 10px !important;
+        overflow:hidden;
+        max-height: calc(100vh - 130px) !important;
+        display:flex !important;
+        flex-direction:column !important;
+      }
+      .catTop{
+        background:#f3f4f6 !important;
+        border-bottom:1px solid rgba(0,0,0,.10) !important;
+        padding:12px 16px !important;
+      }
+      .catBody{
+        display:block !important;
+        max-height: calc(100vh - 210px) !important;
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow: auto !important;
+        -webkit-overflow-scrolling: touch;
+      }
+      .catTree{display:none !important;}
+      .catCols{
+        padding:16px !important;
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow: auto !important;
+        -webkit-overflow-scrolling: touch;
+      }
+      .catCols .mega2{
+        display:grid;
+        grid-template-columns: repeat(3, minmax(0,1fr));
+        gap: 26px;
+      }
+      @media (max-width: 980px){
+        .catCols .mega2{grid-template-columns:1fr;}
+      }
+      .mega2-colTitle{
+        font-weight:1000;
+        text-transform:uppercase;
+        letter-spacing:.06em;
+        font-size:12px;
+        color: rgba(20,20,20,.88);
+        padding-bottom:10px;
+        border-bottom: 2px solid rgba(0,0,0,.08);
+        margin: 0 0 10px 0;
+      }
+      .mega2-list{display:grid; gap:6px;}
+      .mega2-item{
+        display:flex;
+        align-items:center;
+        gap:10px;
+        padding:6px 0;
+        cursor:pointer;
+        user-select:none;
+        color: rgba(20,20,20,.86);
+        font-weight:850;
+      }
+      .mega2-item:hover{color: rgba(11,95,118,.95);}
+      .mega2-arrow{
+        width:16px;
+        opacity:.55;
+        flex:0 0 auto;
+        font-weight:1100;
+      }
+      .mega2-label{
+        min-width:0;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+      }
+      .mega2-count{
+        margin-left:auto;
+        opacity:.55;
+        font-weight:900;
+        font-size:12px;
+        flex:0 0 auto;
+      }
+    `;
+    document.head.appendChild(st);
+  }
+
+  function splitIntoColumnsPhoto2(macros, cols=3){
+    const columns = Array.from({length: cols}, ()=>({items:[], w:0}));
+    const sorted = macros.slice().sort((a,b)=>(b.total||0)-(a.total||0));
+
+    for(const m of sorted){
+      columns.sort((a,b)=>a.w-b.w);
+      columns[0].items.push(m);
+      columns[0].w += (m.total||0);
+    }
+    return columns.map(c=>c.items);
+  }
+
+  function renderMegaPhoto2(){
+    injectMegaStylePhoto2();
+    if(catCount) catCount.textContent = `${ALL.length} prodotti`;
+
+    const cols = splitIntoColumnsPhoto2(MODEL, 3);
+
+    megaGrid.innerHTML = `
+      <div class="mega2">
+        ${cols.map(col => `
+          <div>
+            ${col.map(m => `
+              <div class="mega2-colTitle">${esc(m.macro)}</div>
+              <div class="mega2-list">
+                ${(m.cats || []).map(c => `
+                  <div class="mega2-item"
+                       data-act="sub"
+                       data-m="${esc(m.macroSlug)}"
+                       data-ml="${esc(m.macro)}"
+                       data-s="${esc(c.slug)}"
+                       data-sl="${esc(c.short)}"
+                       title="${esc(c.full)}">
+                    <span class="mega2-arrow">›</span>
+                    <span class="mega2-label">${esc(c.short)}</span>
+                    <span class="mega2-count">${c.count}</span>
+                  </div>
+                `).join("")}
+              </div>
+              <div style="height:18px"></div>
+            `).join("")}
+          </div>
+        `).join("")}
+      </div>
+    `;
+
+    megaGrid.onclick = (e)=>{
+      const el = e.target.closest("[data-act]");
+      if(!el) return;
+
+      setFilterSub(
+        el.getAttribute("data-m"),
+        el.getAttribute("data-ml"),
+        el.getAttribute("data-s"),
+        el.getAttribute("data-sl")
+      );
+      closeMega();
+      document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
+    };
+  }
+
+  function openMega(){
+    catOverlay.classList.add("open");
+    megaBtn.setAttribute("aria-expanded","true");
+    document.body.style.overflow = "hidden";
+    renderMegaPhoto2();
+  }
+
+  function closeMega(){
+    catOverlay.classList.remove("open");
+    megaBtn.setAttribute("aria-expanded","false");
+    document.body.style.overflow = "";
+  }
+
+  function toggleMega(){
+    catOverlay.classList.contains("open") ? closeMega() : openMega();
+  }
+
+  // ===== Boot =====
+  async function boot(){
+    // check requisito
+    if(!window.Catalogo || typeof window.Catalogo.loadCatalog !== "function"){
+      throw new Error("catalogo.js non trovato o window.Catalogo non valido. Includi catalogo.js prima di questo script.");
+    }
+
+    countPill.textContent = "Carico...";
+    metaHead.textContent = "Caricamento catalogo…";
+    metaTop.textContent = "Caricamento…";
+
+    // 1) carica ALL (parsing in catalogo.js)
+    const res = await window.Catalogo.loadCatalog({
+      dataUrlCandidates: DATA_URL_CANDIDATES,
+      placeholderCover: PLACEHOLDER
+    });
+
+    ALL = res?.ALL || [];
+    // 2) costruisci MODEL (macro + sottocategorie + count)
+    MODEL = window.Catalogo.buildModel(ALL) || [];
+
+    // default: apri prime 2 macro in sidebar
+    state.openMacros = new Set(MODEL.slice(0,2).map(x => x.macroSlug));
+
+    renderTree();
+    render();
+
+    // sidebar click
+    tree.addEventListener("click", (e)=>{
+      const el = e.target.closest("[data-action]");
+      if(!el) return;
+
+      const action = el.getAttribute("data-action");
+
+      if(action === "toggle"){
+        toggleMacro(el.getAttribute("data-macro"));
+        return;
+      }
+      if(action === "selectAll"){
+        setFilterAll();
+        return;
+      }
+      if(action === "selectMacro"){
+        setFilterMacro(el.getAttribute("data-macro"), el.getAttribute("data-macro-label"));
+        return;
+      }
+      if(action === "selectSub"){
+        setFilterSub(
+          el.getAttribute("data-macro"),
+          el.getAttribute("data-macro-label"),
+          el.getAttribute("data-sub"),
+          el.getAttribute("data-sub-label")
+        );
+        return;
+      }
+    });
+
+    // search debounce
+    let t;
+    search.addEventListener("input", ()=>{
+      clearTimeout(t);
+      t = setTimeout(()=>{
+        state.q = search.value;
+        state.page = 1;
+        render();
+      }, 140);
+    });
+
+    sort.addEventListener("change", ()=>{
+      state.sort = sort.value;
+      state.page = 1;
+      render();
+    });
+
+    perPage.addEventListener("change", ()=>{
+      state.perPage = Number(perPage.value) || 12;
+      state.page = 1;
+      render();
+    });
+
+    btnGrid.addEventListener("click", ()=>{
+      state.view = "grid";
+      btnGrid.classList.add("active");
+      btnList.classList.remove("active");
+      render();
+    });
+
+    btnList.addEventListener("click", ()=>{
+      state.view = "list";
+      btnList.classList.add("active");
+      btnGrid.classList.remove("active");
+      render();
+    });
+
+    resetAll.addEventListener("click", setFilterAll);
+
+    // overlay events
+    megaBtn?.addEventListener("click", toggleMega);
+    megaClose?.addEventListener("click", closeMega);
+
+    megaAll?.addEventListener("click", ()=>{
+      setFilterAll();
+      closeMega();
+      document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
+    });
+
+    // chiudi cliccando fuori
+    catOverlay?.addEventListener("click", (e)=>{
+      if(e.target === catOverlay) closeMega();
+    });
+
+    document.addEventListener("keydown", (e)=>{
+      if(e.key === "Escape") closeMega();
+    });
+  }
+
+  boot().catch(err=>{
+    console.error(err);
+    countPill.textContent = "Errore";
+    metaHead.textContent = "Errore: non riesco a caricare il catalogo.";
+    tree.innerHTML = `<div style="padding:12px; font-weight:950;">Errore caricamento categorie.</div>`;
     grid.innerHTML = `
       <div class="emptyState">
         <div>
-          <h3 style="margin:0 0 8px; font-size:18px; font-weight:1000;">Nessun prodotto trovato</h3>
-          <div style="opacity:.8">Prova a cambiare ricerca o categoria.</div>
+          <h3 style="margin:0 0 8px; font-size:18px; font-weight:1000;">Errore caricamento</h3>
+          <div style="opacity:.8">Apri la console (F12) per vedere il dettaglio.</div>
         </div>
       </div>
     `;
+    metaTop.textContent = "Errore";
+    metaBottom.textContent = "Errore";
     pgBtns.innerHTML = "";
-    return;
-  }
-
-  grid.innerHTML = slice.map(card).join("");
-
-  grid.querySelectorAll(".card").forEach(el=>{
-    const sku = el.getAttribute("data-sku");
-    el.addEventListener("click", ()=> openProduct(sku));
-    el.addEventListener("keydown", (e)=>{
-      if(e.key === "Enter" || e.key === " "){
-        e.preventDefault();
-        openProduct(sku);
-      }
-    });
   });
-
-  buildPager(pages);
-}
-
-/* ---------------- costruzione modello categorie ---------------- */
-function buildModel(){
-  const macroMap = new Map();
-
-  for(const p of ALL){
-    const macro = p.macro || "Senza categoria";
-    if(!macroMap.has(macro)) macroMap.set(macro, new Map());
-    const m = macroMap.get(macro);
-    m.set(p.category, (m.get(p.category) || 0) + 1);
-  }
-
-  const macros = [...macroMap.entries()].map(([macro, cats])=>{
-    let total = 0;
-    for(const c of cats.values()) total += c;
-
-    const catsSorted = [...cats.entries()]
-      .sort((a,b)=>b[1]-a[1])
-      .map(([full, count])=>{
-        const parts = splitParts(full);
-        const short = parts.length ? parts[parts.length-1] : full;
-        return { full, short, slug: slugify(full), count };
-      });
-
-    return {
-      macro,
-      macroSlug: slugify(macro),
-      total,
-      cats: catsSorted
-    };
-  }).sort((a,b)=>b.total - a.total);
-
-  return macros;
-}
-
-/* ---------------- sidebar sinistra ---------------- */
-function renderTree(){
-  let html = "";
-
-  html += `
-    <div class="treeItem ${state.macro === "tutti" ? "active" : ""}">
-      <div class="treeRow">
-        <div class="treeLeft">
-          <button class="tri" type="button" data-action="noop" aria-label="tri">
-            <span class="triBox">▶</span>
-          </button>
-          <button class="macroBtn" type="button" data-action="selectAll">Tutti</button>
-        </div>
-        <span class="cnt">${ALL.length}</span>
-      </div>
-    </div>
-  `;
-
-  for(const m of model){
-    const isOpen = state.openMacros.has(m.macroSlug);
-    const activeMacro = (state.macro === m.macroSlug && state.sub === "tutti");
-    const triChar = isOpen ? "▼" : "▶";
-
-    html += `
-      <div class="treeItem ${isOpen ? "open" : ""} ${activeMacro ? "active" : ""}" data-macro="${esc(m.macroSlug)}">
-        <div class="treeRow">
-          <div class="treeLeft">
-            <button class="tri" type="button" data-action="toggle" data-macro="${esc(m.macroSlug)}" aria-label="Apri/chiudi">
-              <span class="triBox">${triChar}</span>
-            </button>
-            <button class="macroBtn" type="button"
-                    data-action="selectMacro"
-                    data-macro="${esc(m.macroSlug)}"
-                    data-macro-label="${esc(m.macro)}">${esc(m.macro)}</button>
-          </div>
-          <span class="cnt">${m.total}</span>
-        </div>
-
-        <div class="children">
-          ${m.cats.map(c=>{
-            const active = (state.macro === m.macroSlug && state.sub === c.slug) ? "active" : "";
-            return `
-              <div class="subBtn ${active}"
-                   data-action="selectSub"
-                   data-macro="${esc(m.macroSlug)}"
-                   data-macro-label="${esc(m.macro)}"
-                   data-sub="${esc(c.slug)}"
-                   data-sub-label="${esc(c.short)}"
-                   title="${esc(c.full)}">
-                <span>${esc(c.short)}</span>
-                <small>${c.count}</small>
-              </div>
-            `;
-          }).join("")}
-        </div>
-      </div>
-    `;
-  }
-
-  tree.innerHTML = html;
-}
-
-/* ---------------- set filtri ---------------- */
-function setFilterAll(){
-  state.macro = "tutti";
-  state.sub = "tutti";
-  state.macroLabel = "Tutti";
-  state.subLabel = "";
-  state.page = 1;
-  renderTree();
-  render();
-}
-
-function setFilterMacro(macroSlug, label){
-  state.macro = macroSlug;
-  state.sub = "tutti";
-  state.macroLabel = label || "";
-  state.subLabel = "";
-  state.page = 1;
-  state.openMacros.add(macroSlug);
-  renderTree();
-  render();
-}
-
-function setFilterSub(macroSlug, macroLabel, subSlug, subLabel){
-  state.macro = macroSlug;
-  state.sub = subSlug;
-  state.macroLabel = macroLabel || "";
-  state.subLabel = subLabel || "";
-  state.page = 1;
-  state.openMacros.add(macroSlug);
-  renderTree();
-  render();
-}
-
-function toggleMacro(macroSlug){
-  if(state.openMacros.has(macroSlug)) state.openMacros.delete(macroSlug);
-  else state.openMacros.add(macroSlug);
-  renderTree();
-}
-
-/* =========================================================
-   MEGA MENU OVERLAY — STILE FOTO 2 (piatto + 3 colonne)
-========================================================= */
-function injectMegaStylePhoto2(){
-  if(document.getElementById("megaStylePhoto2")) return;
-
-  const st = document.createElement("style");
-  st.id = "megaStylePhoto2";
-  st.textContent = `
-  /* SCROLL FIX overlay */
-.catOverlay.open{ overflow:hidden; }
-
-
-    .catPanel{
-      background:#f3f4f6 !important;
-      border-radius: 10px !important;
-      overflow:hidden;
-      max-height: calc(100vh - 130px) !important;
-  display:flex !important;
-  flex-direction:column !important;
-    }
-    .catTop{
-      background:#f3f4f6 !important;
-      border-bottom:1px solid rgba(0,0,0,.10) !important;
-      padding:12px 16px !important;
-    }
-    .catBody{
-      display:block !important;
-      max-height: calc(100vh - 210px) !important;
-       flex: 1 1 auto !important;
-  min-height: 0 !important;          /* fondamentale */
-  overflow: auto !important;          /* QUI lo scroll */
-  -webkit-overflow-scrolling: touch;
-    }
-    .catTree{display:none !important;}
-
-    .catCols{
-      padding:16px !important;
-      overflow:auto !important;
-      flex: 1 1 auto !important;
-  min-height: 0 !important;          /* fondamentale */
-  overflow: auto !important;          /* QUI lo scroll */
-  -webkit-overflow-scrolling: touch;
-    }
-    .catCols .mega2{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 26px;
-    }
-    @media (max-width: 980px){
-      .catCols .mega2{grid-template-columns:1fr;}
-    }
-
-    .mega2-colTitle{
-      font-weight:1000;
-      text-transform:uppercase;
-      letter-spacing:.06em;
-      font-size:12px;
-      color: rgba(20,20,20,.88);
-      padding-bottom:10px;
-      border-bottom: 2px solid rgba(0,0,0,.08);
-      margin: 0 0 10px 0;
-    }
-    .mega2-list{display:grid; gap:6px;}
-    .mega2-item{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding:6px 0;
-      cursor:pointer;
-      user-select:none;
-      color: rgba(20,20,20,.86);
-      font-weight:850;
-    }
-    .mega2-item:hover{color: rgba(11,95,118,.95);}
-    .mega2-arrow{
-      width:16px;
-      opacity:.55;
-      flex:0 0 auto;
-      font-weight:1100;
-    }
-    .mega2-label{
-      min-width:0;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-    }
-    .mega2-count{
-      margin-left:auto;
-      opacity:.55;
-      font-weight:900;
-      font-size:12px;
-      flex:0 0 auto;
-    }
-  `;
-  document.head.appendChild(st);
-}
-
-function splitIntoColumnsPhoto2(macros, cols=3){
-  const columns = Array.from({length: cols}, ()=>({items:[], w:0}));
-  const sorted = macros.slice().sort((a,b)=>(b.total||0)-(a.total||0));
-
-  for(const m of sorted){
-    columns.sort((a,b)=>a.w-b.w);
-    columns[0].items.push(m);
-    columns[0].w += (m.total||0);
-  }
-  return columns.map(c=>c.items);
-}
-
-function renderMegaPhoto2(){
-  injectMegaStylePhoto2();
-
-  if(catCount) catCount.textContent = `${ALL.length} prodotti`;
-
-  const cols = splitIntoColumnsPhoto2(model, 3);
-
-  megaGrid.innerHTML = `
-    <div class="mega2">
-      ${cols.map(col => `
-        <div>
-          ${col.map(m => `
-            <div class="mega2-colTitle">${esc(m.macro)}</div>
-            <div class="mega2-list">
-              ${m.cats.map(c => `
-                <div class="mega2-item"
-                     data-act="sub"
-                     data-m="${esc(m.macroSlug)}"
-                     data-ml="${esc(m.macro)}"
-                     data-s="${esc(c.slug)}"
-                     data-sl="${esc(c.short)}"
-                     title="${esc(c.full)}">
-                  <span class="mega2-arrow">›</span>
-                  <span class="mega2-label">${esc(c.short)}</span>
-                  <span class="mega2-count">${c.count}</span>
-                </div>
-              `).join("")}
-            </div>
-            <div style="height:18px"></div>
-          `).join("")}
-        </div>
-      `).join("")}
-    </div>
-  `;
-
-  megaGrid.onclick = (e)=>{
-    const el = e.target.closest("[data-act]");
-    if(!el) return;
-
-    setFilterSub(
-      el.getAttribute("data-m"),
-      el.getAttribute("data-ml"),
-      el.getAttribute("data-s"),
-      el.getAttribute("data-sl")
-    );
-    closeMega();
-    document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
-  };
-}
-
-function openMega(){
-  catOverlay.classList.add("open");
-  megaBtn.setAttribute("aria-expanded","true");
-  document.body.style.overflow = "hidden";   // blocca scroll pagina sotto
-  renderMegaPhoto2();
-}
-
-function closeMega(){
-  catOverlay.classList.remove("open");
-  megaBtn.setAttribute("aria-expanded","false");
-  document.body.style.overflow = "";         // ripristina scroll pagina
-}
-
-function toggleMega(){
-  catOverlay.classList.contains("open") ? closeMega() : openMega();
-}
-
-/* ---------------- boot ---------------- */
-async function boot(){
-  countPill.textContent = "Carico...";
-  metaHead.textContent = "Caricamento catalogo…";
-  metaTop.textContent = "Caricamento…";
-
-  const data = await fetchCatalogJson();
-
-  let currentCategory = "Senza categoria";
-  const out = [];
-
-  for(const row of data){
-    const marker = String(row[""] ?? "").trim();
-
-    // righe "Categoria: ..."
-    if(marker.toLowerCase().startsWith("categoria")){
-      const parts = marker.split(":");
-      const found = norm(parts.length > 1 ? parts.slice(1).join(":") : "");
-      if(found) currentCategory = found;
-      continue;
-    }
-
-    const sku = norm(row["Cod."]);
-    if(!sku) continue;
-
-    const title = norm(row["Descrizione"]) || "(Senza nome)";
-    const brand = norm(row["Produttore"]); // se vuoto -> resta vuoto
-    const catRow = norm(row["Categoria"]);
-    const category = norm(catRow || currentCategory || "Senza categoria");
-
-    const parts = splitParts(category);
-    const macro = parts[0] || "Senza categoria";
-    const micro = (parts.length ? parts[parts.length - 1] : macro) || "SENZA CATEGORIA";
-    const catLine = parts.join(" » ");
-
-    const priceNum = parsePrice(row["Listino 1 (ivato)"]);
-
-    out.push({
-      sku,
-      title,
-      brand,
-      category,
-      catLine,
-      microBadge: micro,
-      catSlug: slugify(category),
-      macro,
-      macroSlug: slugify(macro),
-      price: priceNum,
-      priceLabel: euro(priceNum),
-      cover: PLACEHOLDER
-    });
-  }
-
-  ALL = out;
-  model = buildModel();
-
-  // default: apri prime 2 macro nella sidebar
-  state.openMacros = new Set(model.slice(0,2).map(x=>x.macroSlug));
-
-  renderTree();
-  render();
-
-  // sidebar events
-  tree.addEventListener("click", (e)=>{
-    const el = e.target.closest("[data-action]");
-    if(!el) return;
-
-    const action = el.getAttribute("data-action");
-
-    if(action === "toggle"){
-      toggleMacro(el.getAttribute("data-macro"));
-      return;
-    }
-    if(action === "selectAll"){
-      setFilterAll();
-      return;
-    }
-    if(action === "selectMacro"){
-      setFilterMacro(el.getAttribute("data-macro"), el.getAttribute("data-macro-label"));
-      return;
-    }
-    if(action === "selectSub"){
-      setFilterSub(
-        el.getAttribute("data-macro"),
-        el.getAttribute("data-macro-label"),
-        el.getAttribute("data-sub"),
-        el.getAttribute("data-sub-label")
-      );
-      return;
-    }
-  });
-
-  // search debounce
-  let t;
-  search.addEventListener("input", ()=>{
-    clearTimeout(t);
-    t = setTimeout(()=>{
-      state.q = search.value;
-      state.page = 1;
-      render();
-    }, 140);
-  });
-
-  sort.addEventListener("change", ()=>{
-    state.sort = sort.value;
-    state.page = 1;
-    render();
-  });
-
-  perPage.addEventListener("change", ()=>{
-    state.perPage = Number(perPage.value) || 12;
-    state.page = 1;
-    render();
-  });
-
-  btnGrid.addEventListener("click", ()=>{
-    state.view = "grid";
-    btnGrid.classList.add("active");
-    btnList.classList.remove("active");
-    render();
-  });
-
-  btnList.addEventListener("click", ()=>{
-    state.view = "list";
-    btnList.classList.add("active");
-    btnGrid.classList.remove("active");
-    render();
-  });
-
-  resetAll.addEventListener("click", setFilterAll);
-
-  // overlay events
-  megaBtn?.addEventListener("click", toggleMega);
-  megaClose?.addEventListener("click", closeMega);
-
-  megaAll?.addEventListener("click", ()=>{
-    setFilterAll();
-    closeMega();
-    document.querySelector("#catalogo")?.scrollIntoView({behavior:"smooth"});
-  });
-
-  // chiudi cliccando fuori
-  catOverlay?.addEventListener("click", (e)=>{
-    if(e.target === catOverlay) closeMega();
-  });
-
-  document.addEventListener("keydown", (e)=>{
-    if(e.key === "Escape") closeMega();
-  });
-}
-
-boot().catch(err=>{
-  console.error(err);
-  countPill.textContent = "Errore";
-  metaHead.textContent = "Errore: non riesco a caricare il catalogo.";
-  tree.innerHTML = `<div style="padding:12px; font-weight:950;">Errore caricamento categorie.</div>`;
-  grid.innerHTML = `
-    <div class="emptyState">
-      <div>
-        <h3 style="margin:0 0 8px; font-size:18px; font-weight:1000;">Errore caricamento</h3>
-        <div style="opacity:.8">Apri la console (F12) per vedere il dettaglio.</div>
-      </div>
-    </div>
-  `;
-  metaTop.textContent = "Errore";
-  metaBottom.textContent = "Errore";
-  pgBtns.innerHTML = "";
-});
+})();
 </script>
+
 
 </body>
 </html>
+
 
 
 
