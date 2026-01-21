@@ -486,7 +486,7 @@
       gap:16px;
     }
 
-    /* ===== CARD (uguale foto 2) ===== */
+    /* ===== CARD (foto 2) ===== */
     .card{
       border:1px solid rgba(0,0,0,.14);
       border-radius: 14px;
@@ -653,11 +653,7 @@
       color: rgba(11,95,118,.95);
       background: rgba(14,126,160,.06);
     }
-    .dots{
-      padding:0 6px;
-      opacity:.55;
-      font-weight:1000;
-    }
+    .dots{padding:0 6px; opacity:.55; font-weight:1000;}
 
     footer{
       border-top:1px solid rgba(0,0,0,.12);
@@ -772,7 +768,7 @@
                 <div class="barText" id="metaTop">Mostro 0-0 di 0 prodotto(i)</div>
 
                 <div class="barSelects">
-                  <select id="sort" aria-label="Seleziona ordinamento">
+                  <select id="sort" aria-label="Ordinamento">
                     <option value="rel">Seleziona</option>
                     <option value="az">Nome (A-Z)</option>
                     <option value="priceUp">Prezzo (crescente)</option>
@@ -812,7 +808,7 @@
   <script>
     const PLACEHOLDER = "assets/img/prodotti/placeholder.jpg";
 
-    // percorsi possibili per evitare errori su GitHub Pages / cartelle diverse
+    // fallback percorsi (evita errori se cambia cartella su GitHub Pages)
     const DATA_URL_CANDIDATES = [
       "./data/products.json",
       "data/products.json",
@@ -935,7 +931,6 @@
 
     function matches(p){
       const q = state.q.trim().toLowerCase();
-
       const macroOk = (state.macro === "tutti") || (p.macroSlug === state.macro);
       if(!macroOk) return false;
 
@@ -1262,7 +1257,6 @@
 
         const parts = splitParts(category);
         const macro = parts[0] || "Senza categoria";
-
         const micro = (parts.length ? parts[parts.length - 1] : macro) || "PRODOTTO";
         const catLine = parts.join(" » ");
 
@@ -1316,7 +1310,6 @@
             el.getAttribute("data-sub"),
             el.getAttribute("data-sub-label")
           );
-          return;
         }
       });
 
