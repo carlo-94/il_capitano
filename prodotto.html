@@ -38,11 +38,11 @@
         linear-gradient(180deg, var(--paper2) 0%, #fff 75%);
     }
     a{color:inherit; text-decoration:none}
-    button, input, select{font:inherit}
+    button, input{font:inherit}
     .wrap{max-width:var(--max); margin:0 auto; padding:0 18px;}
     .sr{position:absolute; left:-9999px}
 
-    /* ================= HEADER (uguale home) ================= */
+    /* ================= HEADER (uguale index) ================= */
     .headerHero{
       position:relative;
       padding:22px 0 14px;
@@ -219,6 +219,9 @@
       font-weight:950;
       color: rgba(11,95,118,.92);
       white-space:nowrap;
+      max-width: min(520px, 78vw);
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
     .backBtn{
       display:inline-flex;
@@ -239,9 +242,7 @@
     }
 
     /* ================= PRODUCT ================= */
-    .product{
-      padding:18px 0 44px;
-    }
+    .product{ padding:18px 0 44px; }
 
     .panel{
       border:1px solid rgba(0,0,0,.14);
@@ -271,7 +272,6 @@
       gap:0;
     }
 
-    /* left: gallery */
     .gallery{
       padding:16px;
       border-right:1px solid rgba(0,0,0,.14);
@@ -308,10 +308,7 @@
       border-color: rgba(11,95,118,.38);
       box-shadow:0 0 0 4px rgba(11,95,118,.10), 0 14px 24px rgba(0,0,0,.10);
     }
-    .thumb:hover{
-      transform: translateY(-1px);
-      box-shadow:0 14px 24px rgba(0,0,0,.10);
-    }
+    .thumb:hover{ transform: translateY(-1px); box-shadow:0 14px 24px rgba(0,0,0,.10); }
     .thumb .frame{
       width:100%;
       height:64px;
@@ -366,7 +363,6 @@
       filter: drop-shadow(0 18px 26px rgba(0,0,0,.10)) contrast(1.06);
     }
 
-    /* right: detail */
     .detail{
       padding:18px 18px 20px;
       background: rgba(255,255,255,.55);
@@ -534,7 +530,15 @@
     }
     .infoBox b{color:rgba(20,20,20,.92)}
 
-    /* ================= TOAST ================= */
+    .empty{
+      padding:22px 18px;
+      text-align:center;
+      color:rgba(20,20,20,.72);
+      font-weight:950;
+    }
+    .empty h2{margin:0 0 8px; font-size:18px; font-weight:1000;}
+
+    /* toast */
     .toast{
       position:fixed;
       left:50%;
@@ -558,7 +562,6 @@
     }
     .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
 
-    /* ================= footer ================= */
     footer{
       border-top:1px solid rgba(0,0,0,.12);
       padding:18px 0 26px;
@@ -568,7 +571,6 @@
     }
     footer .wrap{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;}
 
-    /* ================= responsive ================= */
     @media (max-width: 980px){
       .headerRow{grid-template-columns: 1fr; gap:14px}
       .assist{justify-self:start; width:240px}
@@ -584,7 +586,6 @@
 </head>
 
 <body>
-  <!-- HEADER uguale index -->
   <header class="headerHero" id="home">
     <div class="wrap">
       <div class="headerRow">
@@ -625,7 +626,7 @@
 
       <div class="rightTop">
         <span class="pill" id="crumbPill">Carico…</span>
-        <a class="backBtn" id="backBtn" href="index.html#catalogo">← Torna ai prodotti</a>
+        <a class="backBtn" href="index.html#catalogo">← Torna ai prodotti</a>
       </div>
     </div>
   </div>
@@ -633,9 +634,8 @@
   <main class="product">
     <div class="wrap">
       <section class="panel" id="panel" aria-label="Scheda prodotto">
-        <div class="pLayout">
+        <div class="pLayout" id="pLayout">
 
-          <!-- GALLERY -->
           <div class="gallery">
             <div class="galleryGrid">
               <div class="thumbs" id="thumbs" aria-label="Miniature"></div>
@@ -648,7 +648,6 @@
             </div>
           </div>
 
-          <!-- DETTAGLIO -->
           <div class="detail">
             <div class="kicker" id="badge">PRODOTTO</div>
             <h1 id="title">Titolo prodotto</h1>
@@ -676,17 +675,25 @@
               <a class="btn" id="wa" href="#" target="_blank" rel="noopener noreferrer">WhatsApp assistenza</a>
             </div>
 
-            <div class="infoBox" id="infoBox">
+            <div class="infoBox">
               <div><b>Categoria:</b> <span id="catLabel">—</span></div>
               <div><b>Produttore:</b> <span id="brandLabel">—</span></div>
               <div style="margin-top:10px; opacity:.9">
                 Per acquistare, clicca <b>“Compra su eBay”</b>. Per dubbi, scrivici su WhatsApp.
               </div>
             </div>
-
           </div>
 
         </div>
+
+        <div class="empty" id="empty" style="display:none">
+          <h2>Prodotto non trovato</h2>
+          <div>Controlla il link o torna al catalogo.</div>
+          <div style="margin-top:12px">
+            <a class="backBtn" href="index.html#catalogo">← Torna ai prodotti</a>
+          </div>
+        </div>
+
       </section>
     </div>
   </main>
@@ -702,7 +709,9 @@
 
   <script>
     // ===== config
-    const PLACEHOLDER = "assets/img/prodotti/placeholder.jpg";
+    // (il tuo placeholder precedente rompeva: qui usiamo il logo che esiste)
+    const PLACEHOLDER = "assets/img/logo/logo-transparent.svg";
+
     const DATA_URL_CANDIDATES = [
       "./data/products.json",
       "data/products.json",
@@ -720,14 +729,6 @@
 
     function qs(name){ return new URLSearchParams(location.search).get(name); }
     function norm(s){ return String(s ?? "").replace(/\s+/g," ").trim(); }
-    function esc(s){
-      return String(s ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
     function euro(n){
       const num = Number(n);
       if(!Number.isFinite(num)) return "—";
@@ -739,17 +740,20 @@
       let s = String(v).trim();
       if(!s) return NaN;
       s = s.replace(/\s/g,"").replace("€","");
+
+      // "10.00" resta 10, "10,00" -> 10
       if (s.includes(",")){
         s = s.replace(/\./g,"");
         s = s.replace(",",".");
-      } else {
-        s = s.replace(/,/g,"");
       }
       const num = Number(s);
       return Number.isFinite(num) ? num : NaN;
     }
+
     function splitParts(full){
+      // gestisce anche doppi spazi tipo "ABBIGLIAMENTO  »  CAPPELLINI"
       return String(full ?? "")
+        .replace(/\s*»\s*/g, "»")
         .split("»")
         .map(x=>norm(x))
         .filter(Boolean);
@@ -758,12 +762,12 @@
     async function fetchCatalogJson(){
       const tries = DATA_URL_CANDIDATES.map(u => new URL(u, location.href).toString());
       let lastErr = null;
-
       for(const url of tries){
         try{
           const res = await fetch(url, { cache:"no-store" });
-          if(!res.ok) throw new Error(\`HTTP \${res.status} su \${url}\`);
+          if(!res.ok) throw new Error(`HTTP ${res.status} su ${url}`);
           const data = await res.json();
+          if(!Array.isArray(data)) throw new Error("products.json non è un array");
           return data;
         }catch(e){
           lastErr = e;
@@ -780,13 +784,11 @@
       toast._t = setTimeout(()=>t.classList.remove("show"), 1600);
     }
 
-    // ===== gallery helpers
     function setActiveThumb(idx){
       document.querySelectorAll(".thumb").forEach((t,i)=>{
         t.classList.toggle("active", i === idx);
       });
     }
-
     function setHero(src, alt){
       const heroImg = $("heroImg");
       heroImg.src = src || PLACEHOLDER;
@@ -795,23 +797,25 @@
     }
 
     function makeImagesForProduct(p){
-      // Se in futuro aggiungi immagini reali nel JSON, puoi popolare qui.
-      // Per ora: 1 immagine placeholder coerente.
-      return [PLACEHOLDER, PLACEHOLDER, PLACEHOLDER];
+      // se un giorno avrai immagini reali, costruisci qui i path usando p.sku
+      // esempio: assets/img/prodotti/<SKU>-1.jpg
+      return [
+        `assets/img/prodotti/${p.sku}-1.jpg`,
+        `assets/img/prodotti/${p.sku}-2.jpg`,
+        `assets/img/prodotti/${p.sku}-3.jpg`,
+        PLACEHOLDER
+      ];
     }
 
     function renderProduct(p){
-      // header pill
-      $("crumbPill").textContent = p.catLine ? p.catLine : "Prodotto";
-
+      $("crumbPill").textContent = p.catLine || "Prodotto";
       document.title = `${p.title} • Il Capitano`;
 
       $("badge").textContent = p.microBadge || "PRODOTTO";
       $("title").textContent = p.title || "(Senza nome)";
 
-      // descrizione: se non hai descrizione nel JSON, usiamo categoria + SKU
       const fallbackDesc = `Prodotto selezionato dal catalogo Il Capitano. Codice: ${p.sku}.`;
-      $("desc").textContent = p.desc || fallbackDesc;
+      $("desc").textContent = fallbackDesc;
 
       $("price").textContent = p.priceLabel || "—";
       $("skuLine").textContent = `SKU: ${p.sku || "—"}`;
@@ -824,17 +828,15 @@
       $("catLabel").textContent = p.catLine || p.category || "—";
       $("brandLabel").textContent = (p.brand && p.brand.trim()) ? p.brand : "—";
 
-      // link ebay: se in futuro metti nel JSON il link, qui lo usi.
-      // Per adesso: manda alla ricerca eBay con SKU + titolo
+      // eBay ricerca per titolo+codice
       const q = encodeURIComponent(`${p.title} ${p.sku}`.trim());
-      const ebayUrl = `https://www.ebay.it/sch/i.html?_nkw=${q}`;
-      $("buy").href = ebayUrl;
+      $("buy").href = `https://www.ebay.it/sch/i.html?_nkw=${q}`;
 
-      // whatsapp
+      // WhatsApp
       const msg = encodeURIComponent(`${WHATSAPP_TEXT}\n\nProdotto: ${p.title}\nCodice: ${p.sku}`);
       $("wa").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
 
-      // gallery
+      // Gallery
       const imgs = makeImagesForProduct(p);
       const thumbs = $("thumbs");
 
@@ -843,7 +845,8 @@
       thumbs.innerHTML = imgs.map((src,i)=>`
         <div class="thumb ${i===0 ? "active":""}" role="button" tabindex="0" data-i="${i}" aria-label="Foto ${i+1}">
           <div class="frame">
-            <img src="${esc(src)}" alt="${esc(p.title)} foto ${i+1}" onerror="this.src='${esc(PLACEHOLDER)}'">
+            <img src="${src}" alt="${p.title} foto ${i+1}"
+                 onerror="this.src='${PLACEHOLDER}'">
           </div>
         </div>
       `).join("");
@@ -863,7 +866,7 @@
         });
       });
 
-      // add to cart (localStorage)
+      // quantità + carrello (localStorage)
       const qtyInput = $("qty");
       const plus = $("qtyPlus");
       const minus = $("qtyMinus");
@@ -883,7 +886,7 @@
         const qty = clampQty();
         const cart = JSON.parse(localStorage.getItem("cart_ic") || "[]");
 
-        const idx = cart.findIndex(x => x.sku === p.sku);
+        const idx = cart.findIndex(x => String(x.sku) === String(p.sku));
         if(idx >= 0){
           cart[idx].qty = (Number(cart[idx].qty)||0) + qty;
         }else{
@@ -898,65 +901,68 @@
             qty
           });
         }
-
         localStorage.setItem("cart_ic", JSON.stringify(cart));
         toast(`Aggiunto al carrello: ${qty} × ${p.title}`);
       };
     }
 
     async function boot(){
-      const sku = qs("sku") || qs("id") || ""; // compatibile con vecchio ?id=
+      const skuParam = norm(qs("sku") || qs("id") || "");
       const data = await fetchCatalogJson();
 
-      // ricostruzione prodotti come in index
-      let currentCategory = "Senza categoria";
       const out = [];
 
       for(const row of data){
-        const marker = String(row[""] ?? "").trim();
-
-        if(marker.toLowerCase().startsWith("categoria")){
-          const parts = marker.split(":");
-          const found = norm(parts.length > 1 ? parts.slice(1).join(":") : "");
-          if(found) currentCategory = found;
-          continue;
-        }
-
+        // separatore categoria: è un "falso record"
+        const marker = norm(row[""]);
+        const isCategoryRow = marker.toLowerCase().startsWith("categoria");
         const code = norm(row["Cod."]);
-        if(!code) continue;
+
+        if(isCategoryRow) continue;     // SALTA
+        if(!code) continue;             // SALTA record vuoti
 
         const title = norm(row["Descrizione"]) || "(Senza nome)";
-        const brand = norm(row["Produttore"]);
-        const catRow = norm(row["Categoria"]);
-        const category = norm(catRow || currentCategory || "Senza categoria");
 
+        // categoria vera: a volte in row["Categoria"] è vuota nelle righe separatore (che noi abbiamo già saltato)
+        const category = norm(row["Categoria"]) || "Senza categoria";
         const parts = splitParts(category);
+
         const macro = parts[0] || "Senza categoria";
         const micro = (parts.length ? parts[parts.length - 1] : macro) || "PRODOTTO";
         const catLine = parts.join(" » ");
 
-        const priceNum = parsePrice(row["Listino 1 (ivato)"]);
+        const brand = norm(row["Produttore"]);
+
+        // prezzo: se negativo lo rendiamo positivo (nel tuo export ci sono -10.00 €)
+        let priceNum = parsePrice(row["Listino 1 (ivato)"]);
+        if(Number.isFinite(priceNum) && priceNum < 0) priceNum = Math.abs(priceNum);
 
         out.push({
-          sku: code,
+          sku: code,                 // stringa, mantiene zeri "0016189"
           title,
           brand,
           category,
           catLine,
           microBadge: micro,
           price: priceNum,
-          priceLabel: euro(priceNum),
-          desc: "" // se un giorno avrai una colonna descrizione, mettila qui
+          priceLabel: euro(priceNum)
         });
       }
 
-      // trova per sku
-      let p = out.find(x => x.sku === sku);
+      let p = out.find(x => String(x.sku) === String(skuParam));
 
-      // fallback: se manca, prendi primo
+      if(!p && skuParam){
+        // fallback soft
+        p = out.find(x => String(x.sku).includes(skuParam) || skuParam.includes(String(x.sku)));
+      }
+
       if(!p){
-        p = out[0] || { sku:"—", title:"Prodotto non trovato", priceLabel:"—", microBadge:"PRODOTTO" };
-        toast("Prodotto non trovato, mostro un esempio.");
+        // mostra empty state
+        $("pLayout").style.display = "none";
+        $("empty").style.display = "block";
+        $("crumbPill").textContent = "Prodotto non trovato";
+        setHero(PLACEHOLDER, "Prodotto non trovato");
+        return;
       }
 
       renderProduct(p);
