@@ -790,7 +790,21 @@
       throw e;
     }
 
-    const p = Catalogo.findBySku(ALL, skuParam);
+    const p = (()=>{
+  // 1) se nel tuo catalogo.js esiste un nome diverso, lo uso
+  if (typeof Catalogo.findBySku === "function") return Catalogo.findBySku(ALL, skuParam);
+  if (typeof Catalogo.findBySKU === "function") return Catalogo.findBySKU(ALL, skuParam);
+  if (typeof Catalogo.findById === "function")  return Catalogo.findById(ALL, skuParam);
+
+  // 2) altrimenti cerco a mano dentro ALL
+  const norm = (v)=> (Catalogo.norm ? Catalogo.norm(String(v||"")) : String(v||"").trim().toLowerCase());
+
+  return (ALL || []).find(x=>{
+    const sku = norm(x.sku ?? x.SKU ?? x.id ?? x.ID ?? x.codice ?? x.cod);
+    return sku === skuParam;
+  });
+})();
+
 
     if(!p){
       $("pLayout").style.display = "none";
@@ -825,5 +839,3 @@
   </script>
 </body>
 </html>
-
-
