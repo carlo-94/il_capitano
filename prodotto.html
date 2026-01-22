@@ -875,6 +875,19 @@
   flex:0 0 auto;
 }
 
+    /* pinch/zoom: evita selezione e migliora feeling */
+.zoomStage{
+  touch-action: none; /* importante per pinch */
+}
+
+/* stato zoom */
+.zoomImg{
+  transform-origin: center center;
+  cursor: grab;
+}
+.zoomImg.dragging{ cursor: grabbing; }
+
+
 /* Su mobile: card quasi fullscreen */
 @media (max-width: 560px){
   .zoomCard{
@@ -884,6 +897,83 @@
   }
   .zoomNav{ width:42px; height:42px; }
 }
+
+    /* ===== top right: contatore + close ===== */
+.zoomTopRight{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.zoomCount{
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.10);
+  color:#fff;
+  font-weight:1000;
+  font-size:12px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+
+/* ===== thumbnail strip ===== */
+.zoomStrip{
+  display:flex;
+  gap:10px;
+  padding:10px 12px;
+  border-top:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
+  flex:0 0 auto;
+}
+.zoomStrip::-webkit-scrollbar{height:8px}
+.zoomStrip::-webkit-scrollbar-thumb{background: rgba(255,255,255,.18); border-radius:999px}
+
+.zThumb{
+  flex:0 0 auto;
+  width:68px;
+  height:52px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.06);
+  padding:6px;
+  cursor:pointer;
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  position:relative;
+}
+.zThumb:hover{ transform: translateY(-1px); box-shadow: 0 12px 26px rgba(0,0,0,.25); }
+.zThumb.active{
+  border-color: rgba(255,255,255,.55);
+  box-shadow: 0 0 0 4px rgba(255,255,255,.14), 0 14px 30px rgba(0,0,0,.35);
+}
+
+.zThumb img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+  filter: contrast(1.05);
+}
+
+    .zoomMeta{
+  margin-top:6px;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.75);
+  text-align:center;
+}
+
+
+/* su mobile thumbnails un filo più grandi */
+@media (max-width: 560px){
+  .zThumb{ width:76px; height:58px; }
+}
+
 
 
 
@@ -1078,18 +1168,27 @@
 <div class="zoomModal" id="zoomModal" aria-hidden="true">
   <div class="zoomInner" role="dialog" aria-modal="true" aria-label="Zoom immagine prodotto">
     <div class="zoomCard">
-      <div class="zoomTop">
-        <div class="zoomTitle" id="zoomTitle">Immagine</div>
-        <button class="zoomClose" id="zoomClose" type="button" aria-label="Chiudi">✕</button>
-      </div>
+     <div class="zoomTop">
+  <div class="zoomTitle" id="zoomTitle">Immagine</div>
 
-      <div class="zoomStage" id="zoomStage">
-        <button class="zoomNav zoomPrev" id="zoomPrev" type="button" aria-label="Immagine precedente">‹</button>
-        <img class="zoomImg" id="zoomImg" alt="Zoom immagine prodotto">
-        <button class="zoomNav zoomNext" id="zoomNext" type="button" aria-label="Immagine successiva">›</button>
-      </div>
+ <div class="zoomTopRight">
+  <span class="zoomCount" id="zoomCount">1/1</span>
+  <button class="zoomClose" id="zoomClose" type="button" aria-label="Chiudi">✕</button>
+</div>
+<div class="zoomMeta" id="zoomMeta">—</div>
+</div>
 
-      <div class="zoomHint" id="zoomHint">Tap per chiudere • Swipe per cambiare</div>
+<div class="zoomStage" id="zoomStage">
+  <button class="zoomNav zoomPrev" id="zoomPrev" type="button" aria-label="Immagine precedente">‹</button>
+  <img class="zoomImg" id="zoomImg" alt="Zoom immagine prodotto">
+  <button class="zoomNav zoomNext" id="zoomNext" type="button" aria-label="Immagine successiva">›</button>
+</div>
+
+<!-- Thumbnail strip -->
+<div class="zoomStrip" id="zoomStrip" aria-label="Miniature immagini"></div>
+
+<div class="zoomHint" id="zoomHint">Tap per chiudere • Swipe per cambiare • Pinch per zoom</div>
+
     </div>
   </div>
 </div>
@@ -1162,25 +1261,105 @@ function bumpHero(){
 /* ===== Modal zoom ===== */
 function openZoom(idx){
   const modal = document.getElementById("zoomModal");
-  const img = document.getElementById("zoomImg");
+  const img   = document.getElementById("zoomImg");
   const title = document.getElementById("zoomTitle");
+  const count = document.getElementById("zoomCount");
+  const meta  = document.getElementById("zoomMeta");
+  const strip = document.getElementById("zoomStrip");
+
+  const prevBtn = document.getElementById("zoomPrev");
+  const nextBtn = document.getElementById("zoomNext");
 
   if(!modal || !img) return;
 
-  _imgIndex = Math.max(0, Math.min(idx, _imgs.length - 1));
+  // fallback immagini
+  if(!_imgs || !_imgs.length){
+    _imgs = [PLACEHOLDER];
+  }
+
+  const total = Math.max(1, _imgs.length);
+  _imgIndex = Math.max(0, Math.min(Number(idx) || 0, total - 1));
+
   const src = _imgs[_imgIndex] || PLACEHOLDER;
 
+  // ---- immagine principale ----
   img.src = src;
   img.onerror = ()=>{ img.src = PLACEHOLDER; };
 
-  // titolo
+  // ---- titolo prodotto ----
   const productTitle = document.getElementById("title")?.textContent?.trim() || "Immagine";
-  title.textContent = `${productTitle} • ${_imgIndex + 1}/${Math.max(1,_imgs.length)}`;
+  if(title) title.textContent = productTitle;
 
+  // ---- contatore 1/3 ----
+  if(count) count.textContent = `${_imgIndex + 1}/${total}`;
+
+  // ---- mini didascalia: Categoria • SKU • Prezzo ----
+  if(meta){
+    // Categoria: preferisci metaLine (fullCat), fallback badge
+    const catRaw = (document.getElementById("metaLine")?.textContent || document.getElementById("badge")?.textContent || "").trim();
+    const cat = catRaw.replace(/^Categoria:\s*/i, "").trim();
+
+    // SKU: prova da window.__currentProduct, fallback da subLine
+    const skuFromObj = window.__currentProduct?.sku ? String(window.__currentProduct.sku).trim() : "";
+    const subLine = document.getElementById("subLine")?.textContent || "";
+    let sku = skuFromObj;
+
+    if(!sku){
+      const m = String(subLine).match(/SKU\s*([A-Za-z0-9\-_.]+)/i);
+      sku = m ? m[1] : "";
+    }
+
+    const price = (document.getElementById("price")?.textContent || "").trim();
+
+    const parts = [
+      cat || "",
+      sku ? `SKU ${sku}` : "",
+      price || ""
+    ].filter(Boolean);
+
+    meta.textContent = parts.join(" • ") || "—";
+    meta.title = meta.textContent; // utile se va in ellissi
+  }
+
+  // ---- mostra/nascondi frecce ----
+  if(prevBtn) prevBtn.hidden = (total <= 1);
+  if(nextBtn) nextBtn.hidden = (total <= 1);
+
+  // ---- thumbnail strip ----
+  if(strip){
+    strip.innerHTML = _imgs.map((s,i)=>`
+      <button class="zThumb ${i===_imgIndex ? "active":""}"
+              type="button"
+              data-i="${i}"
+              aria-label="Apri immagine ${i+1}">
+        <img src="${s}" alt="${productTitle} miniatura ${i+1}" onerror="this.src='${PLACEHOLDER}'">
+      </button>
+    `).join("");
+
+    strip.querySelectorAll(".zThumb").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const i = Number(btn.getAttribute("data-i"));
+        if(Number.isFinite(i)){
+          _imgIndex = i;
+          openZoom(_imgIndex);
+        }
+      });
+    });
+
+    strip.querySelector(".zThumb.active")
+      ?.scrollIntoView({ behavior:"smooth", inline:"center", block:"nearest" });
+  }
+
+  // ---- apri modal ----
   modal.classList.add("open");
   modal.setAttribute("aria-hidden","false");
   document.body.style.overflow = "hidden";
+
+  // ---- reset pinch/zoom/pan ogni volta ----
+  if(typeof resetZoom === "function") resetZoom();
 }
+
+
 
 function closeZoom(){
   const modal = document.getElementById("zoomModal");
@@ -1189,6 +1368,186 @@ function closeZoom(){
   modal.setAttribute("aria-hidden","true");
   document.body.style.overflow = "";
 }
+
+    // ===== Pinch to zoom + pan + double tap =====
+const Zoom = {
+  scale: 1,
+  min: 1,
+  max: 3.5,
+  x: 0,
+  y: 0,
+  startX: 0,
+  startY: 0,
+  lastTap: 0,
+  isPanning: false,
+  pointers: new Map(),
+  baseDist: 0,
+  baseScale: 1,
+  baseMid: null
+};
+
+function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+
+function applyZoom(){
+  const img = document.getElementById("zoomImg");
+  if(!img) return;
+  img.style.transform = `translate(${Zoom.x}px, ${Zoom.y}px) scale(${Zoom.scale})`;
+}
+
+function resetZoom(){
+  Zoom.scale = 1;
+  Zoom.x = 0;
+  Zoom.y = 0;
+  Zoom.baseDist = 0;
+  Zoom.baseScale = 1;
+  Zoom.baseMid = null;
+  applyZoom();
+}
+
+function setScale(newScale, anchor){
+  // anchor: {x,y} in stage coords (opzionale)
+  const stage = document.getElementById("zoomStage");
+  if(!stage) return;
+
+  const rect = stage.getBoundingClientRect();
+  const ax = anchor ? (anchor.x - rect.left) : rect.width/2;
+  const ay = anchor ? (anchor.y - rect.top) : rect.height/2;
+
+  // coordinate rispetto alla trasformazione corrente
+  const prev = Zoom.scale;
+  newScale = clamp(newScale, Zoom.min, Zoom.max);
+
+  if(newScale === prev) return;
+
+  // Mantieni il punto sotto il dito “ferm0” (approx)
+  // x' = x + (ax - ax')... formula semplificata:
+  // Sposta il translate in base al cambio di scala
+  Zoom.x = (Zoom.x - ax) * (newScale/prev) + ax;
+  Zoom.y = (Zoom.y - ay) * (newScale/prev) + ay;
+
+  Zoom.scale = newScale;
+  applyZoom();
+}
+
+function distance(p1, p2){
+  const dx = p2.x - p1.x;
+  const dy = p2.y - p1.y;
+  return Math.hypot(dx, dy);
+}
+
+function midpoint(p1, p2){
+  return { x: (p1.x + p2.x)/2, y: (p1.y + p2.y)/2 };
+}
+
+function bindPinchPan(stage){
+  const img = document.getElementById("zoomImg");
+  if(!stage || !img) return;
+
+  // Pointer events (funzionano bene su mobile + desktop)
+  stage.addEventListener("pointerdown", (e)=>{
+    stage.setPointerCapture?.(e.pointerId);
+    Zoom.pointers.set(e.pointerId, {x: e.clientX, y: e.clientY});
+
+    // double tap
+    const now = Date.now();
+    if(e.pointerType === "touch"){
+      if(now - Zoom.lastTap < 280){
+        // double tap: toggle 1x <-> 2.2x sul punto
+        const target = (Zoom.scale > 1.05) ? 1 : 2.2;
+        setScale(target, {x: e.clientX, y: e.clientY});
+        if(target === 1) resetZoom();
+        Zoom.lastTap = 0;
+      } else {
+        Zoom.lastTap = now;
+      }
+    }
+
+    // start pan
+    if(Zoom.pointers.size === 1){
+      Zoom.isPanning = true;
+      Zoom.startX = e.clientX - Zoom.x;
+      Zoom.startY = e.clientY - Zoom.y;
+      img.classList.add("dragging");
+    }
+
+    // start pinch
+    if(Zoom.pointers.size === 2){
+      const pts = Array.from(Zoom.pointers.values());
+      Zoom.baseDist = distance(pts[0], pts[1]);
+      Zoom.baseScale = Zoom.scale;
+      Zoom.baseMid = midpoint(pts[0], pts[1]);
+      Zoom.isPanning = false;
+      img.classList.add("dragging");
+    }
+  });
+
+  stage.addEventListener("pointermove", (e)=>{
+    if(!Zoom.pointers.has(e.pointerId)) return;
+    Zoom.pointers.set(e.pointerId, {x: e.clientX, y: e.clientY});
+
+    // pinch con 2 dita
+    if(Zoom.pointers.size === 2){
+      const pts = Array.from(Zoom.pointers.values());
+      const dist = distance(pts[0], pts[1]);
+      const mid = midpoint(pts[0], pts[1]);
+
+      if(Zoom.baseDist > 0){
+        const ratio = dist / Zoom.baseDist;
+        const newScale = Zoom.baseScale * ratio;
+        setScale(newScale, mid);
+      }
+      return;
+    }
+
+    // pan con 1 dito/mouse SOLO se zoom > 1
+    if(Zoom.pointers.size === 1 && Zoom.scale > 1.01){
+      if(!Zoom.isPanning) return;
+      Zoom.x = e.clientX - Zoom.startX;
+      Zoom.y = e.clientY - Zoom.startY;
+      applyZoom();
+    }
+  });
+
+  function endPointer(e){
+    Zoom.pointers.delete(e.pointerId);
+
+    if(Zoom.pointers.size === 0){
+      Zoom.isPanning = false;
+      Zoom.baseDist = 0;
+      Zoom.baseMid = null;
+      img.classList.remove("dragging");
+
+      // se scala quasi 1, reset pulito
+      if(Zoom.scale < 1.02) resetZoom();
+      return;
+    }
+
+    // se rimane un dito dopo pinch, prepara pan
+    if(Zoom.pointers.size === 1){
+      const pt = Array.from(Zoom.pointers.values())[0];
+      Zoom.isPanning = true;
+      Zoom.startX = pt.x - Zoom.x;
+      Zoom.startY = pt.y - Zoom.y;
+      Zoom.baseDist = 0;
+      Zoom.baseMid = null;
+    }
+  }
+
+  stage.addEventListener("pointerup", endPointer);
+  stage.addEventListener("pointercancel", endPointer);
+
+  // Wheel zoom (desktop)
+  stage.addEventListener("wheel", (e)=>{
+    const modalOpen = document.getElementById("zoomModal")?.classList.contains("open");
+    if(!modalOpen) return;
+    e.preventDefault();
+    const delta = Math.sign(e.deltaY);
+    const factor = (delta > 0) ? 0.92 : 1.08;
+    setScale(Zoom.scale * factor, {x: e.clientX, y: e.clientY});
+    if(Zoom.scale <= 1.02) resetZoom();
+  }, {passive:false});
+}
+
 
 function zoomNext(){
   if(!_imgs.length) return;
@@ -1267,13 +1626,15 @@ function bindSwipe(el){
       localStorage.setItem("cart_ic", JSON.stringify(cart));
     }
 
-    function renderProduct(p){
-  const fullCat = String(p.catLine || p.category || "").trim();
-  const sku = String(p.sku || "").trim();
-  const title = p.title || "(Senza nome)";
+   function renderProduct(p){
+  // salva prodotto corrente (per openZoom meta, ecc.)
+  window.__currentProduct = p;
 
-  // --------- parse categoria: "MACRO » SUB" ----------
-  // Supporta sia "»" che ">" o "/" se un giorno cambia.
+  const title = (p.title || p.Descrizione || "(Senza nome)").trim();
+  const sku = String(p.sku || p.SKU || p.id || p.ID || p.codice || p.cod || "").trim();
+  const fullCat = String(p.catLine || p.category || p.Categoria || "").replace(/\s+/g," ").trim();
+
+  // ---------- parse categoria: "MACRO » SUB" ----------
   const parts = fullCat
     ? fullCat.split(/»|>|\/|\|/).map(s => s.replace(/\s+/g," ").trim()).filter(Boolean)
     : [];
@@ -1281,11 +1642,11 @@ function bindSwipe(el){
   const macroLabel = parts[0] || "Catalogo";
   const subLabel   = parts[1] || macroLabel;
 
-  // slug per query (se catalogo.js li ha già, usa quelli)
+  // slug: se catalogo.js li ha già, usa quelli
   const macroSlug = p.macroSlug || (window.Catalogo?.slugify ? window.Catalogo.slugify(macroLabel) : macroLabel.toLowerCase());
   const subSlug   = p.catSlug   || (window.Catalogo?.slugify ? window.Catalogo.slugify(subLabel) : subLabel.toLowerCase());
 
-  // --------- breadcrumb cliccabile ----------
+  // ---------- breadcrumb cliccabile ----------
   const macroA = document.getElementById("crumbMacro");
   const subA   = document.getElementById("crumbSub");
 
@@ -1300,89 +1661,125 @@ function bindSwipe(el){
     subA.title = `Vai a: ${macroLabel} > ${subLabel}`;
   }
 
-  // --------- badge e categoria in card bianca ----------
-  document.getElementById("badge").textContent = fullCat || "PRODOTTO";
-  document.getElementById("metaLine").textContent = fullCat || "—";
+  // ---------- badge + card bianca categoria ----------
+  // badge: puoi scegliere se mostrare "Categoria: ..."
+  const badge = document.getElementById("badge");
+  if(badge) badge.textContent = fullCat ? `Categoria: ${fullCat}` : "PRODOTTO";
 
-  // --------- titolo + riga SKU pulita ----------
+  const metaLine = document.getElementById("metaLine");
+  if(metaLine) metaLine.textContent = fullCat ? `Categoria: ${fullCat}` : "—";
+
+  // ---------- titolo + subline SKU pulita ----------
   document.title = `${title} • Il Capitano`;
-  document.getElementById("title").textContent = title;
+
+  const h1 = document.getElementById("title");
+  if(h1) h1.textContent = title;
 
   const subLine = document.getElementById("subLine");
   if(subLine){
     subLine.textContent = `SKU ${sku || "—"} • ${fullCat || "—"}`;
   }
 
-  // prezzo
-  document.getElementById("price").textContent = p.priceLabel || "—";
+  // ---------- prezzo ----------
+  const priceEl = document.getElementById("price");
+  if(priceEl) priceEl.textContent = p.priceLabel || p["Listino 1 (ivato)"] || "—";
 
-  // produttore: se vuoto -> vuoto
-  const brand = (p.brand && String(p.brand).trim()) ? String(p.brand).trim() : "";
-  document.getElementById("brandLabel").textContent = brand;
+  // ---------- produttore (se vuoto -> vuoto) ----------
+  const brand = (p.brand || p.Produttore || "").toString().trim();
+  const brandEl = document.getElementById("brandLabel");
+  if(brandEl) brandEl.textContent = brand; // vuoto se manca (come vuoi tu)
 
-  // WhatsApp
-  const msg = encodeURIComponent(`Ciao! Mi dai info su questo prodotto?\n\nProdotto: ${title}\nSKU: ${sku}\nCategoria: ${fullCat || "—"}`);
-  document.getElementById("wa").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+  // ---------- WhatsApp ----------
+  const wa = document.getElementById("wa");
+  if(wa){
+    const priceTxt = (priceEl?.textContent || "").trim();
+    const msg = encodeURIComponent(
+      `Ciao! Mi dai info su questo prodotto?\n\n` +
+      `Prodotto: ${title}\n` +
+      `SKU: ${sku || "—"}\n` +
+      `Categoria: ${fullCat || "—"}\n` +
+      `Prezzo: ${priceTxt || "—"}\n` +
+      `Link: ${location.href}`
+    );
+    wa.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+  }
 
-  // immagini
-  const imgs = makeImagesForProduct(p);
-  setHero(imgs[0], title);
-      const hero = document.getElementById("heroImg");
-if(hero){
-  hero.onclick = ()=> openZoom(_imgIndex);
-}
+  // ---------- immagini + thumbs ----------
+  const imgs = makeImagesForProduct(p) || [PLACEHOLDER];
+  _imgs = imgs.slice();
+  _imgIndex = 0;
 
-      _imgs = imgs.slice();
-_imgIndex = 0;
-
+  setHero(_imgs[0], title);
 
   const thumbs = document.getElementById("thumbs");
-  thumbs.innerHTML = imgs.map((src,i)=>`
-    <div class="thumb ${i===0 ? "active":""}" role="button" tabindex="0" data-i="${i}" aria-label="Foto ${i+1}">
-      <div class="frame">
-        <img src="${src}" alt="${title} foto ${i+1}" onerror="this.src='${PLACEHOLDER}'">
+  if(thumbs){
+    thumbs.innerHTML = _imgs.map((src,i)=>`
+      <div class="thumb ${i===0 ? "active":""}" role="button" tabindex="0" data-i="${i}" aria-label="Foto ${i+1}">
+        <div class="frame">
+          <img src="${src}" alt="${title} foto ${i+1}" onerror="this.src='${PLACEHOLDER}'">
+        </div>
       </div>
-    </div>
-  `).join("");
+    `).join("");
 
-  thumbs.querySelectorAll(".thumb").forEach(el=>{
-    const activate = ()=>{
-      _imgIndex = i;
-
-      const i = Number(el.getAttribute("data-i"));
-      setHero(imgs[i], title);
-      setActiveThumb(i);
-    };
-    el.addEventListener("click", activate);
-    el.addEventListener("keydown", (e)=>{
-      if(e.key === "Enter" || e.key === " "){
-        e.preventDefault();
-        activate();
-      }
+    thumbs.querySelectorAll(".thumb").forEach(el=>{
+      const activate = ()=>{
+        const i = Number(el.getAttribute("data-i"));
+        if(!Number.isFinite(i)) return;
+        _imgIndex = i;
+        setHero(_imgs[i], title);
+        setActiveThumb(i);
+      };
+      el.addEventListener("click", activate);
+      el.addEventListener("keydown", (e)=>{
+        if(e.key === "Enter" || e.key === " "){
+          e.preventDefault();
+          activate();
+        }
+      });
     });
-  });
+  }
 
-  // quantità + carrello
+  // tap/click sulla foto grande -> apri modal zoom
+  const hero = document.getElementById("heroImg");
+  if(hero){
+    hero.onclick = ()=> openZoom(_imgIndex);
+  }
+
+  // ---------- quantità + carrello ----------
   const qtyInput = document.getElementById("qty");
   const plus = document.getElementById("qtyPlus");
   const minus = document.getElementById("qtyMinus");
 
   const clampQty = ()=>{
-    let v = Number(qtyInput.value);
+    let v = Number(qtyInput?.value);
     if(!Number.isFinite(v) || v < 1) v = 1;
-    qtyInput.value = String(v);
+    if(qtyInput) qtyInput.value = String(v);
     return v;
   };
 
-  plus.onclick = ()=>{ qtyInput.value = String(clampQty()+1); };
-  minus.onclick = ()=>{ qtyInput.value = String(Math.max(1, clampQty()-1)); };
-  qtyInput.addEventListener("change", clampQty);
+  if(plus) plus.onclick = ()=>{ if(qtyInput) qtyInput.value = String(clampQty()+1); };
+  if(minus) minus.onclick = ()=>{ if(qtyInput) qtyInput.value = String(Math.max(1, clampQty()-1)); };
+  qtyInput?.addEventListener("change", clampQty);
 
-  document.getElementById("addCart").onclick = ()=>{
-    const qty = clampQty();
-    addToCart(p, qty);
-    toast(`Aggiunto al carrello: ${qty} × ${title}`);
-  };
+  const addBtn = document.getElementById("addCart");
+  if(addBtn){
+    addBtn.onclick = ()=>{
+      const qty = clampQty();
+      addToCart(
+        {
+          sku,
+          title,
+          price: Number.isFinite(p.price) ? p.price : null,
+          priceLabel: p.priceLabel || (p["Listino 1 (ivato)"] || "—"),
+          catLine: fullCat,
+          category: fullCat,
+          brand
+        },
+        qty
+      );
+      toast(`Aggiunto al carrello: ${qty} × ${title}`);
+    };
+  }
 }
 
 
@@ -1465,7 +1862,13 @@ modal?.addEventListener("click", (e)=>{
 stage?.addEventListener("click", (e)=>{
   const isBtn = e.target.closest(".zoomNav, .zoomClose");
   if(isBtn) return;
+
+  // se sei zoomato, il tap NON chiude (altrimenti è fastidioso)
+  if(Zoom.scale > 1.05) return;
+
   closeZoom();
+});
+
 });
 
 // ESC / frecce
@@ -1479,6 +1882,8 @@ document.addEventListener("keydown", (e)=>{
 
 // swipe su mobile
 if(stage) bindSwipe(stage);
+      if(stage) bindPinchPan(stage);
+
 
       // requisito
       if(!window.Catalogo || typeof window.Catalogo.loadCatalog !== "function"){
@@ -1571,5 +1976,6 @@ if(stage) bindSwipe(stage);
   </script>
 </body>
 </html>
+
 
 
