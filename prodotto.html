@@ -703,6 +703,52 @@
     }
     footer .wrap{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;}
 
+    /* ===== Breadcrumb vero ===== */
+.crumbNav{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  width:100%;
+}
+.crumbLink{
+  padding:7px 10px;
+  border-radius:999px;
+  border:1px solid rgba(0,0,0,.12);
+  background: rgba(238,246,247,.60);
+  font-weight:950;
+  color: rgba(11,95,118,.95);
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.crumbLink:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(0,0,0,.10);
+  background: rgba(238,246,247,.92);
+}
+.crumbSep{
+  opacity:.45;
+  font-weight:1100;
+}
+.crumbHere{
+  padding:7px 10px;
+  border-radius:999px;
+  border:1px solid rgba(0,0,0,.10);
+  background: rgba(255,255,255,.72);
+  font-weight:950;
+  color: rgba(20,20,20,.72);
+}
+
+/* ===== SKU + categoria sotto al titolo ===== */
+.subLine{
+  margin-top:8px;
+  font-size:12px;
+  font-weight:950;
+  color:rgba(20,20,20,.60);
+  letter-spacing:.10em;
+  text-transform:uppercase;
+}
+
+
     @media (max-width: 1100px){
       .searchTop input{width:min(460px, 46vw)}
       .mega2{grid-template-columns:1fr;}
@@ -806,10 +852,17 @@
     <div class="wrap">
       <section class="panel" id="panel">
 
-        <div class="crumbRow">
-          <div class="crumbPill2" id="crumbPill">Prodotto</div>
-          <div class="skuLine2" id="skuLine">SKU: —</div>
-        </div>
+       <div class="crumbRow">
+  <nav class="crumbNav" aria-label="Percorso">
+    <a class="crumbLink" href="index.html">Home</a>
+    <span class="crumbSep">›</span>
+    <a class="crumbLink" id="crumbMacro" href="index.html">—</a>
+    <span class="crumbSep">›</span>
+    <a class="crumbLink" id="crumbSub" href="index.html">—</a>
+    <span class="crumbSep">›</span>
+    <span class="crumbHere">Prodotto</span>
+  </nav>
+</div>
 
         <div id="pLayout">
           <div class="layoutP">
@@ -832,7 +885,9 @@
               <div class="kicker" id="badge">PRODOTTO</div>
 
               <h1 id="title">Titolo prodotto</h1>
-              <div class="price" id="price">—</div>
+<div class="subLine" id="subLine">SKU — • —</div>
+<div class="price" id="price">—</div>
+
               <div class="ropeP" aria-hidden="true"></div>
 
               <div class="actions">
@@ -965,79 +1020,113 @@
     }
 
     function renderProduct(p){
-      const fullCat = String(p.catLine || p.category || "").trim();
+  const fullCat = String(p.catLine || p.category || "").trim();
+  const sku = String(p.sku || "").trim();
+  const title = p.title || "(Senza nome)";
 
-      // ✅ pill sopra e badge = categoria completa
-      $("crumbPill").textContent = fullCat || "Prodotto";
-      $("badge").textContent = fullCat || "PRODOTTO";
+  // --------- parse categoria: "MACRO » SUB" ----------
+  // Supporta sia "»" che ">" o "/" se un giorno cambia.
+  const parts = fullCat
+    ? fullCat.split(/»|>|\/|\|/).map(s => s.replace(/\s+/g," ").trim()).filter(Boolean)
+    : [];
 
-      // ✅ rettangolo bianco sotto produttore = categoria completa
-      $("metaLine").textContent = fullCat || "—";
+  const macroLabel = parts[0] || "Catalogo";
+  const subLabel   = parts[1] || macroLabel;
 
-      document.title = `${p.title || "Prodotto"} • Il Capitano`;
+  // slug per query (se catalogo.js li ha già, usa quelli)
+  const macroSlug = p.macroSlug || (window.Catalogo?.slugify ? window.Catalogo.slugify(macroLabel) : macroLabel.toLowerCase());
+  const subSlug   = p.catSlug   || (window.Catalogo?.slugify ? window.Catalogo.slugify(subLabel) : subLabel.toLowerCase());
 
-      $("title").textContent = p.title || "(Senza nome)";
-      $("price").textContent = p.priceLabel || "—";
-      $("skuLine").textContent = `SKU: ${p.sku || "—"}`;
+  // --------- breadcrumb cliccabile ----------
+  const macroA = document.getElementById("crumbMacro");
+  const subA   = document.getElementById("crumbSub");
 
-      // ✅ produttore: se vuoto -> vuoto (non “—”)
-      const brand = (p.brand && String(p.brand).trim()) ? String(p.brand).trim() : "";
-      $("brandLabel").textContent = brand;
+  if(macroA){
+    macroA.textContent = macroLabel;
+    macroA.href = `index.html?macro=${encodeURIComponent(macroSlug)}#catalogo`;
+    macroA.title = `Vai a: ${macroLabel}`;
+  }
+  if(subA){
+    subA.textContent = subLabel;
+    subA.href = `index.html?macro=${encodeURIComponent(macroSlug)}&sub=${encodeURIComponent(subSlug)}#catalogo`;
+    subA.title = `Vai a: ${macroLabel} > ${subLabel}`;
+  }
 
-      // WhatsApp
-      const msg = encodeURIComponent(`${WHATSAPP_TEXT}\n\nProdotto: ${p.title}\nCodice: ${p.sku}`);
-      $("wa").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+  // --------- badge e categoria in card bianca ----------
+  document.getElementById("badge").textContent = fullCat || "PRODOTTO";
+  document.getElementById("metaLine").textContent = fullCat || "—";
 
-      // immagini
-      const imgs = makeImagesForProduct(p);
-      setHero(imgs[0], p.title);
+  // --------- titolo + riga SKU pulita ----------
+  document.title = `${title} • Il Capitano`;
+  document.getElementById("title").textContent = title;
 
-      const thumbs = $("thumbs");
-      thumbs.innerHTML = imgs.map((src,i)=>`
-        <div class="thumb ${i===0 ? "active":""}" role="button" tabindex="0" data-i="${i}" aria-label="Foto ${i+1}">
-          <div class="frame">
-            <img src="${src}" alt="${(p.title || "Prodotto")} foto ${i+1}" onerror="this.src='${PLACEHOLDER}'">
-          </div>
-        </div>
-      `).join("");
+  const subLine = document.getElementById("subLine");
+  if(subLine){
+    subLine.textContent = `SKU ${sku || "—"} • ${fullCat || "—"}`;
+  }
 
-      thumbs.querySelectorAll(".thumb").forEach(el=>{
-        const activate = ()=>{
-          const i = Number(el.getAttribute("data-i"));
-          setHero(imgs[i], p.title);
-          setActiveThumb(i);
-        };
-        el.addEventListener("click", activate);
-        el.addEventListener("keydown", (e)=>{
-          if(e.key === "Enter" || e.key === " "){
-            e.preventDefault();
-            activate();
-          }
-        });
-      });
+  // prezzo
+  document.getElementById("price").textContent = p.priceLabel || "—";
 
-      // quantità
-      const qtyInput = $("qty");
-      const plus = $("qtyPlus");
-      const minus = $("qtyMinus");
+  // produttore: se vuoto -> vuoto
+  const brand = (p.brand && String(p.brand).trim()) ? String(p.brand).trim() : "";
+  document.getElementById("brandLabel").textContent = brand;
 
-      const clampQty = ()=>{
-        let v = Number(qtyInput.value);
-        if(!Number.isFinite(v) || v < 1) v = 1;
-        qtyInput.value = String(v);
-        return v;
-      };
+  // WhatsApp
+  const msg = encodeURIComponent(`Ciao! Mi dai info su questo prodotto?\n\nProdotto: ${title}\nSKU: ${sku}\nCategoria: ${fullCat || "—"}`);
+  document.getElementById("wa").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
 
-      plus.onclick = ()=>{ qtyInput.value = String(clampQty()+1); };
-      minus.onclick = ()=>{ qtyInput.value = String(Math.max(1, clampQty()-1)); };
-      qtyInput.addEventListener("change", clampQty);
+  // immagini
+  const imgs = makeImagesForProduct(p);
+  setHero(imgs[0], title);
 
-      $("addCart").onclick = ()=>{
-        const qty = clampQty();
-        addToCart(p, qty);
-        toast(`Aggiunto al carrello: ${qty} × ${p.title}`);
-      };
-    }
+  const thumbs = document.getElementById("thumbs");
+  thumbs.innerHTML = imgs.map((src,i)=>`
+    <div class="thumb ${i===0 ? "active":""}" role="button" tabindex="0" data-i="${i}" aria-label="Foto ${i+1}">
+      <div class="frame">
+        <img src="${src}" alt="${title} foto ${i+1}" onerror="this.src='${PLACEHOLDER}'">
+      </div>
+    </div>
+  `).join("");
+
+  thumbs.querySelectorAll(".thumb").forEach(el=>{
+    const activate = ()=>{
+      const i = Number(el.getAttribute("data-i"));
+      setHero(imgs[i], title);
+      setActiveThumb(i);
+    };
+    el.addEventListener("click", activate);
+    el.addEventListener("keydown", (e)=>{
+      if(e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        activate();
+      }
+    });
+  });
+
+  // quantità + carrello
+  const qtyInput = document.getElementById("qty");
+  const plus = document.getElementById("qtyPlus");
+  const minus = document.getElementById("qtyMinus");
+
+  const clampQty = ()=>{
+    let v = Number(qtyInput.value);
+    if(!Number.isFinite(v) || v < 1) v = 1;
+    qtyInput.value = String(v);
+    return v;
+  };
+
+  plus.onclick = ()=>{ qtyInput.value = String(clampQty()+1); };
+  minus.onclick = ()=>{ qtyInput.value = String(Math.max(1, clampQty()-1)); };
+  qtyInput.addEventListener("change", clampQty);
+
+  document.getElementById("addCart").onclick = ()=>{
+    const qty = clampQty();
+    addToCart(p, qty);
+    toast(`Aggiunto al carrello: ${qty} × ${title}`);
+  };
+}
+
 
     /* =================== MEGA OVERLAY (come index) =================== */
     function esc(s){
@@ -1189,3 +1278,4 @@
   </script>
 </body>
 </html>
+
