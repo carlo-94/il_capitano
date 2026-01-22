@@ -1574,6 +1574,28 @@
     // 2) costruisci MODEL (macro + sottocategorie + count)
     MODEL = window.Catalogo.buildModel(ALL) || [];
 
+    // ===== leggi filtri da query (macro/sub) =====
+const url = new URL(location.href);
+const qMacro = url.searchParams.get("macro");
+const qSub = url.searchParams.get("sub");
+
+if(qMacro){
+  state.macro = qMacro;
+  state.sub = qSub || "tutti";
+
+  // prova a ricostruire label da MODEL
+  const mm = MODEL.find(x => x.macroSlug === qMacro);
+  if(mm){
+    state.macroLabel = mm.macro;
+    if(qSub && qSub !== "tutti"){
+      const cc = (mm.cats||[]).find(c => c.slug === qSub);
+      if(cc) state.subLabel = cc.short;
+    }
+    state.openMacros.add(qMacro);
+  }
+}
+
+
     // default: apri prime 2 macro in sidebar
     state.openMacros = new Set(MODEL.slice(0,2).map(x => x.macroSlug));
 
@@ -1692,6 +1714,7 @@
 
 </body>
 </html>
+
 
 
 
