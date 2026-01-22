@@ -748,6 +748,144 @@
   text-transform:uppercase;
 }
 
+    /* ===== Premium image transitions ===== */
+.mainFrame{ position:relative; }
+.mainFrame img{
+  transition: transform .22s ease, filter .22s ease, opacity .22s ease;
+  will-change: transform, filter, opacity;
+  cursor: zoom-in;
+}
+.mainFrame img.bump{
+  transform: scale(1.035);
+  filter: drop-shadow(0 20px 30px rgba(0,0,0,.12)) contrast(1.08);
+}
+
+/* ===== Fullscreen zoom modal ===== */
+.zoomModal{
+  position:fixed;
+  inset:0;
+  background: rgba(10,14,18,.82);
+  display:none;
+  z-index:10000;
+}
+.zoomModal.open{ display:block; }
+
+.zoomInner{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:14px;
+}
+
+.zoomCard{
+  width:min(1100px, calc(100vw - 28px));
+  height:min(760px, calc(100vh - 28px));
+  border-radius:18px;
+  background: rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow: 0 28px 120px rgba(0,0,0,.45);
+  overflow:hidden;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+}
+
+.zoomTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px 12px;
+  background: rgba(255,255,255,.08);
+  border-bottom:1px solid rgba(255,255,255,.12);
+  flex:0 0 auto;
+}
+.zoomTitle{
+  font-weight:950;
+  color: rgba(255,255,255,.92);
+  font-size:12px;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  opacity:.92;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  max-width:70vw;
+}
+.zoomClose{
+  border:1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.10);
+  color:#fff;
+  border-radius:12px;
+  padding:8px 10px;
+  cursor:pointer;
+  font-weight:1100;
+}
+
+.zoomStage{
+  flex:1 1 auto;
+  min-height:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:14px;
+  position:relative;
+  user-select:none;
+  touch-action: pan-y; /* permette swipe */
+}
+.zoomImg{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  display:block;
+  filter: drop-shadow(0 26px 60px rgba(0,0,0,.35));
+  transform: translateZ(0);
+}
+
+.zoomNav{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:44px;
+  height:44px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.10);
+  color:#fff;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:1200;
+}
+.zoomPrev{ left:14px; }
+.zoomNext{ right:14px; }
+.zoomNav:active{ transform:translateY(-50%) scale(.98); }
+
+.zoomHint{
+  padding:10px 12px 12px;
+  color: rgba(255,255,255,.86);
+  font-weight:900;
+  font-size:12px;
+  opacity:.85;
+  border-top:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  flex:0 0 auto;
+}
+
+/* Su mobile: card quasi fullscreen */
+@media (max-width: 560px){
+  .zoomCard{
+    width: calc(100vw - 18px);
+    height: calc(100vh - 18px);
+    border-radius:16px;
+  }
+  .zoomNav{ width:42px; height:42px; }
+}
+
+
 
     @media (max-width: 1100px){
       .searchTop input{width:min(460px, 46vw)}
@@ -936,6 +1074,27 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<!-- FULLSCREEN ZOOM MODAL -->
+<div class="zoomModal" id="zoomModal" aria-hidden="true">
+  <div class="zoomInner" role="dialog" aria-modal="true" aria-label="Zoom immagine prodotto">
+    <div class="zoomCard">
+      <div class="zoomTop">
+        <div class="zoomTitle" id="zoomTitle">Immagine</div>
+        <button class="zoomClose" id="zoomClose" type="button" aria-label="Chiudi">✕</button>
+      </div>
+
+      <div class="zoomStage" id="zoomStage">
+        <button class="zoomNav zoomPrev" id="zoomPrev" type="button" aria-label="Immagine precedente">‹</button>
+        <img class="zoomImg" id="zoomImg" alt="Zoom immagine prodotto">
+        <button class="zoomNav zoomNext" id="zoomNext" type="button" aria-label="Immagine successiva">›</button>
+      </div>
+
+      <div class="zoomHint" id="zoomHint">Tap per chiudere • Swipe per cambiare</div>
+    </div>
+  </div>
+</div>
+
+
   <!-- JS condiviso -->
   <script src="./assets/js/catalogo.js"></script>
 
@@ -982,7 +1141,96 @@
       heroImg.src = src || PLACEHOLDER;
       heroImg.alt = alt || "Immagine prodotto";
       heroImg.onerror = ()=>{ heroImg.src = PLACEHOLDER; };
+      bumpHero();
+
     }
+
+    let _imgs = [];
+let _imgIndex = 0;
+
+function bumpHero(){
+  const hero = document.getElementById("heroImg");
+  if(!hero) return;
+  hero.classList.remove("bump");
+  // trigger reflow per riavviare animazione
+  void hero.offsetWidth;
+  hero.classList.add("bump");
+  clearTimeout(bumpHero._t);
+  bumpHero._t = setTimeout(()=>hero.classList.remove("bump"), 240);
+}
+
+/* ===== Modal zoom ===== */
+function openZoom(idx){
+  const modal = document.getElementById("zoomModal");
+  const img = document.getElementById("zoomImg");
+  const title = document.getElementById("zoomTitle");
+
+  if(!modal || !img) return;
+
+  _imgIndex = Math.max(0, Math.min(idx, _imgs.length - 1));
+  const src = _imgs[_imgIndex] || PLACEHOLDER;
+
+  img.src = src;
+  img.onerror = ()=>{ img.src = PLACEHOLDER; };
+
+  // titolo
+  const productTitle = document.getElementById("title")?.textContent?.trim() || "Immagine";
+  title.textContent = `${productTitle} • ${_imgIndex + 1}/${Math.max(1,_imgs.length)}`;
+
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+}
+
+function closeZoom(){
+  const modal = document.getElementById("zoomModal");
+  if(!modal) return;
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden","true");
+  document.body.style.overflow = "";
+}
+
+function zoomNext(){
+  if(!_imgs.length) return;
+  _imgIndex = (_imgIndex + 1) % _imgs.length;
+  openZoom(_imgIndex);
+}
+
+function zoomPrev(){
+  if(!_imgs.length) return;
+  _imgIndex = (_imgIndex - 1 + _imgs.length) % _imgs.length;
+  openZoom(_imgIndex);
+}
+
+/* swipe detection (semplice e robusto) */
+function bindSwipe(el){
+  let x0 = null;
+  let t0 = 0;
+
+  el.addEventListener("touchstart", (e)=>{
+    const t = e.touches?.[0];
+    if(!t) return;
+    x0 = t.clientX;
+    t0 = Date.now();
+  }, {passive:true});
+
+  el.addEventListener("touchend", (e)=>{
+    if(x0 === null) return;
+    const t = e.changedTouches?.[0];
+    if(!t) return;
+
+    const dx = t.clientX - x0;
+    const dt = Date.now() - t0;
+
+    x0 = null;
+    // swipe “intenzionale”
+    if(Math.abs(dx) > 40 && dt < 650){
+      if(dx < 0) zoomNext();
+      else zoomPrev();
+    }
+  }, {passive:true});
+}
+
 
     function makeImagesForProduct(p){
       // se catalogo.js ti dà p.images/cover ecc, usa quelli
@@ -1079,6 +1327,14 @@
   // immagini
   const imgs = makeImagesForProduct(p);
   setHero(imgs[0], title);
+      const hero = document.getElementById("heroImg");
+if(hero){
+  hero.onclick = ()=> openZoom(_imgIndex);
+}
+
+      _imgs = imgs.slice();
+_imgIndex = 0;
+
 
   const thumbs = document.getElementById("thumbs");
   thumbs.innerHTML = imgs.map((src,i)=>`
@@ -1091,6 +1347,8 @@
 
   thumbs.querySelectorAll(".thumb").forEach(el=>{
     const activate = ()=>{
+      _imgIndex = i;
+
       const i = Number(el.getAttribute("data-i"));
       setHero(imgs[i], title);
       setActiveThumb(i);
@@ -1187,6 +1445,41 @@
     function toggleMega(){ $("catOverlay").classList.contains("open") ? closeMega() : openMega(); }
 
     async function boot(){
+      // bind modal zoom events (una volta)
+const modal = document.getElementById("zoomModal");
+const closeBtn = document.getElementById("zoomClose");
+const stage = document.getElementById("zoomStage");
+const prevBtn = document.getElementById("zoomPrev");
+const nextBtn = document.getElementById("zoomNext");
+
+closeBtn?.addEventListener("click", closeZoom);
+prevBtn?.addEventListener("click", zoomPrev);
+nextBtn?.addEventListener("click", zoomNext);
+
+// click fuori dalla card chiude
+modal?.addEventListener("click", (e)=>{
+  if(e.target === modal) closeZoom();
+});
+
+// tap sullo stage chiude (ma non se clicchi sui bottoni)
+stage?.addEventListener("click", (e)=>{
+  const isBtn = e.target.closest(".zoomNav, .zoomClose");
+  if(isBtn) return;
+  closeZoom();
+});
+
+// ESC / frecce
+document.addEventListener("keydown", (e)=>{
+  const isOpen = modal?.classList.contains("open");
+  if(!isOpen) return;
+  if(e.key === "Escape") closeZoom();
+  if(e.key === "ArrowRight") zoomNext();
+  if(e.key === "ArrowLeft") zoomPrev();
+});
+
+// swipe su mobile
+if(stage) bindSwipe(stage);
+
       // requisito
       if(!window.Catalogo || typeof window.Catalogo.loadCatalog !== "function"){
         throw new Error("catalogo.js non trovato o window.Catalogo non valido.");
@@ -1278,4 +1571,5 @@
   </script>
 </body>
 </html>
+
 
